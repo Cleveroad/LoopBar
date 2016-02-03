@@ -5,7 +5,6 @@ import cleveroad.com.lib.adapter.CategoriesAdapter;
 class CategoryItem implements CategoriesAdapter.ICategoryItem {
     private int categoryItemDrawableId;
     private String categoryName;
-    private int position;
     private boolean isVisible = true;
 
     public CategoryItem(int categoryItemDrawableId, String categoryName) {
@@ -25,15 +24,6 @@ class CategoryItem implements CategoriesAdapter.ICategoryItem {
 
     public void setVisible(boolean visible) {
         isVisible = visible;
-    }
-
-    @Override
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
     }
 
     @Override

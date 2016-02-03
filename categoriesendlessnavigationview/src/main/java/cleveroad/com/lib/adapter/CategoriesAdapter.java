@@ -74,10 +74,6 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
 
         void setVisible(boolean isVisible);
 
-        int getPosition();
-
-        void setPosition(int position);
-
         String getCategoryName();
     }
 
