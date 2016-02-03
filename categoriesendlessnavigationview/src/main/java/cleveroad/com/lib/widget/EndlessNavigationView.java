@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import java.util.List;
@@ -26,7 +27,7 @@ import cleveroad.com.lib.util.AbstractAnimatorListener;
 public class EndlessNavigationView extends FrameLayout implements OnItemClickListener<CategoriesAdapter.ICategoryItem> {
     private static final String TAG = EndlessNavigationView.class.getSimpleName();
     public static final int ORIENTATION_VERTICAL = 0;
-    public static final int ORIENTATION_HORISONTAL = 1;
+    public static final int ORIENTATION_HORIZONTAL = 1;
 
     private Animator selectionInAnimator;
     private Animator selectionOutAnimator;
@@ -75,7 +76,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
                 ContextCompat.getColor(getContext(), R.color.default_list_background));
         int colorSelectionView = a.getColor(R.styleable.EndlessNavigationView_selectionBackground,
                 ContextCompat.getColor(getContext(), R.color.default_selection_view_background));
-        int orientation = a.getInteger(R.styleable.EndlessNavigationView_orientation, ORIENTATION_VERTICAL);
+        int orientation = a.getInteger(R.styleable.EndlessNavigationView_orientation, ORIENTATION_HORIZONTAL);
         int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_selectionInAnimation, R.animator.scale_restore);
         int selectionAnimatorOutId = a.getResourceId(R.styleable.EndlessNavigationView_selectionOutAnimation, R.animator.scale_small);
         a.recycle();
@@ -112,14 +113,6 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
                 }
             }
         });
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        LayoutParams params = (LayoutParams) rvCategories.getLayoutParams();
-        params.height = categoriesHolder.itemView.getHeight();
-        rvCategories.setLayoutParams(params);
     }
 
     private void startSelectedViewOutAnimation(final ICategoryItem item){
