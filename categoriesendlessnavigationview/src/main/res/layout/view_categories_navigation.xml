@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,20 +11,31 @@
         android:id="@+id/rvCategories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:layout_height="100dp"
         android:layout_marginTop="@dimen/margin_selected_view"
         tools:layout_marginLeft="@dimen/selected_view_size_plus_margin"
-        android:background="@android:color/holo_red_dark"
+        android:background="@color/default_list_background"
         />
 
-    <FrameLayout
-        android:id="@+id/flContainerSelected"
-        android:layout_width="@dimen/selected_view_width"
-        android:layout_height="@dimen/selected_view_height"
+    <android.support.v7.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_selected_view"
         android:layout_marginStart="@dimen/margin_selected_view"
-        android:background="@android:color/holo_blue_dark"
-        />
+        app:cardCornerRadius="0dp"
+        app:cardElevation="10dp"
+        app:cardBackgroundColor="@android:color/black"
+        >
 
+        <FrameLayout
+            android:id="@+id/flContainerSelected"
+            android:layout_width="@dimen/selected_view_width"
+            android:layout_height="@dimen/selected_view_height"
+            android:background="@color/default_selection_view_background"
+            />
+
+
+    </android.support.v7.widget.CardView>
 
 
 </merge>

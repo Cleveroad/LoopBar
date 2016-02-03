@@ -5,12 +5,15 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:padding="8dp"
+    android:gravity="center"
     tools:background="@android:color/holo_red_dark">
 
     <ImageView
         android:id="@+id/ivCategoryIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_gravity="center_horizontal"
         android:src="@drawable/ic_local_taxi"
         />
 

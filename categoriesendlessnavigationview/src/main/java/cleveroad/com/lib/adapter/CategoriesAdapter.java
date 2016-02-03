@@ -3,11 +3,9 @@ package cleveroad.com.lib.adapter;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,17 +35,8 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
     }
 
     ICategoryItem getItem(int position) {
-        Log.w(TAG, "items = " + items);
-        Log.w(TAG, "getItem position = " + position);
-
         position = position % items.size();
-
-        Log.w(TAG, "getItem position normalized =" + position);
-
-        ICategoryItem item = items.get(position);
-        Log.w(TAG, "item = " + item);
-
-        return item;
+        return items.get(position);
     }
 
     @Override
@@ -58,7 +47,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
 
     @Override
     public CategoriesHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == 1){
+        if (viewType == 1) {
             return new EmptyHolder(createEmptyView(parent));
         }
         return CategoriesHolder.newBuilder(createView(parent))
@@ -74,7 +63,6 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
     //indeterminate scroll
     @Override
     public int getItemCount() {
-//        return items.size()*3;
         return Integer.MAX_VALUE;
     }
 
@@ -82,6 +70,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
         int getCategoryIconDrawable();
 
         boolean isVisible();
+
         void setVisible(boolean isVisible);
 
         int getPosition();
@@ -99,7 +88,8 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
         }
 
         @Override
-        protected void onBindItem(ICategoryItem item) {}
+        protected void onBindItem(ICategoryItem item) {
+        }
     }
 
     public static class CategoriesHolder extends BaseRecyclerViewHolder<ICategoryItem> {

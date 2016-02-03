@@ -90,9 +90,11 @@ public class CategoriesEndlessNavigationView extends FrameLayout implements OnIt
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        LayoutParams params = (LayoutParams) rvCategories.getLayoutParams();
-        params.height = categoriesHolder.itemView.getHeight();
-        rvCategories.setLayoutParams(params);
+        if (!isInEditMode()) {
+            LayoutParams params = (LayoutParams) rvCategories.getLayoutParams();
+            params.height = categoriesHolder.itemView.getHeight();
+            rvCategories.setLayoutParams(params);
+        }
     }
 
     public Animator getSelectedViewInAnimator() {
