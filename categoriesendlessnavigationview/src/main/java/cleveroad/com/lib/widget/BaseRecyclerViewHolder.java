@@ -42,7 +42,11 @@ public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder 
     /**
      * override this method with {@link #setClickable(boolean)} to receive click events on viewHolder item in child class
      */
-    public void onItemClicked(T item, int position) {
+    public void onItemClicked(T item) {
+    }
+
+    public boolean isClickAllowed() {
+        return true;
     }
 
     protected abstract void onBindItem(T item);
@@ -50,8 +54,8 @@ public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder 
     @Override
     public void onClick(View v) {
         Object tag = v.getTag(KEY_VIEW_TAG);
-        if (tag != null && tag.equals(TAG_ITEM_VIEW) && getAdapterPosition() != -1) {
-            onItemClicked(getItem(), getAdapterPosition());
+        if (tag != null && tag.equals(TAG_ITEM_VIEW) && getAdapterPosition() != -1 && isClickAllowed()) {
+            onItemClicked(getItem());
             if (listener != null) {
                 listener.onItemClicked(getItem(), getAdapterPosition());
             }

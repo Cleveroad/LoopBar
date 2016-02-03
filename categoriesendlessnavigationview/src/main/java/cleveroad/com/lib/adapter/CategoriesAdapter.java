@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +32,10 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
         return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_default, parent, false);
     }
 
+    public static View createEmptyView(ViewGroup parent) {
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_view, parent, false);
+    }
+
     ICategoryItem getItem(int position) {
         Log.w(TAG, "items = " + items);
         Log.w(TAG, "getItem position = " + position);
@@ -46,9 +51,17 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
     }
 
     @Override
+    public int getItemViewType(int position) {
+        ICategoryItem item = getItem(position);
+        return item.isVisible() ? 0 : 1;
+    }
+
+    @Override
     public CategoriesHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = createView(parent);
-        return CategoriesHolder.newBuilder(itemView)
+        if (viewType == 1){
+            return new EmptyHolder(createEmptyView(parent));
+        }
+        return CategoriesHolder.newBuilder(createView(parent))
                 .listener(listener)
                 .build();
     }
@@ -56,79 +69,6 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
     @Override
     public void onBindViewHolder(CategoriesHolder holder, int position) {
         holder.bindItem(getItem(position));
-    }
-
-
-    /**
-     * Inserts the specified object at the specified index in the array.
-     *
-     * @param object The object to insert into the array.
-     */
-    public void insert(final ICategoryItem object, int deletedPosition) {
-        Log.d(TAG, "items before inserting =" + items);
-
-        if (items.contains(object)) {
-            Log.e(TAG, "this object already added");
-            return;
-        }
-
-        int offset = deletedPosition % items.size();
-        int startPosition = deletedPosition - offset;
-//        notifyItemInserted(startPosition);
-//        Log.i(TAG, "inserted in position = " + deletedPosition);
-
-        items.add(object);
-
-//        notifyItemInserted(items.indexOf(object));
-//        notifyDataSetChanged();
-//        notifyItemInserted(startPosition + object.getPosition());
-//        notifyItemRangeChanged(deletedPosition, items.size());
-        Log.d(TAG, "insert =" + object);
-        Log.d(TAG, "items after inserting =" + items);
-    }
-
-    /**
-     * Removes the specified object from the array.
-     *
-     * @param adapterPosition position of object to remove
-     */
-    public ICategoryItem remove(ICategoryItem categoryItem, int adapterPosition) {
-        Log.d(TAG, "items before removing =" + items);
-
-        Log.d(TAG, "remove object = " + categoryItem + ", position =" + adapterPosition);
-
-
-        notifyItemRemoved(adapterPosition);
-        notifyItemInserted(0);
-
-        int idx = items.indexOf(categoryItem);
-
-        items.remove(categoryItem);
-
-        Log.d(TAG, "items after removing =" + items);
-//        notifyDataSetChanged();
-
-//        int startFrom = adapterPosition;
-//        int endTo = adapterPosition;
-//
-//        for (int i = 0; i < 5; i++) {
-//            startFrom -= items.size();
-//            endTo += items.size();
-//            notifyItemRemoved(startFrom);
-//            notifyItemRemoved(endTo);
-//        }
-
-        return categoryItem;
-    }
-
-    public ICategoryItem replace(ICategoryItem categoryItem , ICategoryItem oldCategoryItem, int adapterPosition) {
-        int idx = items.indexOf(categoryItem);
-        items.remove(idx);
-        items.add(idx, oldCategoryItem);
-
-        notifyItemChanged(adapterPosition);
-
-        return categoryItem;
     }
 
     //indeterminate scroll
@@ -141,6 +81,9 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
     public interface ICategoryItem {
         int getCategoryIconDrawable();
 
+        boolean isVisible();
+        void setVisible(boolean isVisible);
+
         int getPosition();
 
         void setPosition(int position);
@@ -148,8 +91,18 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
         String getCategoryName();
     }
 
-    public static class CategoriesHolder extends BaseRecyclerViewHolder<ICategoryItem> {
+    public static class EmptyHolder extends CategoriesHolder {
 
+        public EmptyHolder(@NonNull View itemView) {
+            super(itemView);
+            itemView.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected void onBindItem(ICategoryItem item) {}
+    }
+
+    public static class CategoriesHolder extends BaseRecyclerViewHolder<ICategoryItem> {
         private TextView tvCategoryName;
         private ImageView ivCategoryIcon;
 
@@ -167,6 +120,11 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
         protected void onBindItem(ICategoryItem item) {
             tvCategoryName.setText(item.getCategoryName());
             ivCategoryIcon.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), item.getCategoryIconDrawable()));
+        }
+
+        @Override
+        public boolean isClickAllowed() {
+            return getItem().isVisible();
         }
 
         public class Builder {

@@ -6,6 +6,7 @@ class CategoryItem implements CategoriesAdapter.ICategoryItem {
     private int categoryItemDrawableId;
     private String categoryName;
     private int position;
+    private boolean isVisible = true;
 
     public CategoryItem(int categoryItemDrawableId, String categoryName) {
         this.categoryItemDrawableId = categoryItemDrawableId;
@@ -15,6 +16,15 @@ class CategoryItem implements CategoriesAdapter.ICategoryItem {
     @Override
     public int getCategoryIconDrawable() {
         return categoryItemDrawableId;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
     }
 
     @Override

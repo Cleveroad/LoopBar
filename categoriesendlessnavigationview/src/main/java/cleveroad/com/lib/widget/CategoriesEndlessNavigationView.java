@@ -27,6 +27,8 @@ public class CategoriesEndlessNavigationView extends FrameLayout implements OnIt
     private CategoriesAdapter categoriesAdapter;
     LinkedList<ICategoryItem> items;
 
+    int realHidedPosition = 0;
+
     public CategoriesEndlessNavigationView(Context context) {
         super(context);
         init(context);
@@ -59,31 +61,27 @@ public class CategoriesEndlessNavigationView extends FrameLayout implements OnIt
             rvCategories.setLayoutManager(linearLayoutManager);
 
             items = MockedItemsFactory.getCategoryItemsUniq();
+            items.get(0).setVisible(false);
 
             categoriesAdapter = new CategoriesAdapter(items, this);
             rvCategories.setAdapter(categoriesAdapter);
 
             View itemView = CategoriesAdapter.createView(flContainerSelected);
             categoriesHolder = CategoriesAdapter.CategoriesHolder.newBuilder(itemView).build();
+            categoriesHolder.bindItem(items.get(0));
             flContainerSelected.addView(itemView);
 
-            linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE/2, getResources().getDimensionPixelOffset(R.dimen.selected_view_size_plus_margin));
-//
-//            rvCategories.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//                @Override
-//                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                    super.onScrolled(recyclerView, dx, dy);
-//                    if (linearLayoutManager.findFirstVisibleItemPosition() == 0 || linearLayoutManager.findFirstVisibleItemPosition() == Integer.MAX_VALUE) {
-//                        linearLayoutManager.scrollToPosition(Integer.MAX_VALUE/2);
-//                    }
-//                }
-//            });
+            linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.selected_view_size_plus_margin));
 
-            replaceItem(items.get(0), 0);
-
-//            for (int i = 0; i < items.size(); i++){
-//                items.get(i).setPosition(i);
-//            }
+            rvCategories.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (linearLayoutManager.findFirstVisibleItemPosition() == 0 || linearLayoutManager.findFirstVisibleItemPosition() == Integer.MAX_VALUE) {
+                        linearLayoutManager.scrollToPosition(Integer.MAX_VALUE/2);
+                    }
+                }
+            });
         }
     }
 
@@ -95,29 +93,21 @@ public class CategoriesEndlessNavigationView extends FrameLayout implements OnIt
         rvCategories.setLayoutParams(params);
     }
 
-    private void replaceItem(ICategoryItem item, int position) {
-        ICategoryItem oldItem = categoriesHolder.getItem();
-        Log.i(TAG, "oldItem = " + oldItem);
-
-        categoriesHolder.bindItem(item);
-
-        if (oldItem != null) {
-            categoriesAdapter.insert(oldItem, position);
-        }
-
-        categoriesAdapter.remove(item, position);
-
-//        if (oldItem!=null) {
-//            categoriesAdapter.replace(item, oldItem, position);
-//        } else {
-//            categoriesAdapter.remove(item, position);
-//            items.remove(item);
-//        }
-    }
-
     @Override
     public void onItemClicked(CategoriesAdapter.ICategoryItem item, int position) {
+        ICategoryItem oldHidedItem = items.get(realHidedPosition);
+
+        int realPosition = position % items.size();
+        int itemToShowAdapterPosition = position - realPosition + realHidedPosition;
+
+        item.setVisible(false);
+        categoriesHolder.bindItem(item);
+        categoriesAdapter.notifyItemChanged(position);
+        realHidedPosition = realPosition;
+
+        oldHidedItem.setVisible(true);
+        categoriesAdapter.notifyItemChanged(itemToShowAdapterPosition);
+
         Log.i(TAG, "clicked on position =" + position);
-        replaceItem(item, position);
     }
 }
