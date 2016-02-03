@@ -8,5 +8,9 @@
 
         <attr name="listBackground" format="color"/>
         <attr name="selectionBackground" format="color"/>
+
+        <attr name="selectionInAnimation" format="reference"/>
+        <attr name="selectionOutAnimation" format="reference"/>
+
     </declare-styleable>
 </resources>

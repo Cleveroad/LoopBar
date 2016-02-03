@@ -28,6 +28,9 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     public static final int ORIENTATION_VERTICAL = 0;
     public static final int ORIENTATION_HORISONTAL = 1;
 
+    private Animator selectionInAnimator;
+    private Animator selectionOutAnimator;
+
     private FrameLayout flContainerSelected;
     private RecyclerView rvCategories;
     private CategoriesAdapter.CategoriesHolder categoriesHolder;
@@ -66,13 +69,18 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private void init(Context context, @Nullable AttributeSet attrs) {
         inflate();
 
+        //read customization attributes
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EndlessNavigationView);
         int colorListBackground = a.getColor(R.styleable.EndlessNavigationView_listBackground,
                 ContextCompat.getColor(getContext(), R.color.default_list_background));
         int colorSelectionView = a.getColor(R.styleable.EndlessNavigationView_selectionBackground,
-                ContextCompat.getColor(getContext(), R.styleable.EndlessNavigationView_selectionBackground));
+                ContextCompat.getColor(getContext(), R.color.default_selection_view_background));
         int orientation = a.getInteger(R.styleable.EndlessNavigationView_orientation, ORIENTATION_VERTICAL);
+        int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_selectionInAnimation, R.animator.scale_restore);
+        int selectionAnimatorOutId = a.getResourceId(R.styleable.EndlessNavigationView_selectionOutAnimation, R.animator.scale_small);
         a.recycle();
+        selectionInAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorInId);
+        selectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
 
         //current view has two state : horizontal & vertical. State design pattern
         OrientationState orientationState = getOrientationStateFromParam(orientation);
@@ -114,16 +122,8 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         rvCategories.setLayoutParams(params);
     }
 
-    public Animator getSelectedViewInAnimator() {
-        return AnimatorInflater.loadAnimator(getContext(), R.animator.scale_small);
-    }
-
-    public Animator getSelectedViewOutAnimator() {
-        return AnimatorInflater.loadAnimator(getContext(), R.animator.scale_restore);
-    }
-
-    private void startSelectedViewInAnimation(final ICategoryItem item){
-        Animator animator = getSelectedViewInAnimator();
+    private void startSelectedViewOutAnimation(final ICategoryItem item){
+        Animator animator = selectionOutAnimator;
         animator.setTarget(categoriesHolder.itemView);
         animator.start();
         animator.addListener(new AbstractAnimatorListener() {
@@ -131,13 +131,13 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
             public void onAnimationEnd(Animator animation) {
                 //replace selected view
                 categoriesHolder.bindItem(item);
-                startSelectedViewOutAnimation();
+                startSelectedViewInAnimation();
             }
         });
     }
 
-    private void startSelectedViewOutAnimation() {
-        Animator animator = getSelectedViewOutAnimator();
+    private void startSelectedViewInAnimation() {
+        Animator animator = selectionInAnimator;
         animator.setTarget(categoriesHolder.itemView);
         animator.start();
     }
@@ -151,7 +151,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
 
         item.setVisible(false);
 
-        startSelectedViewInAnimation(item);
+        startSelectedViewOutAnimation(item);
 
         categoriesAdapter.notifyItemChanged(position);
         realHidedPosition = realPosition;
