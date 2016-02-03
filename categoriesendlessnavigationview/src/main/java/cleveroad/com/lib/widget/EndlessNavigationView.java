@@ -4,7 +4,10 @@ import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Build;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -12,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import cleveroad.com.lib.R;
@@ -21,8 +23,10 @@ import static cleveroad.com.lib.adapter.CategoriesAdapter.ICategoryItem;
 import cleveroad.com.lib.model.MockedItemsFactory;
 import cleveroad.com.lib.util.AbstractAnimatorListener;
 
-public class CategoriesEndlessNavigationView extends FrameLayout implements OnItemClickListener<CategoriesAdapter.ICategoryItem> {
-    private static final String TAG = CategoriesEndlessNavigationView.class.getSimpleName();
+public class EndlessNavigationView extends FrameLayout implements OnItemClickListener<CategoriesAdapter.ICategoryItem> {
+    private static final String TAG = EndlessNavigationView.class.getSimpleName();
+    public static final int ORIENTATION_VERTICAL = 0;
+    public static final int ORIENTATION_HORISONTAL = 1;
 
     private FrameLayout flContainerSelected;
     private RecyclerView rvCategories;
@@ -32,35 +36,51 @@ public class CategoriesEndlessNavigationView extends FrameLayout implements OnIt
 
     int realHidedPosition = 0;
 
-    public CategoriesEndlessNavigationView(Context context) {
+    public EndlessNavigationView(Context context) {
         super(context);
-        init(context);
+        init(context, null);
     }
 
-    public CategoriesEndlessNavigationView(Context context, AttributeSet attrs) {
+    public EndlessNavigationView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init(context, attrs);
     }
 
-    public CategoriesEndlessNavigationView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public EndlessNavigationView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init(context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public CategoriesEndlessNavigationView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public EndlessNavigationView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init(context);
+        init(context, attrs);
     }
 
-    private void init(Context context) {
-        View view = inflate(context, R.layout.view_categories_navigation, this);
+    private void inflate(){
+        View view = inflate(getContext(), R.layout.view_categories_navigation, this);
         flContainerSelected = (FrameLayout) view.findViewById(R.id.flContainerSelected);
         rvCategories = (RecyclerView) view.findViewById(R.id.rvCategories);
+    }
 
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+    private void init(Context context, @Nullable AttributeSet attrs) {
+        inflate();
 
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EndlessNavigationView);
+        int colorListBackground = a.getColor(R.styleable.EndlessNavigationView_listBackground,
+                ContextCompat.getColor(getContext(), R.color.default_list_background));
+        int colorSelectionView = a.getColor(R.styleable.EndlessNavigationView_selectionBackground,
+                ContextCompat.getColor(getContext(), R.styleable.EndlessNavigationView_selectionBackground));
+        int orientation = a.getInteger(R.styleable.EndlessNavigationView_orientation, ORIENTATION_VERTICAL);
+        a.recycle();
+
+        //current view has two state : horizontal & vertical. State design pattern
+        OrientationState orientationState = getOrientationStateFromParam(orientation);
+        LinearLayoutManager linearLayoutManager = orientationState.getLayoutManager(getContext());
         rvCategories.setLayoutManager(linearLayoutManager);
+
+        rvCategories.setBackgroundColor(colorListBackground);
+        flContainerSelected.setBackgroundColor(colorSelectionView);
 
         items = MockedItemsFactory.getCategoryItems();
         items.get(0).setVisible(false);
@@ -73,8 +93,8 @@ public class CategoriesEndlessNavigationView extends FrameLayout implements OnIt
         categoriesHolder.bindItem(items.get(0));
         flContainerSelected.addView(itemView);
 
+        //scroll to middle of indeterminate recycler view on initialization and if user somehow scrolled to start or end
         linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.selected_view_size_plus_margin));
-
         rvCategories.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -90,8 +110,7 @@ public class CategoriesEndlessNavigationView extends FrameLayout implements OnIt
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         LayoutParams params = (LayoutParams) rvCategories.getLayoutParams();
-//        params.height = categoriesHolder.itemView.getHeight();
-        params.height = 300;
+        params.height = categoriesHolder.itemView.getHeight();
         rvCategories.setLayoutParams(params);
     }
 
@@ -141,5 +160,28 @@ public class CategoriesEndlessNavigationView extends FrameLayout implements OnIt
         categoriesAdapter.notifyItemChanged(itemToShowAdapterPosition);
 
         Log.i(TAG, "clicked on position =" + position);
+    }
+
+    public OrientationState getOrientationStateFromParam(int orientation){
+        return orientation == 0 ? new OrientationStateVertical() : new OrientationStateHorizontal();
+    }
+
+    private interface OrientationState {
+        LinearLayoutManager getLayoutManager(Context context);
+    }
+
+    private class OrientationStateVertical implements OrientationState {
+        @Override
+        public LinearLayoutManager getLayoutManager(Context context) {
+            return new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        }
+    }
+
+    private class OrientationStateHorizontal implements OrientationState {
+
+        @Override
+        public LinearLayoutManager getLayoutManager(Context context) {
+            return new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        }
     }
 }

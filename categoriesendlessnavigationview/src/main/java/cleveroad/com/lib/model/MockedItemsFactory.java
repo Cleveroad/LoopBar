@@ -16,13 +16,6 @@ public class MockedItemsFactory {
         items.add(new CategoryItem(R.drawable.ic_alarm, "item3"));
         items.add(new CategoryItem(R.drawable.ic_local_taxi, "item4"));
         items.add(new CategoryItem(R.drawable.ic_account_balance, "item5"));
-        items.add(new CategoryItem(R.drawable.ic_alarm, "item6"));
-        items.add(new CategoryItem(R.drawable.ic_local_taxi, "item7"));
-        items.add(new CategoryItem(R.drawable.ic_account_balance, "item8"));
-        items.add(new CategoryItem(R.drawable.ic_alarm, "item9"));
-        items.add(new CategoryItem(R.drawable.ic_local_taxi, "item10"));
-        items.add(new CategoryItem(R.drawable.ic_account_balance, "item11"));
-        items.add(new CategoryItem(R.drawable.ic_alarm, "item12"));
         return items;
     }
 

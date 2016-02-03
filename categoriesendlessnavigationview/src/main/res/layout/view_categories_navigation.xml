@@ -14,7 +14,7 @@
         tools:layout_height="75dp"
         tools:listItem="@layout/item_default"
         android:layout_marginTop="@dimen/margin_selected_view"
-        android:background="@color/default_list_background"
+        tools:background="@color/default_list_background"
         />
 
     <android.support.v7.widget.CardView
@@ -31,7 +31,7 @@
             android:id="@+id/flContainerSelected"
             android:layout_width="@dimen/selected_view_width"
             android:layout_height="@dimen/selected_view_height"
-            android:background="@color/default_selection_view_background"
+            tools:background="@color/default_selection_view_background"
             />
 
 
