@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="selected_view_width">70dp</dimen>
+    <dimen name="selected_view_height">75dp</dimen>
+    <dimen name="margin_selected_view">5dp</dimen>
+    <dimen name="selected_view_size_plus_margin">80dp</dimen>
+</resources>

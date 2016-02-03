@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:background="@android:color/white">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_selected_view"
+        tools:layout_marginLeft="@dimen/selected_view_size_plus_margin"
+        android:background="@android:color/holo_red_dark"
+        />
+
+    <FrameLayout
+        android:id="@+id/flContainerSelected"
+        android:layout_width="@dimen/selected_view_width"
+        android:layout_height="@dimen/selected_view_height"
+        android:layout_marginLeft="@dimen/margin_selected_view"
+        android:layout_marginStart="@dimen/margin_selected_view"
+        android:background="@android:color/holo_blue_dark"
+        />
+
+
+
+</merge>
