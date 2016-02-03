@@ -1,5 +1,7 @@
 package cleveroad.com.lib.widget;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
@@ -11,12 +13,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import cleveroad.com.lib.R;
 import cleveroad.com.lib.adapter.CategoriesAdapter;
 import static cleveroad.com.lib.adapter.CategoriesAdapter.ICategoryItem;
 import cleveroad.com.lib.model.MockedItemsFactory;
+import cleveroad.com.lib.util.AbstractAnimatorListener;
 
 public class CategoriesEndlessNavigationView extends FrameLayout implements OnItemClickListener<CategoriesAdapter.ICategoryItem> {
     private static final String TAG = CategoriesEndlessNavigationView.class.getSimpleName();
@@ -93,6 +95,34 @@ public class CategoriesEndlessNavigationView extends FrameLayout implements OnIt
         rvCategories.setLayoutParams(params);
     }
 
+    public Animator getSelectedViewInAnimator() {
+        return AnimatorInflater.loadAnimator(getContext(), R.animator.scale_small);
+    }
+
+    public Animator getSelectedViewOutAnimator() {
+        return AnimatorInflater.loadAnimator(getContext(), R.animator.scale_restore);
+    }
+
+    private void startSelectedViewInAnimation(final ICategoryItem item){
+        Animator animator = getSelectedViewInAnimator();
+        animator.setTarget(categoriesHolder.itemView);
+        animator.start();
+        animator.addListener(new AbstractAnimatorListener() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                //replace selected view
+                categoriesHolder.bindItem(item);
+                startSelectedViewOutAnimation();
+            }
+        });
+    }
+
+    private void startSelectedViewOutAnimation() {
+        Animator animator = getSelectedViewOutAnimator();
+        animator.setTarget(categoriesHolder.itemView);
+        animator.start();
+    }
+
     @Override
     public void onItemClicked(CategoriesAdapter.ICategoryItem item, int position) {
         ICategoryItem oldHidedItem = items.get(realHidedPosition);
@@ -101,7 +131,9 @@ public class CategoriesEndlessNavigationView extends FrameLayout implements OnIt
         int itemToShowAdapterPosition = position - realPosition + realHidedPosition;
 
         item.setVisible(false);
-        categoriesHolder.bindItem(item);
+
+        startSelectedViewInAnimation(item);
+
         categoriesAdapter.notifyItemChanged(position);
         realHidedPosition = realPosition;
 
