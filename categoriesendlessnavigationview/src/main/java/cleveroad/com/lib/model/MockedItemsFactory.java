@@ -11,23 +11,23 @@ import static cleveroad.com.lib.adapter.CategoriesAdapter.ICategoryItem;
 public class MockedItemsFactory {
     public static List<ICategoryItem> getCategoryItems() {
         List<ICategoryItem> items = new ArrayList<>();
-        items.add(new CategoryItem(R.drawable.ic_local_taxi, "auto1"));
-        items.add(new CategoryItem(R.drawable.ic_account_balance, "balance1"));
-        items.add(new CategoryItem(R.drawable.ic_alarm, "alarm1"));
-        items.add(new CategoryItem(R.drawable.ic_local_taxi, "auto2"));
-        items.add(new CategoryItem(R.drawable.ic_account_balance, "balance2"));
-        items.add(new CategoryItem(R.drawable.ic_alarm, "alarm2"));
-        items.add(new CategoryItem(R.drawable.ic_local_taxi, "auto3"));
-        items.add(new CategoryItem(R.drawable.ic_account_balance, "balance3"));
-        items.add(new CategoryItem(R.drawable.ic_alarm, "alarm3"));
-        items.add(new CategoryItem(R.drawable.ic_local_taxi, "auto4"));
-        items.add(new CategoryItem(R.drawable.ic_account_balance, "balance4"));
-        items.add(new CategoryItem(R.drawable.ic_alarm, "alarm4"));
+        items.add(new CategoryItem(R.drawable.ic_local_taxi, "item1"));
+        items.add(new CategoryItem(R.drawable.ic_account_balance, "item2"));
+        items.add(new CategoryItem(R.drawable.ic_alarm, "item3"));
+        items.add(new CategoryItem(R.drawable.ic_local_taxi, "item4"));
+        items.add(new CategoryItem(R.drawable.ic_account_balance, "item5"));
+        items.add(new CategoryItem(R.drawable.ic_alarm, "item6"));
+        items.add(new CategoryItem(R.drawable.ic_local_taxi, "item7"));
+        items.add(new CategoryItem(R.drawable.ic_account_balance, "item8"));
+        items.add(new CategoryItem(R.drawable.ic_alarm, "item9"));
+        items.add(new CategoryItem(R.drawable.ic_local_taxi, "item10"));
+        items.add(new CategoryItem(R.drawable.ic_account_balance, "item11"));
+        items.add(new CategoryItem(R.drawable.ic_alarm, "item12"));
         return items;
     }
 
-    public static LinkedList<ICategoryItem> getCategoryItemsUniq() {
-        LinkedList<ICategoryItem> items = new LinkedList<>();
+    public static List<ICategoryItem> getCategoryItemsUniq() {
+        List<ICategoryItem> items = new ArrayList<>();
         items.add(new CategoryItem(R.drawable.ic_local_taxi, "auto"));
         items.add(new CategoryItem(R.drawable.ic_account_balance, "balance"));
         items.add(new CategoryItem(R.drawable.ic_alarm, "alarm"));

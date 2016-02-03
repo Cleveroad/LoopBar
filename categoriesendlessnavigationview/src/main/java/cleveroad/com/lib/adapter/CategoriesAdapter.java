@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import cleveroad.com.lib.R;
 import cleveroad.com.lib.widget.BaseRecyclerViewHolder;
@@ -18,10 +19,10 @@ import cleveroad.com.lib.widget.OnItemClickListener;
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.CategoriesHolder> {
     private static final String TAG = CategoriesAdapter.class.getSimpleName();
 
-    private LinkedList<ICategoryItem> items = new LinkedList<>();
+    private List<ICategoryItem> items;
     private OnItemClickListener<ICategoryItem> listener;
 
-    public CategoriesAdapter(LinkedList<ICategoryItem> items, OnItemClickListener<ICategoryItem> listener) {
+    public CategoriesAdapter(List<ICategoryItem> items, OnItemClickListener<ICategoryItem> listener) {
         this.items = items;
         this.listener = listener;
     }

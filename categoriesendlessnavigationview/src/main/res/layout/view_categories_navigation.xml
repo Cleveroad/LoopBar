@@ -11,9 +11,9 @@
         android:id="@+id/rvCategories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout_height="100dp"
+        tools:layout_height="75dp"
+        tools:listItem="@layout/item_default"
         android:layout_marginTop="@dimen/margin_selected_view"
-        tools:layout_marginLeft="@dimen/selected_view_size_plus_margin"
         android:background="@color/default_list_background"
         />
 
@@ -23,7 +23,7 @@
         android:layout_marginLeft="@dimen/margin_selected_view"
         android:layout_marginStart="@dimen/margin_selected_view"
         app:cardCornerRadius="0dp"
-        app:cardElevation="10dp"
+        app:cardElevation="5dp"
         app:cardBackgroundColor="@android:color/black"
         >
 

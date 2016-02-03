@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import cleveroad.com.lib.R;
 import cleveroad.com.lib.adapter.CategoriesAdapter;
@@ -27,7 +28,7 @@ public class CategoriesEndlessNavigationView extends FrameLayout implements OnIt
     private RecyclerView rvCategories;
     private CategoriesAdapter.CategoriesHolder categoriesHolder;
     private CategoriesAdapter categoriesAdapter;
-    LinkedList<ICategoryItem> items;
+    List<ICategoryItem> items;
 
     int realHidedPosition = 0;
 
@@ -53,48 +54,45 @@ public class CategoriesEndlessNavigationView extends FrameLayout implements OnIt
     }
 
     private void init(Context context) {
-        if (!isInEditMode()) {
-            View view = inflate(context, R.layout.view_categories_navigation, this);
-            flContainerSelected = (FrameLayout) view.findViewById(R.id.flContainerSelected);
-            rvCategories = (RecyclerView) view.findViewById(R.id.rvCategories);
+        View view = inflate(context, R.layout.view_categories_navigation, this);
+        flContainerSelected = (FrameLayout) view.findViewById(R.id.flContainerSelected);
+        rvCategories = (RecyclerView) view.findViewById(R.id.rvCategories);
 
-            final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
 
-            rvCategories.setLayoutManager(linearLayoutManager);
+        rvCategories.setLayoutManager(linearLayoutManager);
 
-            items = MockedItemsFactory.getCategoryItemsUniq();
-            items.get(0).setVisible(false);
+        items = MockedItemsFactory.getCategoryItems();
+        items.get(0).setVisible(false);
 
-            categoriesAdapter = new CategoriesAdapter(items, this);
-            rvCategories.setAdapter(categoriesAdapter);
+        categoriesAdapter = new CategoriesAdapter(items, this);
+        rvCategories.setAdapter(categoriesAdapter);
 
-            View itemView = CategoriesAdapter.createView(flContainerSelected);
-            categoriesHolder = CategoriesAdapter.CategoriesHolder.newBuilder(itemView).build();
-            categoriesHolder.bindItem(items.get(0));
-            flContainerSelected.addView(itemView);
+        View itemView = CategoriesAdapter.createView(flContainerSelected);
+        categoriesHolder = CategoriesAdapter.CategoriesHolder.newBuilder(itemView).build();
+        categoriesHolder.bindItem(items.get(0));
+        flContainerSelected.addView(itemView);
 
-            linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.selected_view_size_plus_margin));
+        linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.selected_view_size_plus_margin));
 
-            rvCategories.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    if (linearLayoutManager.findFirstVisibleItemPosition() == 0 || linearLayoutManager.findFirstVisibleItemPosition() == Integer.MAX_VALUE) {
-                        linearLayoutManager.scrollToPosition(Integer.MAX_VALUE/2);
-                    }
+        rvCategories.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (linearLayoutManager.findFirstVisibleItemPosition() == 0 || linearLayoutManager.findFirstVisibleItemPosition() == Integer.MAX_VALUE) {
+                    linearLayoutManager.scrollToPosition(Integer.MAX_VALUE/2);
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (!isInEditMode()) {
-            LayoutParams params = (LayoutParams) rvCategories.getLayoutParams();
-            params.height = categoriesHolder.itemView.getHeight();
-            rvCategories.setLayoutParams(params);
-        }
+        LayoutParams params = (LayoutParams) rvCategories.getLayoutParams();
+//        params.height = categoriesHolder.itemView.getHeight();
+        params.height = 300;
+        rvCategories.setLayoutParams(params);
     }
 
     public Animator getSelectedViewInAnimator() {

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CategoriesEndlessNavigationView">
+        <attr name="orientation" format="integer">
+            <flag name="vertical" value="1"/>
+            <flag name="horizontal" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>
