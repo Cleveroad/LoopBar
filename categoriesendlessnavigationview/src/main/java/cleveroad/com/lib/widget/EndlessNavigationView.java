@@ -14,12 +14,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.List;
-import java.util.UnknownFormatFlagsException;
 
 import cleveroad.com.lib.R;
 import cleveroad.com.lib.adapter.CategoriesAdapter;
@@ -67,7 +65,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         init(context, attrs);
     }
 
-    private void inflate(OrientationState orientationState) {
+    private void inflate(IOrientationState orientationState) {
         inflate(getContext(), orientationState.getLayoutId(), this);
         flContainerSelected = (FrameLayout) findViewById(R.id.flContainerSelected);
         rvCategories = (RecyclerView) findViewById(R.id.rvCategories);
@@ -84,18 +82,20 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_selectionInAnimation, R.animator.scale_restore);
         int selectionAnimatorOutId = a.getResourceId(R.styleable.EndlessNavigationView_selectionOutAnimation, R.animator.scale_small);
         @GravityAttr int selectionGravity = a.getInteger(R.styleable.EndlessNavigationView_selectionGravity, SELECTION_GRAVITY_START);
+        int selectionMargin = a.getDimensionPixelSize(R.styleable.EndlessNavigationView_selectionMargin, getResources().getDimensionPixelSize(R.dimen.margin_selected_view));
         a.recycle();
         selectionInAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorInId);
         selectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
 
         //current view has two state : horizontal & vertical. State design pattern
-        OrientationState orientationState = getOrientationStateFromParam(orientation);
+        IOrientationState orientationState = getOrientationStateFromParam(orientation, selectionGravity);
 
         inflate(orientationState);
 
         //note that flContainerSelected should be in FrameLayout
         FrameLayout.LayoutParams params = (LayoutParams) flContainerSelected.getLayoutParams();
-        params.gravity = orientationState.getSelectionGravity(selectionGravity);
+        params.gravity = orientationState.getSelectionGravity();
+        orientationState.setSelectionMargin(selectionMargin, params);
         flContainerSelected.setLayoutParams(params);
 
         LinearLayoutManager linearLayoutManager = orientationState.getLayoutManager(getContext());
@@ -168,72 +168,13 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         Log.i(TAG, "clicked on position =" + position);
     }
 
-
-    public OrientationState getOrientationStateFromParam(int orientation) {
-        return orientation == ORIENTATION_VERTICAL ? new OrientationStateVertical() : new OrientationStateHorizontal();
-    }
-
-    interface OrientationState {
-        LinearLayoutManager getLayoutManager(Context context);
-
-        int getLayoutId();
-
-        @LayoutGravity
-        int getSelectionGravity(@GravityAttr int gravityAttribute);
+    //orientation state factory method
+    public IOrientationState getOrientationStateFromParam(int orientation, @GravityAttr int selectionGravityState) {
+        return orientation == ORIENTATION_VERTICAL ? new OrientationStateVertical(selectionGravityState) : new OrientationStateHorizontal(selectionGravityState);
     }
 
     @IntDef({SELECTION_GRAVITY_START, SELECTION_GRAVITY_END})
-    @interface GravityAttr{}
-
-    static class OrientationStateVertical implements OrientationState {
-
-        @Override
-        public LinearLayoutManager getLayoutManager(Context context) {
-            return new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
-        }
-
-        @Override
-        public int getLayoutId() {
-            return R.layout.view_categories_navigation_vertical;
-        }
-
-        @Override
-        public int getSelectionGravity(int gravityAttribute) {
-            switch (gravityAttribute){
-                case SELECTION_GRAVITY_START:
-                    return Gravity.TOP;
-                case SELECTION_GRAVITY_END:
-                    return Gravity.BOTTOM;
-                default:
-                    throw new UnknownFormatFlagsException("unknown gravity Attribute = " + gravityAttribute +". Should be one of SELECTION_GRAVITY");
-            }
-        }
-
+    @interface GravityAttr {
     }
 
-    static class OrientationStateHorizontal implements OrientationState {
-
-        @Override
-        public LinearLayoutManager getLayoutManager(Context context) {
-            return new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        }
-
-        @Override
-        public int getLayoutId() {
-            return R.layout.view_categories_navigation_horizontal;
-        }
-
-        @Override
-        public int getSelectionGravity(int gravityAttribute) {
-
-            switch (gravityAttribute){
-                case SELECTION_GRAVITY_START:
-                    return Gravity.START;
-                case SELECTION_GRAVITY_END:
-                    return Gravity.END;
-                default:
-                    throw new UnknownFormatFlagsException("unknown gravity Attribute = " + gravityAttribute +". Should be one of SELECTION_GRAVITY");
-            }
-        }
-    }
 }

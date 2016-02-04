@@ -14,5 +14,6 @@
         android:layout_alignParentBottom="true"
         app:orientation="horizontal"
         app:selectionGravity="end"
+        app:selectionMargin="10dp"
         />
 </RelativeLayout>

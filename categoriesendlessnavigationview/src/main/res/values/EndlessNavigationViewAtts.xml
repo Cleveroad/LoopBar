@@ -11,6 +11,8 @@
             <flag name="end" value="1"/>
         </attr>
 
+        <attr name="selectionMargin" format="dimension"/>
+
         <attr name="listBackground" format="color"/>
         <attr name="selectionBackground" format="color"/>
 
