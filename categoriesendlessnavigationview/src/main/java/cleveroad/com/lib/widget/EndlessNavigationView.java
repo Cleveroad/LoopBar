@@ -48,6 +48,9 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private SpacesItemDecoration spacesItemDecoration = new SpacesItemDecoration(0);
     private boolean skipNextOnLayout;
     private boolean isIndeterminateInitialized;
+
+    private Integer itemWidth;
+
     private RecyclerView.OnScrollListener indeterminateOnScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -130,6 +133,17 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         flContainerSelected.addView(itemView);
     }
 
+    //very big duct tape
+    private int calItemWidth() {
+        if (itemWidth == null) {
+            for (int i = 0; i < rvCategories.getChildCount(); i++) {
+                itemWidth = rvCategories.getChildAt(i).getWidth();
+                if (itemWidth!=0) break;
+            }
+        }
+        return itemWidth;
+    }
+
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
@@ -137,8 +151,10 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
 
         if (!skipNextOnLayout) {
             if (rvCategories.getChildCount() > 0) {
-                int itemWidth = rvCategories.getChildAt(1).getWidth();
+                int itemWidth = calItemWidth();
                 int itemsWidth = itemWidth * (items.size() - 1);
+                Log.d(TAG, "items Width = " + itemsWidth);
+                Log.d(TAG, "rv width = " + rvCategories.getWidth());
 
                 //if all items of recyclerView fit on screen
                 boolean isFitOnScreen = rvCategories.getWidth() >= itemsWidth;
@@ -151,6 +167,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
                     rvCategories.addItemDecoration(spacesItemDecoration);
                     //changing item decoration will call onLayout again, so this flag needed to avoid indeterminate loop
                     skipNextOnLayout = true;
+                    isIndeterminateInitialized = false;
 
                     rvCategories.removeOnScrollListener(indeterminateOnScrollListener);
                 } else {
@@ -165,11 +182,6 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         } else {
             skipNextOnLayout = false;
         }
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
     }
 
     private void startSelectedViewOutAnimation(final ICategoryItem item) {
