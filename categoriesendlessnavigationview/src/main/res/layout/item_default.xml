@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    tools:layout_width="70dp"
     android:layout_gravity="center"
     android:padding="8dp"
     android:gravity="center"

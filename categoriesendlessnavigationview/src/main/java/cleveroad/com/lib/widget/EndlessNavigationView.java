@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,28 +17,29 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.List;
+import java.util.UnknownFormatFlagsException;
 
 import cleveroad.com.lib.R;
 import cleveroad.com.lib.adapter.CategoriesAdapter;
-import static cleveroad.com.lib.adapter.CategoriesAdapter.ICategoryItem;
 import cleveroad.com.lib.model.MockedItemsFactory;
 import cleveroad.com.lib.util.AbstractAnimatorListener;
 
+import static cleveroad.com.lib.adapter.CategoriesAdapter.ICategoryItem;
+
 public class EndlessNavigationView extends FrameLayout implements OnItemClickListener<CategoriesAdapter.ICategoryItem> {
-    private static final String TAG = EndlessNavigationView.class.getSimpleName();
     public static final int ORIENTATION_VERTICAL = 0;
     public static final int ORIENTATION_HORIZONTAL = 1;
-
+    public static final int SELECTION_GRAVITY_START = 0;
+    public static final int SELECTION_GRAVITY_END = 1;
+    private static final String TAG = EndlessNavigationView.class.getSimpleName();
+    List<ICategoryItem> items;
+    int realHidedPosition = 0;
     private Animator selectionInAnimator;
     private Animator selectionOutAnimator;
-
     private FrameLayout flContainerSelected;
     private RecyclerView rvCategories;
     private CategoriesAdapter.CategoriesHolder categoriesHolder;
     private CategoriesAdapter categoriesAdapter;
-    List<ICategoryItem> items;
-
-    int realHidedPosition = 0;
 
     public EndlessNavigationView(Context context) {
         super(context);
@@ -60,15 +62,13 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         init(context, attrs);
     }
 
-    private void inflate(){
-        View view = inflate(getContext(), R.layout.view_categories_navigation, this);
-        flContainerSelected = (FrameLayout) view.findViewById(R.id.flContainerSelected);
-        rvCategories = (RecyclerView) view.findViewById(R.id.rvCategories);
+    private void inflate(OrientationState orientationState) {
+        inflate(getContext(), orientationState.getLayoutId(), this);
+        flContainerSelected = (FrameLayout) findViewById(R.id.flContainerSelected);
+        rvCategories = (RecyclerView) findViewById(R.id.rvCategories);
     }
 
     private void init(Context context, @Nullable AttributeSet attrs) {
-        inflate();
-
         //read customization attributes
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EndlessNavigationView);
         int colorListBackground = a.getColor(R.styleable.EndlessNavigationView_listBackground,
@@ -78,12 +78,20 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         int orientation = a.getInteger(R.styleable.EndlessNavigationView_orientation, ORIENTATION_HORIZONTAL);
         int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_selectionInAnimation, R.animator.scale_restore);
         int selectionAnimatorOutId = a.getResourceId(R.styleable.EndlessNavigationView_selectionOutAnimation, R.animator.scale_small);
+        @GravityAttr int selectionGravity = a.getResourceId(R.styleable.EndlessNavigationView_selectionGravity, SELECTION_GRAVITY_START);
         a.recycle();
         selectionInAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorInId);
         selectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
 
         //current view has two state : horizontal & vertical. State design pattern
         OrientationState orientationState = getOrientationStateFromParam(orientation);
+
+        inflate(orientationState);
+
+        //note that flContainerSelected should be in FrameLayout
+        FrameLayout.LayoutParams params = (LayoutParams) flContainerSelected.getLayoutParams();
+        params.gravity = orientationState.getSelectionGravity(selectionGravity);
+
         LinearLayoutManager linearLayoutManager = orientationState.getLayoutManager(getContext());
         rvCategories.setLayoutManager(linearLayoutManager);
 
@@ -108,13 +116,13 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (linearLayoutManager.findFirstVisibleItemPosition() == 0 || linearLayoutManager.findFirstVisibleItemPosition() == Integer.MAX_VALUE) {
-                    linearLayoutManager.scrollToPosition(Integer.MAX_VALUE/2);
+                    linearLayoutManager.scrollToPosition(Integer.MAX_VALUE / 2);
                 }
             }
         });
     }
 
-    private void startSelectedViewOutAnimation(final ICategoryItem item){
+    private void startSelectedViewOutAnimation(final ICategoryItem item) {
         Animator animator = selectionOutAnimator;
         animator.setTarget(categoriesHolder.itemView);
         animator.start();
@@ -154,26 +162,69 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         Log.i(TAG, "clicked on position =" + position);
     }
 
-    public OrientationState getOrientationStateFromParam(int orientation){
-        return orientation == 0 ? new OrientationStateVertical() : new OrientationStateHorizontal();
+    public OrientationState getOrientationStateFromParam(int orientation) {
+        return orientation == ORIENTATION_VERTICAL ? new OrientationStateVertical() : new OrientationStateHorizontal();
     }
 
-    private interface OrientationState {
+    interface OrientationState {
         LinearLayoutManager getLayoutManager(Context context);
+
+        int getLayoutId();
+
+        @cleveroad.com.lib.widget.Gravity
+        int getSelectionGravity(@GravityAttr int gravityAttribute);
     }
 
-    private class OrientationStateVertical implements OrientationState {
+    @IntDef({SELECTION_GRAVITY_START, SELECTION_GRAVITY_END})
+    @interface GravityAttr{}
+
+    static class OrientationStateVertical implements OrientationState {
+
         @Override
         public LinearLayoutManager getLayoutManager(Context context) {
             return new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         }
+
+        @Override
+        public int getLayoutId() {
+            return R.layout.view_categories_navigation_vertical;
+        }
+
+        @Override
+        public int getSelectionGravity(int gravityAttribute) {
+            switch (gravityAttribute){
+                case SELECTION_GRAVITY_START:
+                    return android.view.Gravity.TOP;
+                case SELECTION_GRAVITY_END:
+                    return android.view.Gravity.BOTTOM;
+                default:
+                    throw new UnknownFormatFlagsException("unknown gravity Attribute = " + gravityAttribute +". Should be one of SELECTION_GRAVITY");
+            }
+        }
     }
 
-    private class OrientationStateHorizontal implements OrientationState {
+    static class OrientationStateHorizontal implements OrientationState {
 
         @Override
         public LinearLayoutManager getLayoutManager(Context context) {
             return new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        }
+
+        @Override
+        public int getLayoutId() {
+            return R.layout.view_categories_navigation_horizontal;
+        }
+
+        @Override
+        public int getSelectionGravity(int gravityAttribute) {
+            switch (gravityAttribute){
+                case SELECTION_GRAVITY_START:
+                    return android.view.Gravity.LEFT;
+                case SELECTION_GRAVITY_END:
+                    return android.view.Gravity.RIGHT;
+                default:
+                    throw new UnknownFormatFlagsException("unknown gravity Attribute = " + gravityAttribute +". Should be one of SELECTION_GRAVITY");
+            }
         }
     }
 }

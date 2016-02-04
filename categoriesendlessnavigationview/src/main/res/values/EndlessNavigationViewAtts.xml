@@ -6,6 +6,11 @@
             <flag name="horizontal" value="1"/>
         </attr>
 
+        <attr name="selectionGravity" format="integer">
+            <flag name="start" value="0"/>
+            <flag name="end" value="1"/>
+        </attr>
+
         <attr name="listBackground" format="color"/>
         <attr name="selectionBackground" format="color"/>
 
