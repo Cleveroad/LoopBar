@@ -12,9 +12,9 @@ import java.util.List;
 
 import cleveroad.com.lib.R;
 
-public class SimpleCategoriesAdapter extends AbstractCategoriesAdapter {
+public class SimpleCategoriesAdapter extends AbstractCategoriesAdapter<ICategoryItem> {
 
-    public SimpleCategoriesAdapter(List<IOperationItem> items) {
+    public SimpleCategoriesAdapter(List<ICategoryItem> items) {
         super(items);
     }
 
@@ -29,7 +29,7 @@ public class SimpleCategoriesAdapter extends AbstractCategoriesAdapter {
         return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_default, parent, false);
     }
 
-    public static class SimpleCategoriesHolder extends CategoriesHolder {
+    public static class SimpleCategoriesHolder extends CategoriesHolder<ICategoryItem> {
         private TextView tvCategoryName;
         private ImageView ivCategoryIcon;
 
@@ -40,8 +40,7 @@ public class SimpleCategoriesAdapter extends AbstractCategoriesAdapter {
         }
 
         @Override
-        protected void onBindItem(IOperationItem itemOperation) {
-            ICategoryItem item = (ICategoryItem) itemOperation;
+        protected void onBindItemToView(ICategoryItem item) {
             tvCategoryName.setText(item.getCategoryName());
             ivCategoryIcon.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), item.getCategoryIconDrawable()));
         }

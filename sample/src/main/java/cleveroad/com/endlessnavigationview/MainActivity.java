@@ -17,6 +17,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         EndlessNavigationView endlessNavigationView = (EndlessNavigationView) findViewById(R.id.endlessView);
-        endlessNavigationView.setCategoriesAdapter(new SimpleCategoriesAdapter(new ArrayList<IOperationItem>(MockedItemsFactory.getCategoryItems())));
+        endlessNavigationView.setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItems()));
     }
 }

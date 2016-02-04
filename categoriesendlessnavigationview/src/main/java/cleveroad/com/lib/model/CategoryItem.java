@@ -5,7 +5,6 @@ import cleveroad.com.lib.adapter.ICategoryItem;
 class CategoryItem implements ICategoryItem {
     private int categoryItemDrawableId;
     private String categoryName;
-    private boolean isVisible = true;
 
     public CategoryItem(int categoryItemDrawableId, String categoryName) {
         this.categoryItemDrawableId = categoryItemDrawableId;
@@ -15,15 +14,6 @@ class CategoryItem implements ICategoryItem {
     @Override
     public int getCategoryIconDrawable() {
         return categoryItemDrawableId;
-    }
-
-    @Override
-    public boolean isVisible() {
-        return isVisible;
-    }
-
-    public void setVisible(boolean visible) {
-        isVisible = visible;
     }
 
     @Override

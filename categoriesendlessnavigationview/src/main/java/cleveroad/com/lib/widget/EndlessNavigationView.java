@@ -85,8 +85,8 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
 
     public void setCategoriesAdapter(@NonNull SimpleCategoriesAdapter categoriesAdapter) {
         this.categoriesAdapter = categoriesAdapter;
-        items = categoriesAdapter.getItems();
-        IOperationItem firstItem = categoriesAdapter.getItems().get(0);
+        items = categoriesAdapter.getWrappedItems();
+        IOperationItem firstItem = categoriesAdapter.getWrappedItems().get(0);
         firstItem.setVisible(false);
 
         categoriesAdapter.setListener(this);
@@ -139,7 +139,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         flContainerSelected.setBackgroundColor(colorSelectionView);
 
         if (isInEditMode()){
-            setCategoriesAdapter(new SimpleCategoriesAdapter(new ArrayList<>(MockedItemsFactory.getCategoryItemsUniq())));
+            setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq()));
         }
     }
 

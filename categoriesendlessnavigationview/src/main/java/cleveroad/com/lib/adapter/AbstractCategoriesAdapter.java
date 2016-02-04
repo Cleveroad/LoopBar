@@ -1,35 +1,35 @@
 package cleveroad.com.lib.adapter;
 
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cleveroad.com.lib.R;
 import cleveroad.com.lib.widget.BaseRecyclerViewHolder;
 import cleveroad.com.lib.widget.OnItemClickListener;
 
-public abstract class AbstractCategoriesAdapter extends RecyclerView.Adapter<AbstractCategoriesAdapter.CategoriesHolder> {
+public abstract class AbstractCategoriesAdapter<T> extends RecyclerView.Adapter<AbstractCategoriesAdapter.CategoriesHolder> {
     private static final String TAG = AbstractCategoriesAdapter.class.getSimpleName();
     public static final int VIEW_TYPE_RESERVED_HIDDEN = -1;
     public static final int VIEW_TYPE_OTHER = 0;
 
-    private List<IOperationItem> items;
+    private List<IOperationItem> wrappedItems = new ArrayList<>();
     private OnItemClickListener<IOperationItem> listener;
     private boolean isIndeterminate = true;
 
-    public AbstractCategoriesAdapter(List<IOperationItem> items) {
-        this.items = items;
+    public AbstractCategoriesAdapter(List<T> items) {
+        for (T item : items) {
+            wrappedItems.add(new OperationItem(item));
+        }
     }
 
-    public List<IOperationItem> getItems() {
-        return items;
+    public List<IOperationItem> getWrappedItems() {
+        return wrappedItems;
     }
 
     public void setListener(OnItemClickListener<IOperationItem> listener) {
@@ -50,8 +50,8 @@ public abstract class AbstractCategoriesAdapter extends RecyclerView.Adapter<Abs
     }
 
     IOperationItem getItem(int position) {
-        position = position % items.size();
-        return items.get(position);
+        position = position % wrappedItems.size();
+        return wrappedItems.get(position);
     }
 
     @Override
@@ -81,7 +81,7 @@ public abstract class AbstractCategoriesAdapter extends RecyclerView.Adapter<Abs
         if (isIndeterminate) {
             return Integer.MAX_VALUE;
         } else {
-            return items.size();
+            return wrappedItems.size();
         }
     }
 
@@ -93,14 +93,21 @@ public abstract class AbstractCategoriesAdapter extends RecyclerView.Adapter<Abs
         }
 
         @Override
-        protected void onBindItem(IOperationItem item) {
-        }
+        protected void onBindItemToView(Object o) {}
+
     }
 
-    public abstract static class CategoriesHolder extends BaseRecyclerViewHolder<IOperationItem> {
+    public abstract static class CategoriesHolder<T> extends BaseRecyclerViewHolder<IOperationItem<T>> {
         public CategoriesHolder(@NonNull View itemView) {
             super(itemView);
         }
+
+        @Override
+        protected final void onBindItem(IOperationItem<T> item) {
+            onBindItemToView(item.getWrappedItem());
+        }
+
+        protected abstract void onBindItemToView(T t);
 
         @Override
         public boolean isClickAllowed() {

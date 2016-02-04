@@ -1,6 +1,6 @@
 package cleveroad.com.lib.adapter;
 
-public interface ICategoryItem extends IOperationItem {
+public interface ICategoryItem {
     int getCategoryIconDrawable();
 
     String getCategoryName();
