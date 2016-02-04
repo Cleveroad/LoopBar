@@ -23,6 +23,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/margin_selected_view"
         android:layout_marginStart="@dimen/margin_selected_view"
+        android:layout_gravity="start"
         app:cardCornerRadius="0dp"
         app:cardElevation="5dp"
         app:cardBackgroundColor="@color/default_selection_view_background"

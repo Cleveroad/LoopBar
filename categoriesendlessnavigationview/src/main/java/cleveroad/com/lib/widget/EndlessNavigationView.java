@@ -5,6 +5,7 @@ import android.animation.AnimatorInflater;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -40,6 +42,9 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private RecyclerView rvCategories;
     private CategoriesAdapter.CategoriesHolder categoriesHolder;
     private CategoriesAdapter categoriesAdapter;
+
+    private Rect drawingRect = new Rect();
+    private Rect childRect = new Rect();
 
     public EndlessNavigationView(Context context) {
         super(context);
@@ -78,7 +83,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         int orientation = a.getInteger(R.styleable.EndlessNavigationView_orientation, ORIENTATION_HORIZONTAL);
         int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_selectionInAnimation, R.animator.scale_restore);
         int selectionAnimatorOutId = a.getResourceId(R.styleable.EndlessNavigationView_selectionOutAnimation, R.animator.scale_small);
-        @GravityAttr int selectionGravity = a.getResourceId(R.styleable.EndlessNavigationView_selectionGravity, SELECTION_GRAVITY_START);
+        @GravityAttr int selectionGravity = a.getInteger(R.styleable.EndlessNavigationView_selectionGravity, SELECTION_GRAVITY_START);
         a.recycle();
         selectionInAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorInId);
         selectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
@@ -91,6 +96,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         //note that flContainerSelected should be in FrameLayout
         FrameLayout.LayoutParams params = (LayoutParams) flContainerSelected.getLayoutParams();
         params.gravity = orientationState.getSelectionGravity(selectionGravity);
+        flContainerSelected.setLayoutParams(params);
 
         LinearLayoutManager linearLayoutManager = orientationState.getLayoutManager(getContext());
         rvCategories.setLayoutManager(linearLayoutManager);
@@ -162,6 +168,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         Log.i(TAG, "clicked on position =" + position);
     }
 
+
     public OrientationState getOrientationStateFromParam(int orientation) {
         return orientation == ORIENTATION_VERTICAL ? new OrientationStateVertical() : new OrientationStateHorizontal();
     }
@@ -171,7 +178,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
 
         int getLayoutId();
 
-        @cleveroad.com.lib.widget.Gravity
+        @LayoutGravity
         int getSelectionGravity(@GravityAttr int gravityAttribute);
     }
 
@@ -194,13 +201,14 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         public int getSelectionGravity(int gravityAttribute) {
             switch (gravityAttribute){
                 case SELECTION_GRAVITY_START:
-                    return android.view.Gravity.TOP;
+                    return Gravity.TOP;
                 case SELECTION_GRAVITY_END:
-                    return android.view.Gravity.BOTTOM;
+                    return Gravity.BOTTOM;
                 default:
                     throw new UnknownFormatFlagsException("unknown gravity Attribute = " + gravityAttribute +". Should be one of SELECTION_GRAVITY");
             }
         }
+
     }
 
     static class OrientationStateHorizontal implements OrientationState {
@@ -217,11 +225,12 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
 
         @Override
         public int getSelectionGravity(int gravityAttribute) {
+
             switch (gravityAttribute){
                 case SELECTION_GRAVITY_START:
-                    return android.view.Gravity.LEFT;
+                    return Gravity.START;
                 case SELECTION_GRAVITY_END:
-                    return android.view.Gravity.RIGHT;
+                    return Gravity.END;
                 default:
                     throw new UnknownFormatFlagsException("unknown gravity Attribute = " + gravityAttribute +". Should be one of SELECTION_GRAVITY");
             }
