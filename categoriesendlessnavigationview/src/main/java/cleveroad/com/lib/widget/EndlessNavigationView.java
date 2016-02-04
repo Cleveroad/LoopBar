@@ -41,9 +41,6 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private CategoriesAdapter.CategoriesHolder categoriesHolder;
     private CategoriesAdapter categoriesAdapter;
 
-    private Rect drawingRect = new Rect();
-    private Rect childRect = new Rect();
-
     public EndlessNavigationView(Context context) {
         super(context);
         init(context, null);
