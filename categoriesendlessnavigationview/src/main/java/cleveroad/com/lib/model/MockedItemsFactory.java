@@ -5,7 +5,7 @@ import java.util.List;
 
 import cleveroad.com.lib.R;
 
-import static cleveroad.com.lib.adapter.SimpleCategoriesAdapter.ICategoryItem;
+import cleveroad.com.lib.adapter.ICategoryItem;
 
 public class MockedItemsFactory {
     public static List<ICategoryItem> getCategoryItems() {

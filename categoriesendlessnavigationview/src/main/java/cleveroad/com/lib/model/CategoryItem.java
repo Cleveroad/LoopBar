@@ -1,8 +1,8 @@
 package cleveroad.com.lib.model;
 
-import cleveroad.com.lib.adapter.SimpleCategoriesAdapter;
+import cleveroad.com.lib.adapter.ICategoryItem;
 
-class CategoryItem implements SimpleCategoriesAdapter.ICategoryItem {
+class CategoryItem implements ICategoryItem {
     private int categoryItemDrawableId;
     private String categoryName;
     private boolean isVisible = true;
