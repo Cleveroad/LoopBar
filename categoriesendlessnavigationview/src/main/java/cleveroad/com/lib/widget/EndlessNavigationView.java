@@ -5,7 +5,6 @@ import android.animation.AnimatorInflater;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
@@ -20,26 +19,26 @@ import android.widget.FrameLayout;
 import java.util.List;
 
 import cleveroad.com.lib.R;
-import cleveroad.com.lib.adapter.CategoriesAdapter;
+import cleveroad.com.lib.adapter.SimpleCategoriesAdapter;
 import cleveroad.com.lib.model.MockedItemsFactory;
 import cleveroad.com.lib.util.AbstractAnimatorListener;
 
-import static cleveroad.com.lib.adapter.CategoriesAdapter.ICategoryItem;
+import static cleveroad.com.lib.adapter.SimpleCategoriesAdapter.ICategoryItem;
 
-public class EndlessNavigationView extends FrameLayout implements OnItemClickListener<CategoriesAdapter.ICategoryItem> {
+public class EndlessNavigationView extends FrameLayout implements OnItemClickListener<SimpleCategoriesAdapter.ICategoryItem> {
     public static final int ORIENTATION_VERTICAL = 0;
     public static final int ORIENTATION_HORIZONTAL = 1;
     public static final int SELECTION_GRAVITY_START = 0;
     public static final int SELECTION_GRAVITY_END = 1;
     private static final String TAG = EndlessNavigationView.class.getSimpleName();
-    List<ICategoryItem> items;
-    int realHidedPosition = 0;
+    private List<ICategoryItem> items = MockedItemsFactory.getCategoryItems();
+    private int realHidedPosition = 0;
     private Animator selectionInAnimator;
     private Animator selectionOutAnimator;
     private FrameLayout flContainerSelected;
     private RecyclerView rvCategories;
-    private CategoriesAdapter.CategoriesHolder categoriesHolder;
-    private CategoriesAdapter categoriesAdapter;
+    private SimpleCategoriesAdapter.CategoriesHolder categoriesHolder;
+    private SimpleCategoriesAdapter categoriesAdapter;
 
     public EndlessNavigationView(Context context) {
         super(context);
@@ -101,14 +100,13 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         rvCategories.setBackgroundColor(colorListBackground);
         flContainerSelected.setBackgroundColor(colorSelectionView);
 
-        items = MockedItemsFactory.getCategoryItems();
         items.get(0).setVisible(false);
 
-        categoriesAdapter = new CategoriesAdapter(items, this);
+        categoriesAdapter = new SimpleCategoriesAdapter(items, this);
         rvCategories.setAdapter(categoriesAdapter);
 
-        View itemView = CategoriesAdapter.createView(flContainerSelected);
-        categoriesHolder = CategoriesAdapter.CategoriesHolder.newBuilder(itemView).build();
+        View itemView = SimpleCategoriesAdapter.createView(flContainerSelected);
+        categoriesHolder = SimpleCategoriesAdapter.CategoriesHolder.newBuilder(itemView).build();
         categoriesHolder.bindItem(items.get(0));
         flContainerSelected.addView(itemView);
 
@@ -146,7 +144,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     }
 
     @Override
-    public void onItemClicked(CategoriesAdapter.ICategoryItem item, int position) {
+    public void onItemClicked(SimpleCategoriesAdapter.ICategoryItem item, int position) {
         ICategoryItem oldHidedItem = items.get(realHidedPosition);
 
         int realPosition = position % items.size();

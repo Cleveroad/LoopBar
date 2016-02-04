@@ -1,12 +1,11 @@
 package cleveroad.com.lib.model;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import cleveroad.com.lib.R;
 
-import static cleveroad.com.lib.adapter.CategoriesAdapter.ICategoryItem;
+import static cleveroad.com.lib.adapter.SimpleCategoriesAdapter.ICategoryItem;
 
 public class MockedItemsFactory {
     public static List<ICategoryItem> getCategoryItems() {
