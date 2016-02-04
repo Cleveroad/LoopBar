@@ -31,14 +31,32 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     public static final int SELECTION_GRAVITY_START = 0;
     public static final int SELECTION_GRAVITY_END = 1;
     private static final String TAG = EndlessNavigationView.class.getSimpleName();
-    private List<ICategoryItem> items = MockedItemsFactory.getCategoryItems();
-    private int realHidedPosition = 0;
+
+    //view settings
     private Animator selectionInAnimator;
     private Animator selectionOutAnimator;
+    private int selectionMargin;
+
+    private List<ICategoryItem> items = MockedItemsFactory.getCategoryItemsUniq();
+    private int realHidedPosition = 0;
     private FrameLayout flContainerSelected;
     private RecyclerView rvCategories;
     private SimpleCategoriesAdapter.CategoriesHolder categoriesHolder;
     private SimpleCategoriesAdapter categoriesAdapter;
+
+    private LinearLayoutManager linearLayoutManager;
+    private SpacesItemDecoration spacesItemDecoration = new SpacesItemDecoration(0);
+    private boolean skipNextOnLayout;
+    private boolean isIndeterminateInitialized;
+    private RecyclerView.OnScrollListener indeterminateOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            if (linearLayoutManager.findFirstVisibleItemPosition() == 0 || linearLayoutManager.findFirstVisibleItemPosition() == Integer.MAX_VALUE) {
+                linearLayoutManager.scrollToPosition(Integer.MAX_VALUE / 2);
+            }
+        }
+    };
 
     public EndlessNavigationView(Context context) {
         super(context);
@@ -78,7 +96,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_selectionInAnimation, R.animator.scale_restore);
         int selectionAnimatorOutId = a.getResourceId(R.styleable.EndlessNavigationView_selectionOutAnimation, R.animator.scale_small);
         @GravityAttr int selectionGravity = a.getInteger(R.styleable.EndlessNavigationView_selectionGravity, SELECTION_GRAVITY_START);
-        int selectionMargin = a.getDimensionPixelSize(R.styleable.EndlessNavigationView_selectionMargin, getResources().getDimensionPixelSize(R.dimen.margin_selected_view));
+        selectionMargin = a.getDimensionPixelSize(R.styleable.EndlessNavigationView_selectionMargin, getResources().getDimensionPixelSize(R.dimen.margin_selected_view));
         a.recycle();
         selectionInAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorInId);
         selectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
@@ -94,7 +112,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         orientationState.setSelectionMargin(selectionMargin, params);
         flContainerSelected.setLayoutParams(params);
 
-        LinearLayoutManager linearLayoutManager = orientationState.getLayoutManager(getContext());
+        linearLayoutManager = orientationState.getLayoutManager(getContext());
         rvCategories.setLayoutManager(linearLayoutManager);
 
         rvCategories.setBackgroundColor(colorListBackground);
@@ -107,20 +125,51 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
 
         View itemView = SimpleCategoriesAdapter.createView(flContainerSelected);
         categoriesHolder = SimpleCategoriesAdapter.CategoriesHolder.newBuilder(itemView).build();
+        //set first item to selectionView
         categoriesHolder.bindItem(items.get(0));
         flContainerSelected.addView(itemView);
+    }
 
-        //scroll to middle of indeterminate recycler view on initialization and if user somehow scrolled to start or end
-        linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.selected_view_size_plus_margin));
-        rvCategories.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (linearLayoutManager.findFirstVisibleItemPosition() == 0 || linearLayoutManager.findFirstVisibleItemPosition() == Integer.MAX_VALUE) {
-                    linearLayoutManager.scrollToPosition(Integer.MAX_VALUE / 2);
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        Log.d(TAG, "onLayout");
+
+        if (!skipNextOnLayout) {
+            if (rvCategories.getChildCount() > 0) {
+                int itemWidth = rvCategories.getChildAt(1).getWidth();
+                int itemsWidth = itemWidth * (items.size() - 1);
+
+                //if all items of recyclerView fit on screen
+                boolean isFitOnScreen = rvCategories.getWidth() >= itemsWidth;
+
+                if (isFitOnScreen) {
+                    rvCategories.removeItemDecoration(spacesItemDecoration);
+                    Log.i(TAG, "all items fit on screen");
+                    categoriesAdapter.setIndeterminate(false);
+                    spacesItemDecoration.setSpace(selectionMargin + categoriesHolder.itemView.getWidth());
+                    rvCategories.addItemDecoration(spacesItemDecoration);
+                    //changing item decoration will call onLayout again, so this flag needed to avoid indeterminate loop
+                    skipNextOnLayout = true;
+
+                    rvCategories.removeOnScrollListener(indeterminateOnScrollListener);
+                } else {
+                    if (!isIndeterminateInitialized) {
+                        //scroll to middle of indeterminate recycler view on initialization and if user somehow scrolled to start or end
+                        linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.selected_view_size_plus_margin));
+                        rvCategories.addOnScrollListener(indeterminateOnScrollListener);
+                        isIndeterminateInitialized = true;
+                    }
                 }
             }
-        });
+        } else {
+            skipNextOnLayout = false;
+        }
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
     }
 
     private void startSelectedViewOutAnimation(final ICategoryItem item) {

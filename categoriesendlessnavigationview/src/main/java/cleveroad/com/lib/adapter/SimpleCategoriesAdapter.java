@@ -20,6 +20,7 @@ public class SimpleCategoriesAdapter extends RecyclerView.Adapter<SimpleCategori
 
     private List<ICategoryItem> items;
     private OnItemClickListener<ICategoryItem> listener;
+    private boolean isIndeterminate = true;
 
     public SimpleCategoriesAdapter(List<ICategoryItem> items, OnItemClickListener<ICategoryItem> listener) {
         this.items = items;
@@ -32,6 +33,10 @@ public class SimpleCategoriesAdapter extends RecyclerView.Adapter<SimpleCategori
 
     public static View createEmptyView(ViewGroup parent) {
         return LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_view, parent, false);
+    }
+
+    public void setIndeterminate(boolean isIndeterminate) {
+        this.isIndeterminate = isIndeterminate;
     }
 
     ICategoryItem getItem(int position) {
@@ -63,7 +68,11 @@ public class SimpleCategoriesAdapter extends RecyclerView.Adapter<SimpleCategori
     //indeterminate scroll
     @Override
     public int getItemCount() {
-        return Integer.MAX_VALUE;
+        if (isIndeterminate) {
+            return Integer.MAX_VALUE;
+        } else {
+            return items.size();
+        }
     }
 
     public interface ICategoryItem {
