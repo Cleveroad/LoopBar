@@ -9,6 +9,7 @@
     tools:context="cleveroad.com.endlessnavigationview.MainActivity">
 
     <cleveroad.com.lib.widget.EndlessNavigationView
+        android:id="@+id/endlessView"
         android:layout_width="wrap_content"
         android:layout_height="90dp"
         android:layout_alignParentBottom="true"

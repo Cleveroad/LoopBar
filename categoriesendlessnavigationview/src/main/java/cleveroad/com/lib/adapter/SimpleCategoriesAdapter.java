@@ -22,8 +22,15 @@ public class SimpleCategoriesAdapter extends RecyclerView.Adapter<SimpleCategori
     private OnItemClickListener<ICategoryItem> listener;
     private boolean isIndeterminate = true;
 
-    public SimpleCategoriesAdapter(List<ICategoryItem> items, OnItemClickListener<ICategoryItem> listener) {
+    public SimpleCategoriesAdapter(List<ICategoryItem> items) {
         this.items = items;
+    }
+
+    public List<ICategoryItem> getItems() {
+        return items;
+    }
+
+    public void setListener(OnItemClickListener<ICategoryItem> listener) {
         this.listener = listener;
     }
 

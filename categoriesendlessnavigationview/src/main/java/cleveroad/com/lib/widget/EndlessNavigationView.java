@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,12 +38,12 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private Animator selectionOutAnimator;
     private int selectionMargin;
 
-    private List<ICategoryItem> items = MockedItemsFactory.getCategoryItemsUniq();
     private int realHidedPosition = 0;
     private FrameLayout flContainerSelected;
     private RecyclerView rvCategories;
     private SimpleCategoriesAdapter.CategoriesHolder categoriesHolder;
     private SimpleCategoriesAdapter categoriesAdapter;
+    private List<ICategoryItem> items;
 
     private LinearLayoutManager linearLayoutManager;
     private SpacesItemDecoration spacesItemDecoration = new SpacesItemDecoration(0);
@@ -80,6 +81,18 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     public EndlessNavigationView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs);
+    }
+
+    public void setCategoriesAdapter(@NonNull SimpleCategoriesAdapter categoriesAdapter) {
+        this.categoriesAdapter = categoriesAdapter;
+        items = categoriesAdapter.getItems();
+        ICategoryItem firstItem = categoriesAdapter.getItems().get(0);
+        firstItem.setVisible(false);
+
+        categoriesAdapter.setListener(this);
+        rvCategories.setAdapter(categoriesAdapter);
+        //set first item to selectionView
+        categoriesHolder.bindItem(firstItem);
     }
 
     private void inflate(IOrientationState orientationState) {
@@ -121,16 +134,13 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         rvCategories.setBackgroundColor(colorListBackground);
         flContainerSelected.setBackgroundColor(colorSelectionView);
 
-        items.get(0).setVisible(false);
-
-        categoriesAdapter = new SimpleCategoriesAdapter(items, this);
-        rvCategories.setAdapter(categoriesAdapter);
-
         View itemView = SimpleCategoriesAdapter.createView(flContainerSelected);
         categoriesHolder = SimpleCategoriesAdapter.CategoriesHolder.newBuilder(itemView).build();
-        //set first item to selectionView
-        categoriesHolder.bindItem(items.get(0));
         flContainerSelected.addView(itemView);
+
+        if (isInEditMode()){
+            setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq()));
+        }
     }
 
     //very big duct tape
