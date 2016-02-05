@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import cleveroad.com.lib.R;
+import cleveroad.com.lib.widget.AbstractCategoriesAdapter;
 
 public class SimpleCategoriesAdapter extends AbstractCategoriesAdapter<ICategoryItem> {
 
@@ -20,7 +21,7 @@ public class SimpleCategoriesAdapter extends AbstractCategoriesAdapter<ICategory
 
     /** factory method to create child of CategoriesHolder*/
     @Override
-    public CategoriesHolder createCategoriesHolder(View itemView) {
+    public CategoriesHolder<ICategoryItem> createCategoriesHolder(View itemView) {
         return new SimpleCategoriesHolder(itemView);
     }
 

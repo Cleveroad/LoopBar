@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cleveroad.com.lib.R;
@@ -41,8 +40,8 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private int realHidedPosition = 0;
     private FrameLayout flContainerSelected;
     private RecyclerView rvCategories;
-    private SimpleCategoriesAdapter.CategoriesHolder categoriesHolder;
-    private SimpleCategoriesAdapter categoriesAdapter;
+    private AbstractCategoriesAdapter.CategoriesHolder categoriesHolder;
+    private AbstractCategoriesAdapter categoriesAdapter;
     private List<IOperationItem> items;
 
     private LinearLayoutManager linearLayoutManager;
@@ -83,10 +82,11 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         init(context, attrs);
     }
 
-    public void setCategoriesAdapter(@NonNull SimpleCategoriesAdapter categoriesAdapter) {
+    @SuppressWarnings("unchecked assigment")
+    public void setCategoriesAdapter(@NonNull AbstractCategoriesAdapter categoriesAdapter) {
         this.categoriesAdapter = categoriesAdapter;
         items = categoriesAdapter.getWrappedItems();
-        IOperationItem firstItem = categoriesAdapter.getWrappedItems().get(0);
+        IOperationItem firstItem = items.get(0);
         firstItem.setVisible(false);
 
         categoriesAdapter.setListener(this);
@@ -199,6 +199,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         animator.setTarget(categoriesHolder.itemView);
         animator.start();
         animator.addListener(new AbstractAnimatorListener() {
+            @SuppressWarnings("unchecked assigment")
             @Override
             public void onAnimationEnd(Animator animation) {
                 //replace selected view
@@ -218,7 +219,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     public void onItemClicked(IOperationItem item, int position) {
         IOperationItem oldHidedItem = items.get(realHidedPosition);
 
-        int realPosition = position % items.size();
+        int realPosition = categoriesAdapter.normalizePosition(position);
         int itemToShowAdapterPosition = position - realPosition + realHidedPosition;
 
         item.setVisible(false);

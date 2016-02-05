@@ -1,10 +1,10 @@
 package cleveroad.com.lib.adapter;
 
-public class OperationItem implements IOperationItem{
+public class OperationItem<T> implements IOperationItem<T>{
     private boolean isVisible = true;
-    private Object item;
+    private T item;
 
-    public OperationItem(Object item){
+    public OperationItem(T item){
         this.item = item;
     }
 
@@ -17,7 +17,7 @@ public class OperationItem implements IOperationItem{
         isVisible = visible;
     }
     @Override
-    public Object getWrappedItem() {
+    public T getWrappedItem() {
         return item;
     }
 }
