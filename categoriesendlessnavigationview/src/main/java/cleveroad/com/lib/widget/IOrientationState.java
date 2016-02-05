@@ -8,5 +8,15 @@ interface IOrientationState extends ISelectionGravityState {
 
     int getLayoutId();
 
+    /**
+     * check if all items of recyclerView fit on screen
+     * @param containerWidth width of recyclerView
+     * @param containerHeight height of recyclerView
+     * @param itemWidth width of item
+     * @param itemHeight height of item
+     * @param itemsSize count of items
+     * */
     boolean isItemsFitOnScreen(int containerWidth, int containerHeight, int itemWidth, int itemHeight, int itemsSize);
+
+    AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight);
 }

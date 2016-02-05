@@ -11,6 +11,8 @@ import cleveroad.com.lib.R;
 
 class OrientationStateHorizontal extends AbstractOrientationState implements IOrientationState {
 
+    private SpacesLeftItemDecoration itemDecoration = new SpacesLeftItemDecoration(0);
+
     OrientationStateHorizontal(@EndlessNavigationView.GravityAttr int gravityAttribute) {
         super(gravityAttribute);
     }
@@ -29,6 +31,12 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
     public boolean isItemsFitOnScreen(int containerWidth, int containerHeight, int itemWidth, int itemHeight, int itemsSize) {
         int itemsWidth = itemWidth * (itemsSize - 1);
         return containerWidth >= itemsWidth;
+    }
+
+    @Override
+    public AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight) {
+        itemDecoration.setSpace(margin + selectionViewWidth);
+        return itemDecoration;
     }
 
     @Override

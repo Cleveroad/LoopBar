@@ -47,7 +47,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private List<IOperationItem> items;
 
     private LinearLayoutManager linearLayoutManager;
-    private SpacesItemDecoration spacesItemDecoration = new SpacesItemDecoration(0);
+    private AbstractSpacesItemDecoration spacesItemDecoration;
     private boolean skipNextOnLayout;
     private boolean isIndeterminateInitialized;
 
@@ -178,14 +178,14 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
                 int itemWidth = calcItemWidth();
                 int itemHeight = calcItemHeight();
 
-                //if all items of recyclerView fit on screen
                 boolean isFitOnScreen = orientationState.isItemsFitOnScreen(rvCategories.getWidth(), rvCategories.getHeight(), itemWidth, itemHeight, items.size());
 
                 if (isFitOnScreen) {
                     rvCategories.removeItemDecoration(spacesItemDecoration);
                     Log.i(TAG, "all items fit on screen");
                     categoriesAdapter.setIndeterminate(false);
-                    spacesItemDecoration.setSpace(selectionMargin + categoriesHolder.itemView.getWidth());
+                    spacesItemDecoration = orientationState.getSelectionViewItemDecoration(selectionMargin,
+                            categoriesHolder.itemView.getWidth(), categoriesHolder.itemView.getHeight());
                     rvCategories.addItemDecoration(spacesItemDecoration);
                     //changing item decoration will call onLayout again, so this flag needed to avoid indeterminate loop
                     skipNextOnLayout = true;

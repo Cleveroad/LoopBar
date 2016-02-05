@@ -11,6 +11,8 @@ import cleveroad.com.lib.R;
 
 class OrientationStateVertical extends AbstractOrientationState implements IOrientationState {
 
+    private SpacesTopItemDecoration itemDecoration = new SpacesTopItemDecoration(0);
+
     OrientationStateVertical(int gravityAttribute) {
         super(gravityAttribute);
     }
@@ -28,7 +30,13 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
     @Override
     public boolean isItemsFitOnScreen(int containerWidth, int containerHeight, int itemWidth, int itemHeight, int itemsSize) {
         int itemsHeight = itemHeight * (itemsSize - 1);
-        return containerHeight >= itemHeight;
+        return containerHeight >= itemsHeight;
+    }
+
+    @Override
+    public AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight) {
+        itemDecoration.setSpace(margin + selectionViewHeight);
+        return itemDecoration;
     }
 
     @Override
