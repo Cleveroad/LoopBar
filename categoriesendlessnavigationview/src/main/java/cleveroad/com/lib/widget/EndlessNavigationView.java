@@ -102,6 +102,10 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         categoriesHolder.bindItem(firstItem);
     }
 
+    public void setCurrentItem(int position) {
+        onItemClicked(items.get(position), position);
+    }
+
     private void inflate(IOrientationState orientationState) {
         inflate(getContext(), orientationState.getLayoutId(), this);
         flContainerSelected = (FrameLayout) findViewById(R.id.flContainerSelected);

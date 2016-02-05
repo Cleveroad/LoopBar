@@ -4,6 +4,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +23,27 @@ import cleveroad.com.lib.widget.OnItemClickListener;
 public class MainActivity extends AppCompatActivity implements OnItemClickListener<ICategoryItem>{
 
     private ViewPager viewPager;
+    private EndlessNavigationView endlessNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        EndlessNavigationView endlessNavigationView = (EndlessNavigationView) findViewById(R.id.endlessView);
+        endlessNavigationView = (EndlessNavigationView) findViewById(R.id.endlessView);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            @Override
+            public void onPageSelected(int position) {
+                endlessNavigationView.setCurrentItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
 
         List<ICategoryItem> items = MockedItemsFactory.getCategoryItems();
 
@@ -39,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         viewPager.setAdapter(new ViewPagerAdapter(items));
     }
 
-    public static class ViewPagerAdapter extends PagerAdapter {
+    private static class ViewPagerAdapter extends PagerAdapter {
         private List<ICategoryItem> items;
 
         public ViewPagerAdapter(List<ICategoryItem> items){
