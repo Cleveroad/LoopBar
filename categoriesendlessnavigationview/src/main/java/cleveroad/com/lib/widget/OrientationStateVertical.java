@@ -26,6 +26,12 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
     }
 
     @Override
+    public boolean isItemsFitOnScreen(int containerWidth, int containerHeight, int itemWidth, int itemHeight, int itemsSize) {
+        int itemsHeight = itemHeight * (itemsSize - 1);
+        return containerHeight >= itemHeight;
+    }
+
+    @Override
     protected ISelectionGravityState getGravityState(int gravityAttribute) {
         switch (gravityAttribute) {
             case EndlessNavigationView.SELECTION_GRAVITY_START:

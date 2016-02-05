@@ -7,4 +7,6 @@ interface IOrientationState extends ISelectionGravityState {
     LinearLayoutManager getLayoutManager(Context context);
 
     int getLayoutId();
+
+    boolean isItemsFitOnScreen(int containerWidth, int containerHeight, int itemWidth, int itemHeight, int itemsSize);
 }

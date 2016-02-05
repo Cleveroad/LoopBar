@@ -26,6 +26,12 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
     }
 
     @Override
+    public boolean isItemsFitOnScreen(int containerWidth, int containerHeight, int itemWidth, int itemHeight, int itemsSize) {
+        int itemsWidth = itemWidth * (itemsSize - 1);
+        return containerWidth >= itemsWidth;
+    }
+
+    @Override
     protected ISelectionGravityState getGravityState(int gravityAttribute) {
         switch (gravityAttribute) {
             case EndlessNavigationView.SELECTION_GRAVITY_START:

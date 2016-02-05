@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:padding="8dp"
-    android:gravity="center"
-    tools:background="@color/default_selection_view_background">
+    android:gravity="center">
 
     <ImageView
         android:id="@+id/ivCategoryIcon"

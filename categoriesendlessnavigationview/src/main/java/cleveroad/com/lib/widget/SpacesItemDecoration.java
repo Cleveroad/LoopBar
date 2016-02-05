@@ -6,7 +6,7 @@ import android.view.View;
 
 import cleveroad.com.lib.R;
 
-public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+class SpacesItemDecoration extends RecyclerView.ItemDecoration {
     private int space;
 
     public SpacesItemDecoration(int space) {

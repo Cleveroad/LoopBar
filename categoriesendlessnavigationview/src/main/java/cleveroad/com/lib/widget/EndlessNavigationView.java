@@ -5,6 +5,7 @@ import android.animation.AnimatorInflater;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
@@ -36,6 +37,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private Animator selectionInAnimator;
     private Animator selectionOutAnimator;
     private int selectionMargin;
+    private IOrientationState orientationState;
 
     private int realHidedPosition = 0;
     private FrameLayout flContainerSelected;
@@ -50,6 +52,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private boolean isIndeterminateInitialized;
 
     private Integer itemWidth;
+    private Integer itemHeight;
 
     private RecyclerView.OnScrollListener indeterminateOnScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -108,9 +111,9 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private void init(Context context, @Nullable AttributeSet attrs) {
         //read customization attributes
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EndlessNavigationView);
-        int colorListBackground = a.getColor(R.styleable.EndlessNavigationView_listBackground,
+        int colorCodeListBackground = a.getColor(R.styleable.EndlessNavigationView_listBackground,
                 ContextCompat.getColor(getContext(), R.color.default_list_background));
-        int colorSelectionView = a.getColor(R.styleable.EndlessNavigationView_selectionBackground,
+        int colorCodeSelectionView = a.getColor(R.styleable.EndlessNavigationView_selectionBackground,
                 ContextCompat.getColor(getContext(), R.color.default_selection_view_background));
         int orientation = a.getInteger(R.styleable.EndlessNavigationView_orientation, ORIENTATION_HORIZONTAL);
         int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_selectionInAnimation, R.animator.scale_restore);
@@ -122,7 +125,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         selectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
 
         //current view has two state : horizontal & vertical. State design pattern
-        IOrientationState orientationState = getOrientationStateFromParam(orientation, selectionGravity);
+        orientationState = getOrientationStateFromParam(orientation, selectionGravity);
 
         inflate(orientationState);
 
@@ -135,23 +138,34 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         linearLayoutManager = orientationState.getLayoutManager(getContext());
         rvCategories.setLayoutManager(linearLayoutManager);
 
-        rvCategories.setBackgroundColor(colorListBackground);
-        flContainerSelected.setBackgroundColor(colorSelectionView);
+        rvCategories.setBackgroundColor(colorCodeListBackground);
+        ColorDrawable colorDrawable = new ColorDrawable1(colorCodeSelectionView);
+        flContainerSelected.setBackground(colorDrawable);
 
-        if (isInEditMode()){
+        if (isInEditMode()) {
             setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq()));
         }
     }
 
     //very big duct tape
-    private int calItemWidth() {
+    private int calcItemWidth() {
         if (itemWidth == null) {
             for (int i = 0; i < rvCategories.getChildCount(); i++) {
                 itemWidth = rvCategories.getChildAt(i).getWidth();
-                if (itemWidth!=0) break;
+                if (itemWidth != 0) break;
             }
         }
         return itemWidth;
+    }
+
+    private int calcItemHeight() {
+        if (itemHeight == null) {
+            for (int i = 0; i < rvCategories.getChildCount(); i++) {
+                itemHeight = rvCategories.getChildAt(i).getHeight();
+                if (itemHeight != 0) break;
+            }
+        }
+        return itemHeight;
     }
 
     @Override
@@ -161,13 +175,11 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
 
         if (!skipNextOnLayout) {
             if (rvCategories.getChildCount() > 0) {
-                int itemWidth = calItemWidth();
-                int itemsWidth = itemWidth * (items.size() - 1);
-                Log.d(TAG, "items Width = " + itemsWidth);
-                Log.d(TAG, "rv width = " + rvCategories.getWidth());
+                int itemWidth = calcItemWidth();
+                int itemHeight = calcItemHeight();
 
                 //if all items of recyclerView fit on screen
-                boolean isFitOnScreen = rvCategories.getWidth() >= itemsWidth;
+                boolean isFitOnScreen = orientationState.isItemsFitOnScreen(rvCategories.getWidth(), rvCategories.getHeight(), itemWidth, itemHeight, items.size());
 
                 if (isFitOnScreen) {
                     rvCategories.removeItemDecoration(spacesItemDecoration);
