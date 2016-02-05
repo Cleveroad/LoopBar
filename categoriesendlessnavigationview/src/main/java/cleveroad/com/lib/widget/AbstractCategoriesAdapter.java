@@ -95,6 +95,7 @@ public abstract class AbstractCategoriesAdapter<T> extends RecyclerView.Adapter<
 
     @Override
     public void onItemClicked(IOperationItem<T> item, int position) {
+        listener.onItemClicked(item, position);
         position = normalizePosition(position);
         notifyItemClicked(item.getWrappedItem(), position);
     }
