@@ -139,7 +139,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         rvCategories.setLayoutManager(linearLayoutManager);
 
         rvCategories.setBackgroundColor(colorCodeListBackground);
-        ColorDrawable colorDrawable = new ColorDrawable1(colorCodeSelectionView);
+        ColorDrawable colorDrawable = new NegativeMarginFixColorDrawable(colorCodeSelectionView);
         flContainerSelected.setBackground(colorDrawable);
 
         if (isInEditMode()) {
