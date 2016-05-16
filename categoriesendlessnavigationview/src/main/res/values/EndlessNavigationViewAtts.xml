@@ -16,6 +16,8 @@
         <attr name="listBackground" format="color"/>
         <attr name="selectionBackground" format="color"/>
 
+        <attr name="placeholderId" format="reference"/>
+
         <attr name="selectionInAnimation" format="reference"/>
         <attr name="selectionOutAnimation" format="reference"/>
 

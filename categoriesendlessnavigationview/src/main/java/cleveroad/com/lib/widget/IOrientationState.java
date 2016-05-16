@@ -1,7 +1,10 @@
 package cleveroad.com.lib.widget;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -26,4 +29,6 @@ interface IOrientationState extends ISelectionGravityState {
     int getOrientation();
 
     void initSelectionContainer(ViewGroup selectionViewContainer);
+
+    void initPlaceHolder(@Nullable View overlayPlaceHolder, RecyclerView rvCategories);
 }

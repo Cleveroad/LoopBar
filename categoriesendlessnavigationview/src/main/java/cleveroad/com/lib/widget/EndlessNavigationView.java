@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -45,14 +46,20 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private int currentItemPosition;
 
     private int realHidedPosition = 0;
+
+    //views
     private FrameLayout flContainerSelected;
     private RecyclerView rvCategories;
+    @Nullable
+    private View overlayPlaceholder;
+
     private CategoriesAdapter.CategoriesHolder categoriesHolder;
     private CategoriesAdapter categoriesAdapter;
 
     private LinearLayoutManager linearLayoutManager;
     private AbstractSpacesItemDecoration spacesItemDecoration;
     private boolean skipNextOnLayout;
+    private boolean skipNextOnMeasure;
     private boolean isIndeterminateInitialized;
 
     private Integer itemWidth;
@@ -89,14 +96,11 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         init(context, attrs);
     }
 
-    private void inflate(IOrientationState orientationState) {
+    private void inflate(IOrientationState orientationState, int placeHolderId) {
         inflate(getContext(), orientationState.getLayoutId(), this);
         flContainerSelected = (FrameLayout) findViewById(R.id.flContainerSelected);
         rvCategories = (RecyclerView) findViewById(R.id.rvCategories);
-    }
-
-    public void onMoveOver() {
-        invalidate();
+        overlayPlaceholder = getRootView().findViewById(placeHolderId);
     }
 
     private void init(Context context, @Nullable AttributeSet attrs) {
@@ -109,6 +113,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         int orientation = a.getInteger(R.styleable.EndlessNavigationView_orientation, Orientation.ORIENTATION_HORIZONTAL);
         int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_selectionInAnimation, R.animator.scale_restore);
         int selectionAnimatorOutId = a.getResourceId(R.styleable.EndlessNavigationView_selectionOutAnimation, R.animator.scale_small);
+        int placeHolderId = a.getResourceId(R.styleable.EndlessNavigationView_placeholderId, -1);
         @GravityAttr int selectionGravity = a.getInteger(R.styleable.EndlessNavigationView_selectionGravity, SELECTION_GRAVITY_START);
         selectionMargin = a.getDimensionPixelSize(R.styleable.EndlessNavigationView_selectionMargin, getResources().getDimensionPixelSize(R.dimen.margin_selected_view));
         a.recycle();
@@ -118,7 +123,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         //current view has two state : horizontal & vertical. State design pattern
         orientationState = getOrientationStateFromParam(orientation, selectionGravity);
 
-        inflate(orientationState);
+        inflate(orientationState, placeHolderId);
 
         //note that flContainerSelected should be in FrameLayout
         FrameLayout.LayoutParams params = (LayoutParams) flContainerSelected.getLayoutParams();
@@ -209,11 +214,23 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (!skipNextOnMeasure) {
+            skipNextOnMeasure = true;
+            orientationState.initPlaceHolder(overlayPlaceholder, rvCategories);
+        } else {
+            skipNextOnMeasure = false;
+        }
+    }
+
+    @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         Log.d(TAG, "onLayout");
 
         if (!skipNextOnLayout) {
+
             if (rvCategories.getChildCount() > 0) {
                 int itemWidth = calcItemWidth();
                 int itemHeight = calcItemHeight();

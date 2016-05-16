@@ -1,8 +1,11 @@
 package cleveroad.com.lib.widget;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.UnknownFormatFlagsException;
@@ -48,6 +51,15 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
     public void initSelectionContainer(ViewGroup selectionViewContainer) {
         selectionViewContainer.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
         selectionViewContainer.requestLayout();
+    }
+
+    @Override
+    public void initPlaceHolder(@Nullable View overlayPlaceHolder, RecyclerView rvCategories) {
+        if (overlayPlaceHolder != null) {
+            //make placeholder same height as a recyclerView
+            overlayPlaceHolder.getLayoutParams().width = rvCategories.getMeasuredWidth();
+            overlayPlaceHolder.requestLayout();
+        }
     }
 
     @Override
