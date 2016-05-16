@@ -16,7 +16,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -152,6 +151,8 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         categoriesHolder.itemView.setBackgroundColor(colorCodeSelectionView);
 
         flContainerSelected.addView(categoriesHolder.itemView);
+        orientationState.initSelectionContainer(flContainerSelected);
+
         FrameLayout.LayoutParams layoutParams = (LayoutParams) categoriesHolder.itemView.getLayoutParams();
         layoutParams.gravity = Gravity.CENTER;
     }
@@ -254,6 +255,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
                 //replace selected view
                 categoriesHolder.bindItemWildcardHelper(inputAdapter, position);
                 startSelectedViewInAnimation();
+                flContainerSelected.requestLayout();
             }
         });
     }

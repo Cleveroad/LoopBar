@@ -2,6 +2,8 @@ package cleveroad.com.lib.widget;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 interface IOrientationState extends ISelectionGravityState {
     LinearLayoutManager getLayoutManager(Context context);
@@ -22,4 +24,6 @@ interface IOrientationState extends ISelectionGravityState {
 
     @Orientation
     int getOrientation();
+
+    void initSelectionContainer(ViewGroup selectionViewContainer);
 }

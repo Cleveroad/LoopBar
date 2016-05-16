@@ -45,6 +45,12 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
     }
 
     @Override
+    public void initSelectionContainer(ViewGroup selectionViewContainer) {
+        selectionViewContainer.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        selectionViewContainer.requestLayout();
+    }
+
+    @Override
     protected ISelectionGravityState getGravityState(int gravityAttribute) {
         switch (gravityAttribute) {
             case EndlessNavigationView.SELECTION_GRAVITY_START:

@@ -45,6 +45,12 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
     }
 
     @Override
+    public void initSelectionContainer(ViewGroup selectionViewContainer) {
+        selectionViewContainer.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        selectionViewContainer.requestLayout();
+    }
+
+    @Override
     protected ISelectionGravityState getGravityState(int gravityAttribute) {
         switch (gravityAttribute) {
             case EndlessNavigationView.SELECTION_GRAVITY_START:
