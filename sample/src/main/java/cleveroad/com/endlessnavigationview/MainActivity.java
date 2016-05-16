@@ -66,10 +66,9 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         endlessNavigationView.setCategoriesAdapter(categoriesAdapter);
         endlessNavigationView.addOnItemClickListener(this);
 
-        List<Fragment> list = new ArrayList<>(9);
+        List<Fragment> list = new ArrayList<>(8);
         list.add(ColorFragment.newInstance(android.R.color.holo_red_dark));
         list.add(ColorFragment.newInstance(android.R.color.black));
-        list.add(ColorFragment.newInstance(android.R.color.holo_blue_dark));
         list.add(ColorFragment.newInstance(android.R.color.holo_green_dark));
         list.add(ColorFragment.newInstance(android.R.color.holo_orange_dark));
         list.add(ColorFragment.newInstance(android.R.color.holo_blue_light));
@@ -83,7 +82,12 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                endlessNavigationView.setCurrentItem(position);
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                endlessNavigationView.onMoveOver();
             }
         });
     }

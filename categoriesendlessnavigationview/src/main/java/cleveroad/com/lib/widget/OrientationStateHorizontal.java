@@ -29,7 +29,7 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
 
     @Override
     public boolean isItemsFitOnScreen(int containerWidth, int containerHeight, int itemWidth, int itemHeight, int itemsSize) {
-        int itemsWidth = itemWidth * (itemsSize - 1);
+        int itemsWidth = itemWidth * (itemsSize);
         return containerWidth >= itemsWidth;
     }
 

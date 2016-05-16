@@ -95,6 +95,10 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         rvCategories = (RecyclerView) findViewById(R.id.rvCategories);
     }
 
+    public void onMoveOver() {
+        invalidate();
+    }
+
     private void init(Context context, @Nullable AttributeSet attrs) {
         //read customization attributes
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EndlessNavigationView);
@@ -297,6 +301,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         realHidedPosition = realPosition;
 
         oldHidedItem.setVisible(true);
+        flContainerSelected.requestLayout();
         categoriesAdapter.notifyItemChanged(itemToShowAdapterPosition);
 
         this.currentItemPosition = realPosition;

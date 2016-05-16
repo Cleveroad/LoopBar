@@ -26,7 +26,6 @@ public class MockedItemsFactory {
         items.add(new CategoryItem(android.R.drawable.ic_delete, "cross"));
         items.add(new CategoryItem(android.R.drawable.ic_menu_camera, "photo"));
         items.add(new CategoryItem(android.R.drawable.ic_search_category_default, "search"));
-        items.add(new CategoryItem(android.R.drawable.ic_btn_speak_now, "micro"));
         items.add(new CategoryItem(android.R.drawable.ic_dialog_alert, "alert"));
         items.add(new CategoryItem(android.R.drawable.ic_dialog_email, "email"));
         return items;
