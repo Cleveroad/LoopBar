@@ -151,6 +151,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHold
         @Override
         protected final void onBindItem(IOperationItem item) {
             bindItemWildcardHelper(inputAdapter, getAdapterPosition());
+            itemView.setVisibility(item.isVisible()? View.VISIBLE : View.GONE);
         }
 
         @Override

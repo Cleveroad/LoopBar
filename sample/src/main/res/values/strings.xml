@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">EndlessNavigationView</string>
     <string name="mask_on_item_clicked" formatted="false">"On item clicked, position = %s, name = %s"</string>
+    <string name="change_orientation">Change orientation</string>
 </resources>

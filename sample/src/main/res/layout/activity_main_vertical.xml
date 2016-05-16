@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="cleveroad.com.endlessnavigationview.MainActivity">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/endlessView"
+        android:layout_toEndOf="@+id/endlessView"
+        android:background="@android:color/holo_red_dark"
+        />
+
+    <Button
+        android:id="@+id/btnOrientation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_orientation"
+        android:layout_centerInParent="true"
+        android:onClick="onBtnOrientationClicked"
+        />
+
+    <cleveroad.com.lib.widget.EndlessNavigationView
+        android:id="@+id/endlessView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        app:orientation="vertical"
+        app:selectionGravity="start"
+        app:selectionMargin="10dp"
+        app:selectionBackground="@android:color/holo_blue_dark"
+        />
+
+</RelativeLayout>

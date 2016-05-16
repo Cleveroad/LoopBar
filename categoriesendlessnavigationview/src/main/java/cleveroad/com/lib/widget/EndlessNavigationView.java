@@ -29,8 +29,8 @@ import cleveroad.com.lib.model.MockedItemsFactory;
 import cleveroad.com.lib.util.AbstractAnimatorListener;
 
 public class EndlessNavigationView extends FrameLayout implements OnItemClickListener {
-    public static final int ORIENTATION_VERTICAL = 0;
-    public static final int ORIENTATION_HORIZONTAL = 1;
+    private static final int ORIENTATION_VERTICAL = 0;
+    private static final int ORIENTATION_HORIZONTAL = 1;
     public static final int SELECTION_GRAVITY_START = 0;
     public static final int SELECTION_GRAVITY_END = 1;
     private static final String TAG = EndlessNavigationView.class.getSimpleName();
@@ -45,6 +45,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private Animator selectionOutAnimator;
     private int selectionMargin;
     private IOrientationState orientationState;
+    private int currentItemPosition;
 
     private int realHidedPosition = 0;
     private FrameLayout flContainerSelected;
@@ -263,12 +264,27 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         animator.start();
     }
 
-    @Override
-    public void onItemClicked(int position) {
+    /** set selected item in endless view. OnItemSelected listeners won't be invoked
+     * @param currentItemPosition selected position*/
+    public void setCurrentItem(int currentItemPosition) {
+        selectItem(currentItemPosition, false);
+    }
+
+    /** set selected item in endless view.
+     * OnItemSelected listeners won't be invoked
+     * @param currentItemPosition selected position
+     * @param isInvokeListeners should view notify OnItemSelected listeners about this selection*/
+    public void setCurrentItem(int currentItemPosition, boolean isInvokeListeners) {
+        selectItem(currentItemPosition, isInvokeListeners);
+    }
+
+    public void selectItem(int position, boolean invokeListeners) {
         IOperationItem item = categoriesAdapter.getItem(position);
         IOperationItem oldHidedItem = categoriesAdapter.getItem(realHidedPosition);
 
         int realPosition = categoriesAdapter.normalizePosition(position);
+        //do nothing if position not changed
+        if (realPosition == currentItemPosition) return;
         int itemToShowAdapterPosition = position - realPosition + realHidedPosition;
 
         item.setVisible(false);
@@ -281,9 +297,18 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         oldHidedItem.setVisible(true);
         categoriesAdapter.notifyItemChanged(itemToShowAdapterPosition);
 
-        notifyItemClickListeners(realPosition);
+        this.currentItemPosition = realPosition;
+
+        if (invokeListeners) {
+            notifyItemClickListeners(realPosition);
+        }
 
         Log.i(TAG, "clicked on position =" + position);
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+        selectItem(position, true);
     }
 
     //orientation state factory method
