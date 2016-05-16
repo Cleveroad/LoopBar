@@ -42,6 +42,7 @@
         app:enls_orientation="horizontal"
         app:enls_selectionGravity="start"
         app:enls_selectionMargin="10dp"
+        app:enls_overlaySize="5dp"
         app:enls_selectionBackground="@android:color/holo_blue_dark"
         />
 

@@ -117,7 +117,9 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         int selectionAnimatorOutId = a.getResourceId(R.styleable.EndlessNavigationView_enls_selectionOutAnimation, R.animator.enls_scale_small);
         placeHolderId = a.getResourceId(R.styleable.EndlessNavigationView_enls_placeholderId, -1);
         @GravityAttr int selectionGravity = a.getInteger(R.styleable.EndlessNavigationView_enls_selectionGravity, SELECTION_GRAVITY_START);
-        selectionMargin = a.getDimensionPixelSize(R.styleable.EndlessNavigationView_enls_selectionMargin, getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view));
+        selectionMargin = a.getDimensionPixelSize(R.styleable.EndlessNavigationView_enls_selectionMargin,
+                getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view));
+        overlaySize = a.getDimensionPixelSize(R.styleable.EndlessNavigationView_enls_overlaySize, 0);
         a.recycle();
         selectionInAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorInId);
         selectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
@@ -228,7 +230,11 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
 
         if (!skipNextOnLayout) {
 
-            orientationState.initPlaceHolder(overlayPlaceholder, rvCategories);
+            if (overlaySize > 0 && overlayPlaceholder == null) {
+                Log.e(TAG, "You have to add placeholder and set it id with #enls_placeHolderId parameter to use overlaySize");
+            }
+
+            orientationState.initPlaceHolder(overlayPlaceholder, rvCategories, overlaySize);
 
             if (rvCategories.getChildCount() > 0) {
                 int itemWidth = calcItemWidth();

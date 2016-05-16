@@ -54,11 +54,15 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
     }
 
     @Override
-    public void initPlaceHolder(@Nullable View overlayPlaceHolder, RecyclerView rvCategories) {
+    public void initPlaceHolder(@Nullable View overlayPlaceHolder, RecyclerView rvCategories, int overlaySize) {
         if (overlayPlaceHolder != null) {
             //make placeholder same height as a recyclerView
             overlayPlaceHolder.getLayoutParams().width = rvCategories.getMeasuredWidth();
             overlayPlaceHolder.requestLayout();
+
+            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) rvCategories.getLayoutParams();
+            marginLayoutParams.setMargins(0, overlaySize, 0, 0);
+            rvCategories.requestLayout();
         }
     }
 
