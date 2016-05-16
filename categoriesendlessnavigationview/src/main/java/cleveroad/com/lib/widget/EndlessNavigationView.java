@@ -143,6 +143,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         firstItem.setVisible(false);
 
         categoriesAdapter.setListener(this);
+        categoriesAdapter.setOrientation(orientationState.getOrientation());
         rvCategories.setAdapter(categoriesAdapter);
 
         categoriesHolder = (CategoriesAdapter.CategoriesHolder) categoriesAdapter.createViewHolder(rvCategories, CategoriesAdapter.VIEW_TYPE_OTHER);
@@ -212,6 +213,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
                 int itemWidth = calcItemWidth();
                 int itemHeight = calcItemHeight();
 
+                /** true if current set of category items fit on screen, so view shouldn't be indeterminate */
                 boolean isFitOnScreen = orientationState.isItemsFitOnScreen(rvCategories.getWidth(),
                         rvCategories.getHeight(), itemWidth, itemHeight, categoriesAdapter.getWrappedItems().size());
 

@@ -40,6 +40,11 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
     }
 
     @Override
+    public int getOrientation() {
+        return Orientation.ORIENTATION_HORIZONTAL;
+    }
+
+    @Override
     protected ISelectionGravityState getGravityState(int gravityAttribute) {
         switch (gravityAttribute) {
             case EndlessNavigationView.SELECTION_GRAVITY_START:

@@ -19,4 +19,7 @@ interface IOrientationState extends ISelectionGravityState {
     boolean isItemsFitOnScreen(int containerWidth, int containerHeight, int itemWidth, int itemHeight, int itemsSize);
 
     AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight);
+
+    @Orientation
+    int getOrientation();
 }

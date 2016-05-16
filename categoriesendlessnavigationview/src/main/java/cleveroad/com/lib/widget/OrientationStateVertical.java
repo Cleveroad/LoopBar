@@ -40,6 +40,11 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
     }
 
     @Override
+    public int getOrientation() {
+        return Orientation.ORIENTATION_VERTICAL;
+    }
+
+    @Override
     protected ISelectionGravityState getGravityState(int gravityAttribute) {
         switch (gravityAttribute) {
             case EndlessNavigationView.SELECTION_GRAVITY_START:

@@ -21,6 +21,9 @@ public class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHold
     public static final int VIEW_TYPE_RESERVED_HIDDEN = -1;
     public static final int VIEW_TYPE_OTHER = 0;
 
+    @Orientation
+    private int orientation = Orientation.ORIENTATION_VERTICAL;
+
     private RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter;
 
     private HashMap<Integer, IOperationItem> wrappedItems = new HashMap<>();
@@ -71,6 +74,10 @@ public class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHold
         return wrappedItems.get(position);
     }
 
+    public void setOrientation(int orientation) {
+        this.orientation = orientation;
+    }
+
     int normalizePosition(int position){
         return position % wrappedItems.size();
     }
@@ -87,7 +94,20 @@ public class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHold
             return new EmptyHolder(createEmptyView(parent));
         }
 
-        CategoriesHolder categoriesHolder = new CategoriesHolder(inputAdapter.createViewHolder(parent, viewType));
+        RecyclerView.ViewHolder viewHolder = inputAdapter.createViewHolder(parent, viewType);
+        CategoriesHolder categoriesHolder = new CategoriesHolder(viewHolder);
+
+        if (orientation == Orientation.ORIENTATION_VERTICAL) {
+            //if orientation vertical set layout params to MATCH_PARENT to center item in view
+            ViewGroup.LayoutParams layoutParams = viewHolder.itemView.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            viewHolder.itemView.requestLayout();
+        } else {
+            //if orientation vertical set layout params to MATCH_PARENT to center item in view
+            ViewGroup.LayoutParams layoutParams = viewHolder.itemView.getLayoutParams();
+            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            viewHolder.itemView.requestLayout();
+        }
 
         if (listener != null) {
             categoriesHolder.setListener(this);
