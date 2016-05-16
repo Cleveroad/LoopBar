@@ -165,7 +165,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         flContainerSelected.setBackground(colorDrawable);
 
         if (isInEditMode()) {
-            setCategoriesAdapter(new CategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq())));
+            setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq()));
         }
     }
 
