@@ -27,7 +27,7 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
 
     @Override
     public int getLayoutId() {
-        return R.layout.view_categories_navigation_vertical;
+        return R.layout.enls_view_categories_navigation_vertical;
     }
 
     @Override

@@ -10,7 +10,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="8dp"
-    tools:background="@color/default_selection_view_background"
+    tools:background="@color/enls_default_selection_view_background"
     >
 
     <ImageView
@@ -18,7 +18,7 @@
         android:layout_width="34dp"
         android:layout_height="34dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_local_taxi"
+        android:src="@drawable/enls_ic_local_taxi"
         />
 
     <TextView

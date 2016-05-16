@@ -23,7 +23,7 @@ public class SimpleCategoriesAdapter extends RecyclerView.Adapter<SimpleCategori
 
     /** create itemView*/
     public View createView(ViewGroup parent) {
-        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_default, parent, false);
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.enls_item_default, parent, false);
     }
 
     @Override

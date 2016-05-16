@@ -46,6 +46,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private IOrientationState orientationState;
     private int currentItemPosition;
     private int placeHolderId;
+    private int overlaySize;
 
     private int realHidedPosition = 0;
 
@@ -107,16 +108,16 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private void init(Context context, @Nullable AttributeSet attrs) {
         //read customization attributes
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EndlessNavigationView);
-        int colorCodeListBackground = a.getColor(R.styleable.EndlessNavigationView_listBackground,
-                ContextCompat.getColor(getContext(), R.color.default_list_background));
-        colorCodeSelectionView = a.getColor(R.styleable.EndlessNavigationView_selectionBackground,
-                ContextCompat.getColor(getContext(), R.color.default_selection_view_background));
-        int orientation = a.getInteger(R.styleable.EndlessNavigationView_orientation, Orientation.ORIENTATION_HORIZONTAL);
-        int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_selectionInAnimation, R.animator.scale_restore);
-        int selectionAnimatorOutId = a.getResourceId(R.styleable.EndlessNavigationView_selectionOutAnimation, R.animator.scale_small);
-        placeHolderId = a.getResourceId(R.styleable.EndlessNavigationView_placeholderId, -1);
-        @GravityAttr int selectionGravity = a.getInteger(R.styleable.EndlessNavigationView_selectionGravity, SELECTION_GRAVITY_START);
-        selectionMargin = a.getDimensionPixelSize(R.styleable.EndlessNavigationView_selectionMargin, getResources().getDimensionPixelSize(R.dimen.margin_selected_view));
+        int colorCodeListBackground = a.getColor(R.styleable.EndlessNavigationView_enls_listBackground,
+                ContextCompat.getColor(getContext(), R.color.enls_default_list_background));
+        colorCodeSelectionView = a.getColor(R.styleable.EndlessNavigationView_enls_selectionBackground,
+                ContextCompat.getColor(getContext(), R.color.enls_default_selection_view_background));
+        int orientation = a.getInteger(R.styleable.EndlessNavigationView_enls_orientation, Orientation.ORIENTATION_HORIZONTAL);
+        int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_enls_selectionInAnimation, R.animator.enls_scale_restore);
+        int selectionAnimatorOutId = a.getResourceId(R.styleable.EndlessNavigationView_enls_selectionOutAnimation, R.animator.enls_scale_small);
+        placeHolderId = a.getResourceId(R.styleable.EndlessNavigationView_enls_placeholderId, -1);
+        @GravityAttr int selectionGravity = a.getInteger(R.styleable.EndlessNavigationView_enls_selectionGravity, SELECTION_GRAVITY_START);
+        selectionMargin = a.getDimensionPixelSize(R.styleable.EndlessNavigationView_enls_selectionMargin, getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view));
         a.recycle();
         selectionInAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorInId);
         selectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
@@ -252,7 +253,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
                 } else {
                     if (!isIndeterminateInitialized) {
                         //scroll to middle of indeterminate recycler view on initialization and if user somehow scrolled to start or end
-                        linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.selected_view_size_plus_margin));
+                        linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.enls_selected_view_size_plus_margin));
                         rvCategories.addOnScrollListener(indeterminateOnScrollListener);
                         isIndeterminateInitialized = true;
                     }

@@ -62,7 +62,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHold
     }
 
     public View createEmptyView(ViewGroup parent) {
-        return LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_view, parent, false);
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.enls_empty_view, parent, false);
     }
 
     public void setIndeterminate(boolean isIndeterminate) {

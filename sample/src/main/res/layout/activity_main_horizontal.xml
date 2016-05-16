@@ -38,11 +38,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:placeholderId="@id/placeHolder"
-        app:orientation="horizontal"
-        app:selectionGravity="start"
-        app:selectionMargin="10dp"
-        app:selectionBackground="@android:color/holo_blue_dark"
+        app:enls_placeholderId="@id/placeHolder"
+        app:enls_orientation="horizontal"
+        app:enls_selectionGravity="start"
+        app:enls_selectionMargin="10dp"
+        app:enls_selectionBackground="@android:color/holo_blue_dark"
         />
 
 </RelativeLayout>

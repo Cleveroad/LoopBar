@@ -27,7 +27,7 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
 
     @Override
     public int getLayoutId() {
-        return R.layout.view_categories_navigation_horizontal;
+        return R.layout.enls_view_categories_navigation_horizontal;
     }
 
     @Override
