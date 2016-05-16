@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -37,6 +38,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     //outside params
     private RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter;
     private List<OnItemClickListener> clickListeners = new ArrayList<>();
+    private int colorCodeSelectionView;
 
     //view settings
     private Animator selectionInAnimator;
@@ -89,41 +91,6 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         init(context, attrs);
     }
 
-    @SuppressWarnings("unchecked assigment")
-    public void setCategoriesAdapter(@NonNull RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter) {
-        this.inputAdapter = inputAdapter;
-        this.categoriesAdapter = new CategoriesAdapter(inputAdapter);
-        IOperationItem firstItem = categoriesAdapter.getItem(0);
-        firstItem.setVisible(false);
-
-        categoriesAdapter.setListener(this);
-        rvCategories.setAdapter(categoriesAdapter);
-
-        categoriesHolder = (CategoriesAdapter.CategoriesHolder) categoriesAdapter.createViewHolder(rvCategories, CategoriesAdapter.VIEW_TYPE_OTHER);
-        //set first item to selectionView
-        categoriesHolder.bindItemWildcardHelper(inputAdapter, 0);
-
-        flContainerSelected.addView(categoriesHolder.itemView);
-    }
-
-    public boolean addOnItemClickListener(OnItemClickListener itemClickListener) {
-        return clickListeners.add(itemClickListener);
-    }
-
-    public boolean removeOnItemClickListener(OnItemClickListener itemClickListener) {
-        return clickListeners.remove(itemClickListener);
-    }
-
-    public void notifyItemClickListeners(int normalizedPosition) {
-        for (OnItemClickListener itemClickListener : clickListeners) {
-            itemClickListener.onItemClicked(normalizedPosition);
-        }
-    }
-
-    public void setCurrentItem(int position) {
-        onItemClicked(items.get(position), position);
-    }
-
     private void inflate(IOrientationState orientationState) {
         inflate(getContext(), orientationState.getLayoutId(), this);
         flContainerSelected = (FrameLayout) findViewById(R.id.flContainerSelected);
@@ -135,7 +102,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EndlessNavigationView);
         int colorCodeListBackground = a.getColor(R.styleable.EndlessNavigationView_listBackground,
                 ContextCompat.getColor(getContext(), R.color.default_list_background));
-        int colorCodeSelectionView = a.getColor(R.styleable.EndlessNavigationView_selectionBackground,
+        colorCodeSelectionView = a.getColor(R.styleable.EndlessNavigationView_selectionBackground,
                 ContextCompat.getColor(getContext(), R.color.default_selection_view_background));
         int orientation = a.getInteger(R.styleable.EndlessNavigationView_orientation, ORIENTATION_HORIZONTAL);
         int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_selectionInAnimation, R.animator.scale_restore);
@@ -168,6 +135,41 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
             setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq()));
         }
     }
+
+    @SuppressWarnings("unchecked assigment")
+    public void setCategoriesAdapter(@NonNull RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter) {
+        this.inputAdapter = inputAdapter;
+        this.categoriesAdapter = new CategoriesAdapter(inputAdapter);
+        IOperationItem firstItem = categoriesAdapter.getItem(0);
+        firstItem.setVisible(false);
+
+        categoriesAdapter.setListener(this);
+        rvCategories.setAdapter(categoriesAdapter);
+
+        categoriesHolder = (CategoriesAdapter.CategoriesHolder) categoriesAdapter.createViewHolder(rvCategories, CategoriesAdapter.VIEW_TYPE_OTHER);
+        //set first item to selectionView
+        categoriesHolder.bindItemWildcardHelper(inputAdapter, 0);
+        categoriesHolder.itemView.setBackgroundColor(colorCodeSelectionView);
+
+        flContainerSelected.addView(categoriesHolder.itemView);
+        FrameLayout.LayoutParams layoutParams = (LayoutParams) categoriesHolder.itemView.getLayoutParams();
+        layoutParams.gravity = Gravity.CENTER;
+    }
+
+    public boolean addOnItemClickListener(OnItemClickListener itemClickListener) {
+        return clickListeners.add(itemClickListener);
+    }
+
+    public boolean removeOnItemClickListener(OnItemClickListener itemClickListener) {
+        return clickListeners.remove(itemClickListener);
+    }
+
+    public void notifyItemClickListeners(int normalizedPosition) {
+        for (OnItemClickListener itemClickListener : clickListeners) {
+            itemClickListener.onItemClicked(normalizedPosition);
+        }
+    }
+
 
     //very big duct tape
     private int calcItemWidth() {
