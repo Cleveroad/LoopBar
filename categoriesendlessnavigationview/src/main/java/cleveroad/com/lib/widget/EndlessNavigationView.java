@@ -17,6 +17,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private int selectionMargin;
     private IOrientationState orientationState;
     private int currentItemPosition;
+    private int placeHolderId;
 
     private int realHidedPosition = 0;
 
@@ -59,7 +61,6 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private LinearLayoutManager linearLayoutManager;
     private AbstractSpacesItemDecoration spacesItemDecoration;
     private boolean skipNextOnLayout;
-    private boolean skipNextOnMeasure;
     private boolean isIndeterminateInitialized;
 
     private Integer itemWidth;
@@ -113,7 +114,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         int orientation = a.getInteger(R.styleable.EndlessNavigationView_orientation, Orientation.ORIENTATION_HORIZONTAL);
         int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_selectionInAnimation, R.animator.scale_restore);
         int selectionAnimatorOutId = a.getResourceId(R.styleable.EndlessNavigationView_selectionOutAnimation, R.animator.scale_small);
-        int placeHolderId = a.getResourceId(R.styleable.EndlessNavigationView_placeholderId, -1);
+        placeHolderId = a.getResourceId(R.styleable.EndlessNavigationView_placeholderId, -1);
         @GravityAttr int selectionGravity = a.getInteger(R.styleable.EndlessNavigationView_selectionGravity, SELECTION_GRAVITY_START);
         selectionMargin = a.getDimensionPixelSize(R.styleable.EndlessNavigationView_selectionMargin, getResources().getDimensionPixelSize(R.dimen.margin_selected_view));
         a.recycle();
@@ -214,14 +215,9 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (!skipNextOnMeasure) {
-            skipNextOnMeasure = true;
-            orientationState.initPlaceHolder(overlayPlaceholder, rvCategories);
-        } else {
-            skipNextOnMeasure = false;
-        }
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        overlayPlaceholder = ((ViewGroup)getParent()).findViewById(placeHolderId);
     }
 
     @Override
@@ -230,6 +226,8 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         Log.d(TAG, "onLayout");
 
         if (!skipNextOnLayout) {
+
+            orientationState.initPlaceHolder(overlayPlaceholder, rvCategories);
 
             if (rvCategories.getChildCount() > 0) {
                 int itemWidth = calcItemWidth();
