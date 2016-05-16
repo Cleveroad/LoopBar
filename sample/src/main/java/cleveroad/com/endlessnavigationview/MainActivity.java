@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -19,11 +18,10 @@ import cleveroad.com.lib.adapter.SimpleCategoriesAdapter;
 import cleveroad.com.lib.model.MockedItemsFactory;
 import cleveroad.com.lib.widget.EndlessNavigationView;
 import cleveroad.com.lib.widget.OnItemClickListener;
+import cleveroad.com.lib.widget.Orientation;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickListener {
     private static final String EXTRA_ORIENTATION = "orientation";
-    private static final int ORIENTATION_VERTICAL = 0;
-    private static final int ORIENTATION_HORIZONTAL = 1;
 
     private EndlessNavigationView endlessNavigationView;
 
@@ -33,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
     private ViewPager viewPager;
 
     //args
+    @Orientation
     private int orientation;
 
     @Nullable
@@ -45,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
     }
 
     public void onBtnOrientationClicked(View btn) {
-        int nextOrientation = orientation == ORIENTATION_VERTICAL ? ORIENTATION_HORIZONTAL : ORIENTATION_VERTICAL;
+        int nextOrientation = orientation == Orientation.ORIENTATION_VERTICAL ? Orientation.ORIENTATION_HORIZONTAL : Orientation.ORIENTATION_VERTICAL;
         start(this, nextOrientation);
         finish();
     }
@@ -54,9 +53,11 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        orientation = getIntent().getIntExtra(EXTRA_ORIENTATION, ORIENTATION_HORIZONTAL);
+        @Orientation
+        int orientation = getIntent().getIntExtra(EXTRA_ORIENTATION, Orientation.ORIENTATION_HORIZONTAL);
+        this.orientation = orientation;
 
-        setContentView(orientation == ORIENTATION_VERTICAL ? R.layout.activity_main_vertical : R.layout.activity_main_horizontal);
+        setContentView(orientation == Orientation.ORIENTATION_VERTICAL ? R.layout.activity_main_vertical : R.layout.activity_main_horizontal);
 
         endlessNavigationView = (EndlessNavigationView) findViewById(R.id.endlessView);
         viewPager = (ViewPager) findViewById(R.id.viewPager);

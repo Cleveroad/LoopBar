@@ -29,8 +29,6 @@ import cleveroad.com.lib.model.MockedItemsFactory;
 import cleveroad.com.lib.util.AbstractAnimatorListener;
 
 public class EndlessNavigationView extends FrameLayout implements OnItemClickListener {
-    private static final int ORIENTATION_VERTICAL = 0;
-    private static final int ORIENTATION_HORIZONTAL = 1;
     public static final int SELECTION_GRAVITY_START = 0;
     public static final int SELECTION_GRAVITY_END = 1;
     private static final String TAG = EndlessNavigationView.class.getSimpleName();
@@ -105,7 +103,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
                 ContextCompat.getColor(getContext(), R.color.default_list_background));
         colorCodeSelectionView = a.getColor(R.styleable.EndlessNavigationView_selectionBackground,
                 ContextCompat.getColor(getContext(), R.color.default_selection_view_background));
-        int orientation = a.getInteger(R.styleable.EndlessNavigationView_orientation, ORIENTATION_HORIZONTAL);
+        int orientation = a.getInteger(R.styleable.EndlessNavigationView_orientation, Orientation.ORIENTATION_HORIZONTAL);
         int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_selectionInAnimation, R.animator.scale_restore);
         int selectionAnimatorOutId = a.getResourceId(R.styleable.EndlessNavigationView_selectionOutAnimation, R.animator.scale_small);
         @GravityAttr int selectionGravity = a.getInteger(R.styleable.EndlessNavigationView_selectionGravity, SELECTION_GRAVITY_START);
@@ -313,7 +311,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
 
     //orientation state factory method
     public IOrientationState getOrientationStateFromParam(int orientation, @GravityAttr int selectionGravityState) {
-        return orientation == ORIENTATION_VERTICAL ? new OrientationStateVertical(selectionGravityState) : new OrientationStateHorizontal(selectionGravityState);
+        return orientation == Orientation.ORIENTATION_VERTICAL ? new OrientationStateVertical(selectionGravityState) : new OrientationStateHorizontal(selectionGravityState);
     }
 
     @IntDef({SELECTION_GRAVITY_START, SELECTION_GRAVITY_END})
