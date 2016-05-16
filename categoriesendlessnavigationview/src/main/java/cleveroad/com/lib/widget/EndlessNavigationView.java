@@ -156,20 +156,31 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         layoutParams.gravity = Gravity.CENTER;
     }
 
+    /** add item click listener to this view*/
     public boolean addOnItemClickListener(OnItemClickListener itemClickListener) {
         return clickListeners.add(itemClickListener);
     }
 
+    /** remove item click listener from this view*/
     public boolean removeOnItemClickListener(OnItemClickListener itemClickListener) {
         return clickListeners.remove(itemClickListener);
     }
 
-    public void notifyItemClickListeners(int normalizedPosition) {
+    private void notifyItemClickListeners(int normalizedPosition) {
         for (OnItemClickListener itemClickListener : clickListeners) {
             itemClickListener.onItemClicked(normalizedPosition);
         }
     }
 
+    /** change selection view inAnimator in runtime*/
+    public void setSelectionInAnimator(Animator selectionInAnimator) {
+        this.selectionInAnimator = selectionInAnimator;
+    }
+
+    /** change selection view outAnimator in runtime*/
+    public void setSelectionOutAnimator(Animator selectionOutAnimator) {
+        this.selectionOutAnimator = selectionOutAnimator;
+    }
 
     //very big duct tape
     private int calcItemWidth() {
