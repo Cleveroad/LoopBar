@@ -1,12 +1,7 @@
 package cleveroad.com.lib.adapter;
 
-public class OperationItem<T> implements IOperationItem<T>{
+public class OperationItem implements IOperationItem{
     private boolean isVisible = true;
-    private T item;
-
-    public OperationItem(T item){
-        this.item = item;
-    }
 
     @Override
     public boolean isVisible() {
@@ -15,9 +10,5 @@ public class OperationItem<T> implements IOperationItem<T>{
 
     public void setVisible(boolean visible) {
         isVisible = visible;
-    }
-    @Override
-    public T getWrappedItem() {
-        return item;
     }
 }

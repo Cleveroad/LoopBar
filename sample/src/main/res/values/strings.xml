@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">EndlessNavigationView</string>
+    <string name="mask_on_item_clicked">"On item clicked, position = %s"</string>
 </resources>

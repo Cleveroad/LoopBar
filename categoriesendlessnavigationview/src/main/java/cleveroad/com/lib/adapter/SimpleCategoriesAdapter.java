@@ -2,6 +2,7 @@ package cleveroad.com.lib.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +12,13 @@ import android.widget.TextView;
 import java.util.List;
 
 import cleveroad.com.lib.R;
-import cleveroad.com.lib.widget.AbstractCategoriesAdapter;
 
-public class SimpleCategoriesAdapter extends AbstractCategoriesAdapter<ICategoryItem> {
+public class SimpleCategoriesAdapter extends RecyclerView.Adapter<SimpleCategoriesAdapter.SimpleCategoriesHolder> {
+
+    private List<ICategoryItem> categoryItems;
 
     public SimpleCategoriesAdapter(List<ICategoryItem> items) {
-        super(items);
-    }
-
-    /** factory method to create child of CategoriesHolder*/
-    @Override
-    public CategoriesHolder<ICategoryItem> createCategoriesHolder(View itemView) {
-        return new SimpleCategoriesHolder(itemView);
+        this.categoryItems = items;
     }
 
     /** create itemView*/
@@ -30,7 +26,26 @@ public class SimpleCategoriesAdapter extends AbstractCategoriesAdapter<ICategory
         return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_default, parent, false);
     }
 
-    public static class SimpleCategoriesHolder extends CategoriesHolder<ICategoryItem> {
+    @Override
+    public SimpleCategoriesHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new SimpleCategoriesHolder(createView(parent));
+    }
+
+    @Override
+    public void onBindViewHolder(SimpleCategoriesHolder holder, int position) {
+        holder.bindItem(getItem(position));
+    }
+
+    public ICategoryItem getItem(int position) {
+        return categoryItems.get(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return categoryItems.size();
+    }
+
+    public static class SimpleCategoriesHolder extends BaseRecyclerViewHolder<ICategoryItem> {
         private TextView tvCategoryName;
         private ImageView ivCategoryIcon;
 
@@ -41,9 +56,10 @@ public class SimpleCategoriesAdapter extends AbstractCategoriesAdapter<ICategory
         }
 
         @Override
-        protected void onBindItemToView(ICategoryItem item) {
+        protected void onBindItem(ICategoryItem item) {
             tvCategoryName.setText(item.getCategoryName());
             ivCategoryIcon.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), item.getCategoryIconDrawable()));
         }
+
     }
 }

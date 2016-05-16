@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,62 +15,58 @@ import cleveroad.com.lib.R;
 import cleveroad.com.lib.adapter.IOperationItem;
 import cleveroad.com.lib.adapter.OperationItem;
 
-public abstract class CategoriesAdapter<T> extends RecyclerView.Adapter<CategoriesAdapter.CategoriesHolder<T>>
-        implements OnItemClickListener<IOperationItem<T>> {
+public class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOperationItem>>
+        implements OnItemClickListener {
     private static final String TAG = CategoriesAdapter.class.getSimpleName();
     public static final int VIEW_TYPE_RESERVED_HIDDEN = -1;
     public static final int VIEW_TYPE_OTHER = 0;
 
-    private RecyclerView.Adapter<RecyclerView.ViewHolder> inputAdapter;
+    private RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter;
 
-    private List<IOperationItem<T>> wrappedItems = new LinkedList<>();
-    private OnItemClickListener<IOperationItem<T>> listener;
-    private List<OnItemClickListener<T>> outerItemClickListeners = new LinkedList<>();
+    private HashMap<Integer, IOperationItem> wrappedItems = new HashMap<>();
+    private OnItemClickListener listener;
+    private List<OnItemClickListener> outerItemClickListeners = new LinkedList<>();
 
-    public void addOnItemClickListener(OnItemClickListener<T> onItemClickListener){
+    public void addOnItemClickListener(OnItemClickListener onItemClickListener){
         outerItemClickListeners.add(onItemClickListener);
     }
 
-    public void removeOnItemClickListener(OnItemClickListener<T> onItemClickListener){
+    public void removeOnItemClickListener(OnItemClickListener onItemClickListener){
         outerItemClickListeners.remove(onItemClickListener);
     }
 
-    private void notifyItemClicked(T item, int position){
-        for (OnItemClickListener<T> listener : outerItemClickListeners){
-            listener.onItemClicked(item, position);
+    private void notifyItemClicked(int position){
+        for (OnItemClickListener listener : outerItemClickListeners){
+            listener.onItemClicked(position);
         }
     }
 
     private boolean isIndeterminate = true;
 
-    public CategoriesAdapter(List<T> items) {
-        for (T item : items) {
-            wrappedItems.add(new OperationItem<>(item));
+    public CategoriesAdapter(RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter) {
+        this.inputAdapter = inputAdapter;
+        for (int i =0; i < inputAdapter.getItemCount(); i ++) {
+            wrappedItems.put(i, new OperationItem());
         }
     }
 
-    public List<IOperationItem<T>> getWrappedItems() {
-        return wrappedItems;
+    public Collection<IOperationItem> getWrappedItems() {
+        return wrappedItems.values();
     }
 
-    public void setListener(OnItemClickListener<IOperationItem<T>> listener) {
+    public void setListener(OnItemClickListener listener) {
         this.listener = listener;
     }
-
-    public abstract View createView(ViewGroup parent);
 
     public View createEmptyView(ViewGroup parent) {
         return LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_view, parent, false);
     }
 
-    public abstract CategoriesHolder<T> createCategoriesHolder (View itemView);
-
-
     public void setIndeterminate(boolean isIndeterminate) {
         this.isIndeterminate = isIndeterminate;
     }
 
-    IOperationItem<T> getItem(int position) {
+    public IOperationItem getItem(int position) {
         position = normalizePosition(position);
         return wrappedItems.get(position);
     }
@@ -80,30 +78,32 @@ public abstract class CategoriesAdapter<T> extends RecyclerView.Adapter<Categori
     @Override
     public int getItemViewType(int position) {
         IOperationItem item = getItem(position);
-        return item.isVisible() ? VIEW_TYPE_OTHER : VIEW_TYPE_RESERVED_HIDDEN;
+        return item.isVisible() ? inputAdapter.getItemViewType(position) : VIEW_TYPE_RESERVED_HIDDEN;
     }
 
     @Override
-    public CategoriesHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseRecyclerViewHolder<IOperationItem> onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_RESERVED_HIDDEN) {
-            return new EmptyHolder<>(createEmptyView(parent));
+            return new EmptyHolder(createEmptyView(parent));
         }
-        CategoriesHolder<T> holder = createCategoriesHolder(createView(parent));
+
+        CategoriesHolder categoriesHolder = new CategoriesHolder(inputAdapter.createViewHolder(parent, viewType));
+
         if (listener != null) {
-            holder.setListener(this);
+            categoriesHolder.setListener(this);
         }
-        return holder;
+        return categoriesHolder;
     }
 
     @Override
-    public void onItemClicked(IOperationItem<T> item, int position) {
-        listener.onItemClicked(item, position);
+    public void onItemClicked(int position) {
+        listener.onItemClicked(position);
         position = normalizePosition(position);
-        notifyItemClicked(item.getWrappedItem(), position);
+        notifyItemClicked(position);
     }
 
     @Override
-    public void onBindViewHolder(CategoriesHolder<T> holder, int position) {
+    public void onBindViewHolder(BaseRecyclerViewHolder<IOperationItem> holder, int position) {
         holder.bindItem(getItem(position));
     }
 
@@ -117,7 +117,7 @@ public abstract class CategoriesAdapter<T> extends RecyclerView.Adapter<Categori
         }
     }
 
-    public static class EmptyHolder<T> extends CategoriesHolder<T> {
+    public static class EmptyHolder extends BaseRecyclerViewHolder<IOperationItem> {
 
         public EmptyHolder(@NonNull View itemView) {
             super(itemView);
@@ -125,21 +125,33 @@ public abstract class CategoriesAdapter<T> extends RecyclerView.Adapter<Categori
         }
 
         @Override
-        protected void onBindItemToView(Object o) {}
+        protected void onBindItem(IOperationItem item) {
+            //do nothing
+        }
 
     }
 
-    public abstract static class CategoriesHolder<T> extends BaseRecyclerViewHolder<IOperationItem<T>> {
-        public CategoriesHolder(@NonNull View itemView) {
-            super(itemView);
+    public class CategoriesHolder extends BaseRecyclerViewHolder<IOperationItem> {
+
+        private RecyclerView.ViewHolder viewHolder;
+
+        public CategoriesHolder(RecyclerView.ViewHolder viewHolder) {
+            super(viewHolder.itemView);
+            this.viewHolder = viewHolder;
         }
+
+        @SuppressWarnings("unchecked cast")
+        public <T extends RecyclerView.ViewHolder> void bindItemWildcardHelper(RecyclerView.Adapter<T> adapter, int position) {
+            T vh = (T) viewHolder;
+            position = normalizePosition(position);
+            adapter.onBindViewHolder(vh, position);
+        }
+
 
         @Override
-        protected final void onBindItem(IOperationItem<T> item) {
-            onBindItemToView(item.getWrappedItem());
+        protected final void onBindItem(IOperationItem item) {
+            bindItemWildcardHelper(inputAdapter, getAdapterPosition());
         }
-
-        protected abstract void onBindItemToView(T t);
 
         @Override
         public boolean isClickAllowed() {

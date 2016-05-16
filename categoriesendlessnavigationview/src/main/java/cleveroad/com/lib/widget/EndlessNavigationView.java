@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cleveroad.com.lib.R;
@@ -26,12 +27,16 @@ import cleveroad.com.lib.adapter.SimpleCategoriesAdapter;
 import cleveroad.com.lib.model.MockedItemsFactory;
 import cleveroad.com.lib.util.AbstractAnimatorListener;
 
-public class EndlessNavigationView extends FrameLayout implements OnItemClickListener<IOperationItem> {
+public class EndlessNavigationView extends FrameLayout implements OnItemClickListener {
     public static final int ORIENTATION_VERTICAL = 0;
     public static final int ORIENTATION_HORIZONTAL = 1;
     public static final int SELECTION_GRAVITY_START = 0;
     public static final int SELECTION_GRAVITY_END = 1;
     private static final String TAG = EndlessNavigationView.class.getSimpleName();
+
+    //outside params
+    private RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter;
+    private List<OnItemClickListener> clickListeners = new ArrayList<>();
 
     //view settings
     private Animator selectionInAnimator;
@@ -42,9 +47,8 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     private int realHidedPosition = 0;
     private FrameLayout flContainerSelected;
     private RecyclerView rvCategories;
-    private AbstractCategoriesAdapter.CategoriesHolder categoriesHolder;
-    private AbstractCategoriesAdapter categoriesAdapter;
-    private List<IOperationItem> items;
+    private CategoriesAdapter.CategoriesHolder categoriesHolder;
+    private CategoriesAdapter categoriesAdapter;
 
     private LinearLayoutManager linearLayoutManager;
     private AbstractSpacesItemDecoration spacesItemDecoration;
@@ -86,20 +90,34 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     }
 
     @SuppressWarnings("unchecked assigment")
-    public void setCategoriesAdapter(@NonNull AbstractCategoriesAdapter categoriesAdapter) {
-        this.categoriesAdapter = categoriesAdapter;
-        items = categoriesAdapter.getWrappedItems();
-        IOperationItem firstItem = items.get(0);
+    public void setCategoriesAdapter(@NonNull RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter) {
+        this.inputAdapter = inputAdapter;
+        this.categoriesAdapter = new CategoriesAdapter(inputAdapter);
+        IOperationItem firstItem = categoriesAdapter.getItem(0);
         firstItem.setVisible(false);
 
         categoriesAdapter.setListener(this);
         rvCategories.setAdapter(categoriesAdapter);
 
-        View itemView = categoriesAdapter.createView(flContainerSelected);
-        categoriesHolder = categoriesAdapter.createCategoriesHolder(itemView);
-        flContainerSelected.addView(itemView);
+        categoriesHolder = (CategoriesAdapter.CategoriesHolder) categoriesAdapter.createViewHolder(rvCategories, CategoriesAdapter.VIEW_TYPE_OTHER);
         //set first item to selectionView
-        categoriesHolder.bindItem(firstItem);
+        categoriesHolder.bindItemWildcardHelper(inputAdapter, 0);
+
+        flContainerSelected.addView(categoriesHolder.itemView);
+    }
+
+    public boolean addOnItemClickListener(OnItemClickListener itemClickListener) {
+        return clickListeners.add(itemClickListener);
+    }
+
+    public boolean removeOnItemClickListener(OnItemClickListener itemClickListener) {
+        return clickListeners.remove(itemClickListener);
+    }
+
+    public void notifyItemClickListeners(int normalizedPosition) {
+        for (OnItemClickListener itemClickListener : clickListeners) {
+            itemClickListener.onItemClicked(normalizedPosition);
+        }
     }
 
     public void setCurrentItem(int position) {
@@ -147,7 +165,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         flContainerSelected.setBackground(colorDrawable);
 
         if (isInEditMode()) {
-            setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq()));
+            setCategoriesAdapter(new CategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq())));
         }
     }
 
@@ -182,7 +200,8 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
                 int itemWidth = calcItemWidth();
                 int itemHeight = calcItemHeight();
 
-                boolean isFitOnScreen = orientationState.isItemsFitOnScreen(rvCategories.getWidth(), rvCategories.getHeight(), itemWidth, itemHeight, items.size());
+                boolean isFitOnScreen = orientationState.isItemsFitOnScreen(rvCategories.getWidth(),
+                        rvCategories.getHeight(), itemWidth, itemHeight, categoriesAdapter.getWrappedItems().size());
 
                 if (isFitOnScreen) {
                     rvCategories.removeItemDecoration(spacesItemDecoration);
@@ -210,7 +229,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         }
     }
 
-    private void startSelectedViewOutAnimation(final IOperationItem item) {
+    private void startSelectedViewOutAnimation(int position) {
         Animator animator = selectionOutAnimator;
         animator.setTarget(categoriesHolder.itemView);
         animator.start();
@@ -219,7 +238,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
             @Override
             public void onAnimationEnd(Animator animation) {
                 //replace selected view
-                categoriesHolder.bindItem(item);
+                categoriesHolder.bindItemWildcardHelper(inputAdapter, position);
                 startSelectedViewInAnimation();
             }
         });
@@ -232,21 +251,24 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     }
 
     @Override
-    public void onItemClicked(IOperationItem item, int position) {
-        IOperationItem oldHidedItem = items.get(realHidedPosition);
+    public void onItemClicked(int position) {
+        IOperationItem item = categoriesAdapter.getItem(position);
+        IOperationItem oldHidedItem = categoriesAdapter.getItem(realHidedPosition);
 
         int realPosition = categoriesAdapter.normalizePosition(position);
         int itemToShowAdapterPosition = position - realPosition + realHidedPosition;
 
         item.setVisible(false);
 
-        startSelectedViewOutAnimation(item);
+        startSelectedViewOutAnimation(position);
 
         categoriesAdapter.notifyItemChanged(position);
         realHidedPosition = realPosition;
 
         oldHidedItem.setVisible(true);
         categoriesAdapter.notifyItemChanged(itemToShowAdapterPosition);
+
+        notifyItemClickListeners(realPosition);
 
         Log.i(TAG, "clicked on position =" + position);
     }
