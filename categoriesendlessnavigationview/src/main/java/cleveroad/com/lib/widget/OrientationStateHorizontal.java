@@ -60,9 +60,9 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
             overlayPlaceHolder.getLayoutParams().height = rvCategories.getMeasuredHeight();
             overlayPlaceHolder.requestLayout();
 
-//            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) rvCategories.getLayoutParams();
-//            marginLayoutParams.setMargins(0, overlaySize, 0, 0);
-//            rvCategories.requestLayout();
+            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) rvCategories.getLayoutParams();
+            marginLayoutParams.setMargins(0, overlaySize, 0, 0);
+            rvCategories.requestLayout();
         }
     }
 

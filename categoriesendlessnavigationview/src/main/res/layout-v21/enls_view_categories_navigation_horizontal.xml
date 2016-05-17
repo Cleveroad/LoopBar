@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,24 +13,23 @@
         android:layout_height="wrap_content"
         tools:listItem="@layout/item_default"
         android:layout_gravity="bottom"
-        tools:layout_marginTop="5dp"
         tools:background="@color/enls_default_list_background"
         />
 
-    <!-- don't know how to solve problem with additional padding of backport cardView -->
-
-    <FrameLayout
+    <android.support.v7.widget.CardView
         android:id="@+id/flContainerSelected"
         android:layout_width="@dimen/enls_selected_view_width"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/enls_margin_selected_view"
         android:layout_marginStart="@dimen/enls_margin_selected_view"
         android:layout_gravity="start"
+        app:contentPadding="0dp"
         android:padding="0dp"
-        tools:background="@android:color/white"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="5dp"
         >
 
-    </FrameLayout>
+    </android.support.v7.widget.CardView>
 
 
 </FrameLayout>
