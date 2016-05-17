@@ -5,8 +5,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:layout_height="75dp"
-    tools:layout_marginTop="20dp"
     tools:background="@android:color/white">
 
     <android.support.v7.widget.RecyclerView
@@ -14,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listItem="@layout/item_default"
+        android:layout_gravity="bottom"
         tools:background="@color/enls_default_list_background"
         />
 
@@ -24,6 +23,8 @@
         android:layout_marginLeft="@dimen/enls_margin_selected_view"
         android:layout_marginStart="@dimen/enls_margin_selected_view"
         android:layout_gravity="start"
+        app:contentPadding="0dp"
+        android:padding="0dp"
         app:cardCornerRadius="0dp"
         app:cardElevation="5dp"
         >

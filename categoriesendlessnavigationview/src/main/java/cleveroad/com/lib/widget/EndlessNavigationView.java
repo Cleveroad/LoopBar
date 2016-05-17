@@ -234,7 +234,8 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
                 Log.e(TAG, "You have to add placeholder and set it id with #enls_placeHolderId parameter to use overlaySize");
             }
 
-            orientationState.initPlaceHolder(overlayPlaceholder, rvCategories, overlaySize);
+            orientationState.initPlaceHolderAndOverlay(overlayPlaceholder, rvCategories, overlaySize);
+            skipNextOnLayout = true;
 
             if (rvCategories.getChildCount() > 0) {
                 int itemWidth = calcItemWidth();
