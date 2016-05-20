@@ -42,7 +42,7 @@
         android:layout_height="match_parent"
         />
 
-    <cleveroad.com.lib.widget.EndlessNavigationView
+    <cleveroad.com.lib.widget.LoopBarView
         android:id="@+id/endlessView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

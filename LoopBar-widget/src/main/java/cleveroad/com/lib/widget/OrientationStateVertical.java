@@ -12,41 +12,41 @@ import java.util.UnknownFormatFlagsException;
 
 import cleveroad.com.lib.R;
 
-class OrientationStateHorizontal extends AbstractOrientationState implements IOrientationState {
+class OrientationStateVertical extends AbstractOrientationState implements IOrientationState {
 
-    OrientationStateHorizontal() {}
+    OrientationStateVertical() {}
 
     @Override
     public LinearLayoutManager getLayoutManager(Context context) {
-        return new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        return new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
     }
 
     @Override
     public int getLayoutId() {
-        return R.layout.enls_view_categories_navigation_horizontal;
+        return R.layout.enls_view_categories_navigation_vertical;
     }
 
     @Override
     public boolean isItemsFitOnScreen(int containerWidth, int containerHeight, int itemWidth, int itemHeight, int itemsSize) {
-        int itemsWidth = itemWidth * (itemsSize);
-        return containerWidth >= itemsWidth;
+        int itemsHeight = itemHeight * (itemsSize);
+        return containerHeight >= itemsHeight;
     }
 
     @Override
     public AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight) {
-        AbstractSpacesItemDecoration itemDecoration = getGravityState().getOffsetItemDecoration();
-        itemDecoration.setSpace(margin + selectionViewWidth);
+        AbstractSpacesItemDecoration itemDecoration = getOffsetItemDecoration();
+        itemDecoration.setSpace(margin + selectionViewHeight);
         return itemDecoration;
     }
 
     @Override
     public int getOrientation() {
-        return Orientation.ORIENTATION_HORIZONTAL;
+        return Orientation.ORIENTATION_VERTICAL;
     }
 
     @Override
     public void initSelectionContainer(ViewGroup selectionViewContainer) {
-        selectionViewContainer.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        selectionViewContainer.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
         selectionViewContainer.requestLayout();
     }
 
@@ -54,21 +54,22 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
     public void initPlaceHolderAndOverlay(@Nullable View overlayPlaceHolder, RecyclerView rvCategories, int overlaySize) {
         if (overlayPlaceHolder != null) {
             //make placeholder same height as a recyclerView
-            overlayPlaceHolder.getLayoutParams().height = rvCategories.getMeasuredHeight();
+            overlayPlaceHolder.getLayoutParams().width = rvCategories.getMeasuredWidth();
             overlayPlaceHolder.requestLayout();
 
             ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) rvCategories.getLayoutParams();
-            marginLayoutParams.setMargins(0, overlaySize, 0, 0);
+            marginLayoutParams.setMargins(0, 0, overlaySize, 0);
             rvCategories.requestLayout();
         }
     }
 
+    @Override
     protected ISelectionGravityState retrieveGravityState(int gravityAttribute) {
         switch (gravityAttribute) {
-            case EndlessNavigationView.SELECTION_GRAVITY_START:
-                return new StartGravityState();
-            case EndlessNavigationView.SELECTION_GRAVITY_END:
-                return new EndGravityState();
+            case LoopBarView.SELECTION_GRAVITY_START:
+                return new TopGravityState();
+            case LoopBarView.SELECTION_GRAVITY_END:
+                return new BottomGravityState();
             default:
                 throw new UnknownFormatFlagsException("unknown gravity Attribute = " + gravityAttribute + ". Should be one of SELECTION_GRAVITY");
         }
@@ -79,38 +80,39 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
         return getGravityState().getOffsetItemDecoration();
     }
 
-    static class StartGravityState implements ISelectionGravityState {
+    static class TopGravityState implements ISelectionGravityState {
 
-        private SpacesLeftItemDecoration itemDecoration = new SpacesLeftItemDecoration(0);
+        private SpacesTopItemDecoration itemDecoration = new SpacesTopItemDecoration(0);
 
         @Override
         public int getSelectionGravity() {
-            return Gravity.START;
+            return Gravity.TOP;
         }
 
         @Override
         public <T extends ViewGroup.MarginLayoutParams> T setSelectionMargin(int marginPx, T layoutParams) {
-            layoutParams.leftMargin = marginPx;
+            layoutParams.topMargin = marginPx;
             return layoutParams;
         }
 
+        @Override
         public AbstractSpacesItemDecoration getOffsetItemDecoration() {
             return itemDecoration;
         }
     }
 
-    static class EndGravityState implements ISelectionGravityState {
+    static class BottomGravityState implements ISelectionGravityState {
 
-        private SpacesRightItemDecoration itemDecoration = new SpacesRightItemDecoration(0);
+        private SpacesBottomItemDecoration itemDecoration = new SpacesBottomItemDecoration(0);
 
         @Override
         public int getSelectionGravity() {
-            return Gravity.END;
+            return Gravity.BOTTOM;
         }
 
         @Override
         public <T extends ViewGroup.MarginLayoutParams> T setSelectionMargin(int marginPx, T layoutParams) {
-            layoutParams.rightMargin = marginPx;
+            layoutParams.bottomMargin = marginPx;
             return layoutParams;
         }
 

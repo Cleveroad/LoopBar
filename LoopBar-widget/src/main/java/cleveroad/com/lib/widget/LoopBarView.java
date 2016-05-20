@@ -29,10 +29,10 @@ import cleveroad.com.lib.adapter.SimpleCategoriesAdapter;
 import cleveroad.com.lib.model.MockedItemsFactory;
 import cleveroad.com.lib.util.AbstractAnimatorListener;
 
-public class EndlessNavigationView extends FrameLayout implements OnItemClickListener {
+public class LoopBarView extends FrameLayout implements OnItemClickListener {
     public static final int SELECTION_GRAVITY_START = 0;
     public static final int SELECTION_GRAVITY_END = 1;
-    private static final String TAG = EndlessNavigationView.class.getSimpleName();
+    private static final String TAG = LoopBarView.class.getSimpleName();
 
     //outside params
     private RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter;
@@ -77,23 +77,23 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         }
     };
 
-    public EndlessNavigationView(Context context) {
+    public LoopBarView(Context context) {
         super(context);
         init(context, null);
     }
 
-    public EndlessNavigationView(Context context, AttributeSet attrs) {
+    public LoopBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public EndlessNavigationView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LoopBarView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public EndlessNavigationView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public LoopBarView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs);
     }
@@ -107,19 +107,19 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
 
     private void init(Context context, @Nullable AttributeSet attrs) {
         //read customization attributes
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.EndlessNavigationView);
-        int colorCodeListBackground = a.getColor(R.styleable.EndlessNavigationView_enls_listBackground,
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LoopBarView);
+        int colorCodeListBackground = a.getColor(R.styleable.LoopBarView_enls_listBackground,
                 ContextCompat.getColor(getContext(), R.color.enls_default_list_background));
-        colorCodeSelectionView = a.getColor(R.styleable.EndlessNavigationView_enls_selectionBackground,
+        colorCodeSelectionView = a.getColor(R.styleable.LoopBarView_enls_selectionBackground,
                 ContextCompat.getColor(getContext(), R.color.enls_default_selection_view_background));
-        int orientation = a.getInteger(R.styleable.EndlessNavigationView_enls_orientation, Orientation.ORIENTATION_HORIZONTAL);
-        int selectionAnimatorInId = a.getResourceId(R.styleable.EndlessNavigationView_enls_selectionInAnimation, R.animator.enls_scale_restore);
-        int selectionAnimatorOutId = a.getResourceId(R.styleable.EndlessNavigationView_enls_selectionOutAnimation, R.animator.enls_scale_small);
-        placeHolderId = a.getResourceId(R.styleable.EndlessNavigationView_enls_placeholderId, -1);
-        @GravityAttr int selectionGravity = a.getInteger(R.styleable.EndlessNavigationView_enls_selectionGravity, SELECTION_GRAVITY_START);
-        selectionMargin = a.getDimensionPixelSize(R.styleable.EndlessNavigationView_enls_selectionMargin,
+        int orientation = a.getInteger(R.styleable.LoopBarView_enls_orientation, Orientation.ORIENTATION_HORIZONTAL);
+        int selectionAnimatorInId = a.getResourceId(R.styleable.LoopBarView_enls_selectionInAnimation, R.animator.enls_scale_restore);
+        int selectionAnimatorOutId = a.getResourceId(R.styleable.LoopBarView_enls_selectionOutAnimation, R.animator.enls_scale_small);
+        placeHolderId = a.getResourceId(R.styleable.LoopBarView_enls_placeholderId, -1);
+        @GravityAttr int selectionGravity = a.getInteger(R.styleable.LoopBarView_enls_selectionGravity, SELECTION_GRAVITY_START);
+        selectionMargin = a.getDimensionPixelSize(R.styleable.LoopBarView_enls_selectionMargin,
                 getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view));
-        overlaySize = a.getDimensionPixelSize(R.styleable.EndlessNavigationView_enls_overlaySize, 0);
+        overlaySize = a.getDimensionPixelSize(R.styleable.LoopBarView_enls_overlaySize, 0);
         a.recycle();
         selectionInAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorInId);
         selectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);

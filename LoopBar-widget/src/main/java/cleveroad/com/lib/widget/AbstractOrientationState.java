@@ -6,7 +6,7 @@ abstract class AbstractOrientationState implements IOrientationState {
     private ISelectionGravityState selectionGravityState;
 
     AbstractOrientationState() {
-        selectionGravityState = retrieveGravityState(EndlessNavigationView.SELECTION_GRAVITY_START);
+        selectionGravityState = retrieveGravityState(LoopBarView.SELECTION_GRAVITY_START);
     }
 
     @Override
@@ -15,7 +15,7 @@ abstract class AbstractOrientationState implements IOrientationState {
     }
 
     @Override
-    public final void setSelectionGravity(@EndlessNavigationView.GravityAttr int selectionGravity) {
+    public final void setSelectionGravity(@LoopBarView.GravityAttr int selectionGravity) {
         selectionGravityState = retrieveGravityState(selectionGravity);
     }
 

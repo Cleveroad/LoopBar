@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/categoriesendlessnavigationview/categoriesendlessnavigationview.iml" filepath="$PROJECT_DIR$/categoriesendlessnavigationview/categoriesendlessnavigationview.iml" />
-      <module fileurl="file://$PROJECT_DIR$/endlessnavigationview.iml" filepath="$PROJECT_DIR$/endlessnavigationview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LoopBar.iml" filepath="$PROJECT_DIR$/LoopBar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LoopBar-widget/LoopBar-widget.iml" filepath="$PROJECT_DIR$/LoopBar-widget/LoopBar-widget.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/sample.iml" filepath="$PROJECT_DIR$/sample/sample.iml" />
     </modules>
   </component>

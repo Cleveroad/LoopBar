@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <declare-styleable name="EndlessNavigationView" tools:ignore="ResourceName">
+    <declare-styleable name="LoopBarView" tools:ignore="ResourceName">
         <attr name="enls_orientation" format="integer">
             <flag name="vertical" value="0"/>
             <flag name="horizontal" value="1"/>

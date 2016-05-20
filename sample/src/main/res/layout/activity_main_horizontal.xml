@@ -43,7 +43,7 @@
         android:layout_height="0dp"
         />
 
-    <cleveroad.com.lib.widget.EndlessNavigationView
+    <cleveroad.com.lib.widget.LoopBarView
         android:id="@+id/endlessView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

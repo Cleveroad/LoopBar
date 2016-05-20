@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 interface IOrientationState extends ISelectionGravityState {
     LinearLayoutManager getLayoutManager(Context context);
@@ -32,5 +31,5 @@ interface IOrientationState extends ISelectionGravityState {
 
     void initPlaceHolderAndOverlay(@Nullable View overlayPlaceHolder, RecyclerView rvCategories, int overlaySize);
 
-    void setSelectionGravity(@EndlessNavigationView.GravityAttr int selectionGravity);
+    void setSelectionGravity(@LoopBarView.GravityAttr int selectionGravity);
 }

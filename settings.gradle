@@ -1,1 +1,1 @@
-include ':sample', ':categoriesendlessnavigationview'
+include ':sample', ':LoopBar-widget'

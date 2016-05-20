@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,14 +17,14 @@ import java.util.List;
 import cleveroad.com.lib.adapter.ICategoryItem;
 import cleveroad.com.lib.adapter.SimpleCategoriesAdapter;
 import cleveroad.com.lib.model.MockedItemsFactory;
-import cleveroad.com.lib.widget.EndlessNavigationView;
+import cleveroad.com.lib.widget.LoopBarView;
 import cleveroad.com.lib.widget.OnItemClickListener;
 import cleveroad.com.lib.widget.Orientation;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickListener {
     private static final String EXTRA_ORIENTATION = "orientation";
 
-    private EndlessNavigationView endlessNavigationView;
+    private LoopBarView loopBarView;
 
     private SimpleCategoriesAdapter categoriesAdapter;
     private SimpleFragmentStatePagerAdapter pagerAdapter;
@@ -35,8 +34,8 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
     //args
     @Orientation
     private int orientation;
-    @EndlessNavigationView.GravityAttr
-    private int endlessGravity = EndlessNavigationView.SELECTION_GRAVITY_START;
+    @LoopBarView.GravityAttr
+    private int endlessGravity = LoopBarView.SELECTION_GRAVITY_START;
 
     @Nullable
     private Toast toast;
@@ -54,10 +53,10 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
     }
 
     public void onBtnGravityClicked(View btn) {
-        int nextGravity = endlessGravity == EndlessNavigationView.SELECTION_GRAVITY_START ?
-                EndlessNavigationView.SELECTION_GRAVITY_END : EndlessNavigationView.SELECTION_GRAVITY_START;
+        int nextGravity = endlessGravity == LoopBarView.SELECTION_GRAVITY_START ?
+                LoopBarView.SELECTION_GRAVITY_END : LoopBarView.SELECTION_GRAVITY_START;
         endlessGravity = nextGravity;
-        endlessNavigationView.setGravity(nextGravity);
+        loopBarView.setGravity(nextGravity);
     }
 
     @Override
@@ -70,12 +69,12 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 
         setContentView(orientation == Orientation.ORIENTATION_VERTICAL ? R.layout.activity_main_vertical : R.layout.activity_main_horizontal);
 
-        endlessNavigationView = (EndlessNavigationView) findViewById(R.id.endlessView);
+        loopBarView = (LoopBarView) findViewById(R.id.endlessView);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
         categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq());
-        endlessNavigationView.setCategoriesAdapter(categoriesAdapter);
-        endlessNavigationView.addOnItemClickListener(this);
+        loopBarView.setCategoriesAdapter(categoriesAdapter);
+        loopBarView.addOnItemClickListener(this);
 
         List<Fragment> list = new ArrayList<>(8);
         list.add(ColorFragment.newInstance(android.R.color.holo_red_dark));
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                endlessNavigationView.setCurrentItem(position);
+                loopBarView.setCurrentItem(position);
             }
 
             @Override
