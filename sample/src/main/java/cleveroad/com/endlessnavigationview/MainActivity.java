@@ -93,12 +93,11 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
+                endlessNavigationView.setCurrentItem(position);
             }
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                endlessNavigationView.invalidate();
                 Log.d("tag", "on page scrolled");
             }
         });
