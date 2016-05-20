@@ -148,7 +148,7 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         params.gravity = orientationState.getSelectionGravity();
         orientationState.setSelectionMargin(selectionMargin, params);
         flContainerSelected.setLayoutParams(params);
-        flContainerSelected.invalidate();
+        invalidate();
     }
 
     @SuppressWarnings("unchecked assigment")

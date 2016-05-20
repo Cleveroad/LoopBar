@@ -14,8 +14,6 @@ import cleveroad.com.lib.R;
 
 class OrientationStateHorizontal extends AbstractOrientationState implements IOrientationState {
 
-    private SpacesLeftItemDecoration itemDecoration = new SpacesLeftItemDecoration(0);
-
     OrientationStateHorizontal() {}
 
     @Override
@@ -36,6 +34,7 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
 
     @Override
     public AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight) {
+        AbstractSpacesItemDecoration itemDecoration = getGravityState().getOffsetItemDecoration();
         itemDecoration.setSpace(margin + selectionViewWidth);
         return itemDecoration;
     }
@@ -64,8 +63,7 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
         }
     }
 
-    @Override
-    protected ISelectionGravityState getGravityState(int gravityAttribute) {
+    protected ISelectionGravityState retrieveGravityState(int gravityAttribute) {
         switch (gravityAttribute) {
             case EndlessNavigationView.SELECTION_GRAVITY_START:
                 return new StartGravityState();
@@ -76,7 +74,14 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
         }
     }
 
+    @Override
+    public AbstractSpacesItemDecoration getOffsetItemDecoration() {
+        return getGravityState().getOffsetItemDecoration();
+    }
+
     static class StartGravityState implements ISelectionGravityState {
+
+        private SpacesLeftItemDecoration itemDecoration = new SpacesLeftItemDecoration(0);
 
         @Override
         public int getSelectionGravity() {
@@ -88,9 +93,16 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
             layoutParams.leftMargin = marginPx;
             return layoutParams;
         }
+
+        public AbstractSpacesItemDecoration getOffsetItemDecoration() {
+            return itemDecoration;
+        }
     }
 
     static class EndGravityState implements ISelectionGravityState {
+
+        private SpacesRightItemDecoration itemDecoration = new SpacesRightItemDecoration(0);
+
         @Override
         public int getSelectionGravity() {
             return Gravity.END;
@@ -100,6 +112,11 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
         public <T extends ViewGroup.MarginLayoutParams> T setSelectionMargin(int marginPx, T layoutParams) {
             layoutParams.rightMargin = marginPx;
             return layoutParams;
+        }
+
+        @Override
+        public AbstractSpacesItemDecoration getOffsetItemDecoration() {
+            return itemDecoration;
         }
     }
 }

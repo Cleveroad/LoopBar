@@ -14,8 +14,6 @@ import cleveroad.com.lib.R;
 
 class OrientationStateVertical extends AbstractOrientationState implements IOrientationState {
 
-    private SpacesTopItemDecoration itemDecoration = new SpacesTopItemDecoration(0);
-
     OrientationStateVertical() {}
 
     @Override
@@ -36,6 +34,7 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
 
     @Override
     public AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight) {
+        AbstractSpacesItemDecoration itemDecoration = getOffsetItemDecoration();
         itemDecoration.setSpace(margin + selectionViewHeight);
         return itemDecoration;
     }
@@ -65,7 +64,7 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
     }
 
     @Override
-    protected ISelectionGravityState getGravityState(int gravityAttribute) {
+    protected ISelectionGravityState retrieveGravityState(int gravityAttribute) {
         switch (gravityAttribute) {
             case EndlessNavigationView.SELECTION_GRAVITY_START:
                 return new TopGravityState();
@@ -76,7 +75,14 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
         }
     }
 
+    @Override
+    public AbstractSpacesItemDecoration getOffsetItemDecoration() {
+        return getGravityState().getOffsetItemDecoration();
+    }
+
     static class TopGravityState implements ISelectionGravityState {
+
+        private SpacesTopItemDecoration itemDecoration = new SpacesTopItemDecoration(0);
 
         @Override
         public int getSelectionGravity() {
@@ -88,9 +94,16 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
             layoutParams.topMargin = marginPx;
             return layoutParams;
         }
+
+        @Override
+        public AbstractSpacesItemDecoration getOffsetItemDecoration() {
+            return itemDecoration;
+        }
     }
 
     static class BottomGravityState implements ISelectionGravityState {
+
+        private SpacesBottomItemDecoration itemDecoration = new SpacesBottomItemDecoration(0);
 
         @Override
         public int getSelectionGravity() {
@@ -101,6 +114,11 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
         public <T extends ViewGroup.MarginLayoutParams> T setSelectionMargin(int marginPx, T layoutParams) {
             layoutParams.bottomMargin = marginPx;
             return layoutParams;
+        }
+
+        @Override
+        public AbstractSpacesItemDecoration getOffsetItemDecoration() {
+            return itemDecoration;
         }
     }
 }

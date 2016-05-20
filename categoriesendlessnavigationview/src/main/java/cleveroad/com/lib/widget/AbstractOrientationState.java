@@ -6,7 +6,7 @@ abstract class AbstractOrientationState implements IOrientationState {
     private ISelectionGravityState selectionGravityState;
 
     AbstractOrientationState() {
-        selectionGravityState = getGravityState(EndlessNavigationView.SELECTION_GRAVITY_START);
+        selectionGravityState = retrieveGravityState(EndlessNavigationView.SELECTION_GRAVITY_START);
     }
 
     @Override
@@ -16,10 +16,14 @@ abstract class AbstractOrientationState implements IOrientationState {
 
     @Override
     public final void setSelectionGravity(@EndlessNavigationView.GravityAttr int selectionGravity) {
-        selectionGravityState = getGravityState(selectionGravity);
+        selectionGravityState = retrieveGravityState(selectionGravity);
     }
 
-    protected abstract ISelectionGravityState getGravityState(int gravityAttribute);
+    protected abstract ISelectionGravityState retrieveGravityState(int gravityAttribute);
+
+    protected  ISelectionGravityState getGravityState() {
+        return selectionGravityState;
+    }
 
     //dispatch to gravity state
     @Override
