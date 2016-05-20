@@ -7,15 +7,46 @@
     android:layout_height="match_parent"
     tools:background="@android:color/white">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvCategories"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        tools:listItem="@layout/item_default"
-        android:gravity="center"
-        tools:layout_marginRight="5dp"
-        tools:background="@color/enls_default_list_background"
-        />
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvCategories"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            tools:listItem="@layout/item_default"
+            android:gravity="center"
+            tools:layout_marginRight="5dp"
+            tools:background="@color/enls_default_list_background"
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/rvCategories"
+            android:layout_alignRight="@+id/rvCategories"
+            android:layout_alignStart="@+id/rvCategories"
+            android:layout_alignEnd="@+id/rvCategories"
+            android:layout_alignTop="@id/rvCategories"
+            android:layout_alignBottom="@id/rvCategories"
+            android:background="@drawable/top_shadow"
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/rvCategories"
+            android:layout_alignRight="@+id/rvCategories"
+            android:layout_alignStart="@+id/rvCategories"
+            android:layout_alignEnd="@+id/rvCategories"
+            android:background="@drawable/bottom_shadow"
+            android:layout_gravity="end"
+            android:layout_alignParentBottom="true"
+            />
+
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/flContainerSelected"

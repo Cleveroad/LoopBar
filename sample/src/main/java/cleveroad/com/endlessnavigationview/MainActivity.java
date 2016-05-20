@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         ICategoryItem categoryItem = categoriesAdapter.getItem(position);
         viewPager.setCurrentItem(position);
 
-        toast = Toast.makeText(this, getString(R.string.mask_on_item_clicked, position, categoryItem.getCategoryName()), Toast.LENGTH_SHORT);
-        toast.show();
+//        toast = Toast.makeText(this, getString(R.string.mask_on_item_clicked, position, categoryItem.getCategoryName()), Toast.LENGTH_SHORT);
+//        toast.show();
     }
 }
