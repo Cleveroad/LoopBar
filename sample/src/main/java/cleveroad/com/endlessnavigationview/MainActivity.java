@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
     //args
     @Orientation
     private int orientation;
+    @EndlessNavigationView.GravityAttr
+    private int endlessGravity = EndlessNavigationView.SELECTION_GRAVITY_START;
 
     @Nullable
     private Toast toast;
@@ -49,6 +51,13 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         int nextOrientation = orientation == Orientation.ORIENTATION_VERTICAL ? Orientation.ORIENTATION_HORIZONTAL : Orientation.ORIENTATION_VERTICAL;
         start(this, nextOrientation);
         finish();
+    }
+
+    public void onBtnGravityClicked(View btn) {
+        int nextGravity = endlessGravity == EndlessNavigationView.SELECTION_GRAVITY_START ?
+                EndlessNavigationView.SELECTION_GRAVITY_END : EndlessNavigationView.SELECTION_GRAVITY_START;
+        endlessGravity = nextGravity;
+        endlessNavigationView.setGravity(nextGravity);
     }
 
     @Override

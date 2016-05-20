@@ -31,4 +31,6 @@ interface IOrientationState extends ISelectionGravityState {
     void initSelectionContainer(ViewGroup selectionViewContainer);
 
     void initPlaceHolderAndOverlay(@Nullable View overlayPlaceHolder, RecyclerView rvCategories, int overlaySize);
+
+    void setSelectionGravity(@EndlessNavigationView.GravityAttr int selectionGravity);
 }

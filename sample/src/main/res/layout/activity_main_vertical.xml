@@ -26,6 +26,16 @@
         android:onClick="onBtnOrientationClicked"
         />
 
+    <Button
+        android:id="@+id/btnGravity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnOrientation"
+        android:text="@string/change_gravity"
+        android:layout_centerInParent="true"
+        android:onClick="onBtnGravityClicked"
+        />
+
     <View
         android:id="@+id/placeHolder"
         android:layout_width="0dp"

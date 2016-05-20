@@ -16,9 +16,7 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
 
     private SpacesLeftItemDecoration itemDecoration = new SpacesLeftItemDecoration(0);
 
-    OrientationStateHorizontal(@EndlessNavigationView.GravityAttr int gravityAttribute) {
-        super(gravityAttribute);
-    }
+    OrientationStateHorizontal() {}
 
     @Override
     public LinearLayoutManager getLayoutManager(Context context) {

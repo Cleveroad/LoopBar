@@ -3,4 +3,5 @@
     <string name="mask_on_item_clicked" formatted="false">"On item clicked, position = %s, name = %s"</string>
     <string name="change_orientation">Change orientation</string>
     <string name="bottom_left_pager_text">Bottom left pager text</string>
+    <string name="change_gravity">Change gravity</string>
 </resources>

@@ -16,9 +16,7 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
 
     private SpacesTopItemDecoration itemDecoration = new SpacesTopItemDecoration(0);
 
-    OrientationStateVertical(int gravityAttribute) {
-        super(gravityAttribute);
-    }
+    OrientationStateVertical() {}
 
     @Override
     public LinearLayoutManager getLayoutManager(Context context) {

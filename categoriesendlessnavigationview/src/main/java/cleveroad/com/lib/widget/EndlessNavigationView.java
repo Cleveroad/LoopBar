@@ -125,15 +125,9 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         selectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
 
         //current view has two state : horizontal & vertical. State design pattern
-        orientationState = getOrientationStateFromParam(orientation, selectionGravity);
-
+        orientationState = getOrientationStateFromParam(orientation);
         inflate(orientationState, placeHolderId);
-
-        //note that flContainerSelected should be in FrameLayout
-        FrameLayout.LayoutParams params = (LayoutParams) flContainerSelected.getLayoutParams();
-        params.gravity = orientationState.getSelectionGravity();
-        orientationState.setSelectionMargin(selectionMargin, params);
-        flContainerSelected.setLayoutParams(params);
+        setGravity(selectionGravity);
 
         linearLayoutManager = orientationState.getLayoutManager(getContext());
         rvCategories.setLayoutManager(linearLayoutManager);
@@ -145,6 +139,16 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
         if (isInEditMode()) {
             setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq()));
         }
+    }
+
+    public void setGravity(@GravityAttr int selectionGravity) {
+        orientationState.setSelectionGravity(selectionGravity);
+        //note that flContainerSelected should be in FrameLayout
+        FrameLayout.LayoutParams params = (LayoutParams) flContainerSelected.getLayoutParams();
+        params.gravity = orientationState.getSelectionGravity();
+        orientationState.setSelectionMargin(selectionMargin, params);
+        flContainerSelected.setLayoutParams(params);
+        flContainerSelected.invalidate();
     }
 
     @SuppressWarnings("unchecked assigment")
@@ -342,12 +346,12 @@ public class EndlessNavigationView extends FrameLayout implements OnItemClickLis
     }
 
     //orientation state factory method
-    public IOrientationState getOrientationStateFromParam(int orientation, @GravityAttr int selectionGravityState) {
-        return orientation == Orientation.ORIENTATION_VERTICAL ? new OrientationStateVertical(selectionGravityState) : new OrientationStateHorizontal(selectionGravityState);
+    public IOrientationState getOrientationStateFromParam(int orientation) {
+        return orientation == Orientation.ORIENTATION_VERTICAL ? new OrientationStateVertical() : new OrientationStateHorizontal();
     }
 
     @IntDef({SELECTION_GRAVITY_START, SELECTION_GRAVITY_END})
-    @interface GravityAttr {
+    public @interface GravityAttr {
     }
 
 }

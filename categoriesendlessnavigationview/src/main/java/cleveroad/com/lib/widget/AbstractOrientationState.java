@@ -5,13 +5,18 @@ import android.view.ViewGroup;
 abstract class AbstractOrientationState implements IOrientationState {
     private ISelectionGravityState selectionGravityState;
 
-    AbstractOrientationState(@EndlessNavigationView.GravityAttr int gravityAttribute) {
-        selectionGravityState = getGravityState(gravityAttribute);
+    AbstractOrientationState() {
+        selectionGravityState = getGravityState(EndlessNavigationView.SELECTION_GRAVITY_START);
     }
 
     @Override
-    public int getSelectionGravity() {
+    public final int getSelectionGravity() {
         return selectionGravityState.getSelectionGravity();
+    }
+
+    @Override
+    public final void setSelectionGravity(@EndlessNavigationView.GravityAttr int selectionGravity) {
+        selectionGravityState = getGravityState(selectionGravity);
     }
 
     protected abstract ISelectionGravityState getGravityState(int gravityAttribute);
