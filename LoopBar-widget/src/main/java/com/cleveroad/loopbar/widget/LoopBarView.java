@@ -70,9 +70,6 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     private boolean skipNextOnLayout;
     private boolean isIndeterminateInitialized;
 
-    private Integer itemWidth;
-    private Integer itemHeight;
-
     private RecyclerView.OnScrollListener indeterminateOnScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -201,27 +198,6 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         }
     }
 
-    //very big duct tape
-    private int calcItemWidth() {
-        if (itemWidth == null) {
-            for (int i = 0; i < rvCategories.getChildCount(); i++) {
-                itemWidth = rvCategories.getChildAt(i).getWidth();
-                if (itemWidth != 0) break;
-            }
-        }
-        return itemWidth;
-    }
-
-    private int calcItemHeight() {
-        if (itemHeight == null) {
-            for (int i = 0; i < rvCategories.getChildCount(); i++) {
-                itemHeight = rvCategories.getChildAt(i).getHeight();
-                if (itemHeight != 0) break;
-            }
-        }
-        return itemHeight;
-    }
-
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -249,12 +225,9 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
             orientationState.initPlaceHolderAndOverlay(overlayPlaceholder, rvCategories, overlaySize);
 
             if (rvCategories.getChildCount() > 0) {
-                int itemWidth = calcItemWidth();
-                int itemHeight = calcItemHeight();
 
                 /** true if current set of category items fit on screen, so view shouldn't be indeterminate */
-                boolean isFitOnScreen = orientationState.isItemsFitOnScreen(rvCategories.getWidth(),
-                        rvCategories.getHeight(), itemWidth, itemHeight, categoriesAdapter.getWrappedItems().size());
+                boolean isFitOnScreen = orientationState.isItemsFitOnScreen(rvCategories, categoriesAdapter.getWrappedItems().size());
 
                 if (isFitOnScreen) {
                     rvCategories.removeItemDecoration(spacesItemDecoration);

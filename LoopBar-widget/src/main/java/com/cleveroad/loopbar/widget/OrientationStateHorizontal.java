@@ -14,6 +14,8 @@ import com.cleveroad.loopbar.R;
 
 class OrientationStateHorizontal extends AbstractOrientationState implements IOrientationState {
 
+    private Integer itemWidth;
+
     OrientationStateHorizontal() {}
 
     @Override
@@ -27,8 +29,10 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
     }
 
     @Override
-    public boolean isItemsFitOnScreen(int containerWidth, int containerHeight, int itemWidth, int itemHeight, int itemsSize) {
+    public boolean isItemsFitOnScreen(RecyclerView recyclerView, int itemsSize) {
+        calcItemWidth(recyclerView);
         int itemsWidth = itemWidth * (itemsSize);
+        int containerWidth = recyclerView.getMeasuredWidth();
         return containerWidth >= itemsWidth;
     }
 
@@ -48,6 +52,17 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
     public void initSelectionContainer(ViewGroup selectionViewContainer) {
         selectionViewContainer.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
         selectionViewContainer.requestLayout();
+    }
+
+    //very big duct tape
+    private int calcItemWidth(RecyclerView rvCategories) {
+        if (itemWidth == null) {
+            for (int i = 0; i < rvCategories.getChildCount(); i++) {
+                itemWidth = rvCategories.getChildAt(i).getWidth();
+                if (itemWidth != 0) break;
+            }
+        }
+        return itemWidth;
     }
 
     @Override

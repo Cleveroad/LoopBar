@@ -14,6 +14,8 @@ import com.cleveroad.loopbar.R;
 
 class OrientationStateVertical extends AbstractOrientationState implements IOrientationState {
 
+    private Integer itemHeight;
+
     OrientationStateVertical() {}
 
     @Override
@@ -27,8 +29,10 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
     }
 
     @Override
-    public boolean isItemsFitOnScreen(int containerWidth, int containerHeight, int itemWidth, int itemHeight, int itemsSize) {
+    public boolean isItemsFitOnScreen(RecyclerView rvCategories, int itemsSize) {
+        calcItemHeight(rvCategories);
         int itemsHeight = itemHeight * (itemsSize);
+        int containerHeight = rvCategories.getHeight();
         return containerHeight >= itemsHeight;
     }
 
@@ -39,6 +43,16 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
         return itemDecoration;
     }
 
+    private int calcItemHeight(RecyclerView rvCategories) {
+        if (itemHeight == null) {
+            for (int i = 0; i < rvCategories.getChildCount(); i++) {
+                itemHeight = rvCategories.getChildAt(i).getHeight();
+                if (itemHeight != 0) break;
+            }
+        }
+        return itemHeight;
+    }
+
     @Override
     public int getOrientation() {
         return Orientation.ORIENTATION_VERTICAL;
@@ -47,6 +61,7 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
     @Override
     public void initSelectionContainer(ViewGroup selectionViewContainer) {
         selectionViewContainer.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        selectionViewContainer.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
         selectionViewContainer.requestLayout();
     }
 
