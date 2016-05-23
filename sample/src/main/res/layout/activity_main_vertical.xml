@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context="cleveroad.com.endlessnavigationview.MainActivity">
+    tools:context="com.cleveroad.sample.MainActivity">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"
@@ -42,7 +42,7 @@
         android:layout_height="match_parent"
         />
 
-    <cleveroad.com.lib.widget.LoopBarView
+    <com.cleveroad.loopbar.widget.LoopBarView
         android:id="@+id/endlessView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

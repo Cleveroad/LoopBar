@@ -13,6 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         >
 
         <android.support.v7.widget.RecyclerView
@@ -22,6 +23,7 @@
             tools:listItem="@layout/item_default"
             android:layout_gravity="bottom"
             tools:background="@color/enls_default_list_background"
+            tools:layout_marginTop="5dp"
             />
 
         <FrameLayout
@@ -29,7 +31,7 @@
             android:layout_height="match_parent"
             android:layout_alignTop="@id/rvCategories"
             android:layout_alignBottom="@id/rvCategories"
-            android:background="@drawable/left_shadow"
+            android:background="@drawable/enls_left_shadow"
             android:layout_gravity="start"
             />
 
@@ -38,7 +40,7 @@
             android:layout_height="match_parent"
             android:layout_alignTop="@id/rvCategories"
             android:layout_alignBottom="@id/rvCategories"
-            android:background="@drawable/right_shadow"
+            android:background="@drawable/enls_right_shadow"
             android:layout_gravity="end"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
