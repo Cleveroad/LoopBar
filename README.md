@@ -69,7 +69,7 @@ enls_overlaySize & enls_placeholderId are used for overlay feature.
 #### Support ####
 * * *
 If you have any other questions regarding the use of this library, please contact us for support at info@cleveroad.com (email subject: "LoopBar. Support request.")
-Also pull requests are welcome;
+Also pull requests are welcome.
 
 <br />
 #### License ####
