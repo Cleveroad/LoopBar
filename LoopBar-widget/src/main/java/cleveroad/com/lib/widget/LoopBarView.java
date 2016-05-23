@@ -55,6 +55,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     private RecyclerView rvCategories;
     @Nullable
     private View overlayPlaceholder;
+    private View viewColorable;
 
     private CategoriesAdapter.CategoriesHolder categoriesHolder;
     private CategoriesAdapter categoriesAdapter;
@@ -103,6 +104,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         flContainerSelected = (FrameLayout) findViewById(R.id.flContainerSelected);
         rvCategories = (RecyclerView) findViewById(R.id.rvCategories);
         overlayPlaceholder = getRootView().findViewById(placeHolderId);
+        viewColorable = getRootView().findViewById(R.id.viewColorable);
     }
 
     private void init(Context context, @Nullable AttributeSet attrs) {
@@ -129,12 +131,13 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         inflate(orientationState, placeHolderId);
         setGravity(selectionGravity);
 
+        ColorDrawable colorDrawable = new NegativeMarginFixColorDrawable(colorCodeSelectionView);
+        viewColorable.setBackground(colorDrawable);
+
         linearLayoutManager = orientationState.getLayoutManager(getContext());
         rvCategories.setLayoutManager(linearLayoutManager);
 
         rvCategories.setBackgroundColor(colorCodeListBackground);
-        ColorDrawable colorDrawable = new NegativeMarginFixColorDrawable(colorCodeSelectionView);
-        flContainerSelected.setBackground(colorDrawable);
 
         if (isInEditMode()) {
             setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq()));
@@ -168,6 +171,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         categoriesHolder.itemView.setBackgroundColor(colorCodeSelectionView);
 
         flContainerSelected.addView(categoriesHolder.itemView);
+
         orientationState.initSelectionContainer(flContainerSelected);
 
         FrameLayout.LayoutParams layoutParams = (LayoutParams) categoriesHolder.itemView.getLayoutParams();
@@ -286,7 +290,6 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
                 //replace selected view
                 categoriesHolder.bindItemWildcardHelper(inputAdapter, position);
                 startSelectedViewInAnimation();
-                flContainerSelected.requestLayout();
             }
         });
     }

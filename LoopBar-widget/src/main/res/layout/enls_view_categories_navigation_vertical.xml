@@ -18,17 +18,16 @@
             android:layout_height="match_parent"
             tools:listItem="@layout/item_default"
             android:gravity="center"
-            tools:layout_marginRight="5dp"
             tools:background="@color/enls_default_list_background"
             />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/rvCategories"
-            android:layout_alignRight="@+id/rvCategories"
             android:layout_alignStart="@+id/rvCategories"
+            android:layout_alignLeft="@+id/rvCategories"
             android:layout_alignEnd="@+id/rvCategories"
+            android:layout_alignRight="@+id/rvCategories"
             android:layout_alignTop="@id/rvCategories"
             android:layout_alignBottom="@id/rvCategories"
             android:background="@drawable/top_shadow"
@@ -37,10 +36,11 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/rvCategories"
-            android:layout_alignRight="@+id/rvCategories"
             android:layout_alignStart="@+id/rvCategories"
+            android:layout_alignLeft="@+id/rvCategories"
             android:layout_alignEnd="@+id/rvCategories"
+            android:layout_alignRight="@+id/rvCategories"
+
             android:background="@drawable/bottom_shadow"
             android:layout_gravity="end"
             android:layout_alignParentBottom="true"
@@ -53,9 +53,15 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/enls_selected_view_height"
         android:layout_marginTop="@dimen/enls_margin_selected_view"
-        android:background="@color/enls_default_selection_view_background"
-        tools:background="@android:color/white"
+        android:background="@drawable/enls_bottom_right_shadow"
+        android:animateLayoutChanges="true"
         >
+
+        <FrameLayout
+            android:id="@+id/viewColorable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
 
     </FrameLayout>
 
