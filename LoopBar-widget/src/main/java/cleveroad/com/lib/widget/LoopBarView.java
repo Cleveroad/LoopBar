@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -44,9 +46,12 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     private Animator selectionOutAnimator;
     private int selectionMargin;
     private IOrientationState orientationState;
-    private int currentItemPosition;
     private int placeHolderId;
     private int overlaySize;
+    //state settings below
+    private int currentItemPosition;
+    @GravityAttr
+    private int selectionGravity;
 
     private int realHidedPosition = 0;
 
@@ -119,6 +124,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         int selectionAnimatorOutId = a.getResourceId(R.styleable.LoopBarView_enls_selectionOutAnimation, R.animator.enls_scale_small);
         placeHolderId = a.getResourceId(R.styleable.LoopBarView_enls_placeholderId, -1);
         @GravityAttr int selectionGravity = a.getInteger(R.styleable.LoopBarView_enls_selectionGravity, SELECTION_GRAVITY_START);
+        this.selectionGravity = selectionGravity;
         selectionMargin = a.getDimensionPixelSize(R.styleable.LoopBarView_enls_selectionMargin,
                 getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view));
         overlaySize = a.getDimensionPixelSize(R.styleable.LoopBarView_enls_overlaySize, 0);
@@ -151,6 +157,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         params.gravity = orientationState.getSelectionGravity();
         orientationState.setSelectionMargin(selectionMargin, params);
         flContainerSelected.setLayoutParams(params);
+        this.selectionGravity = selectionGravity;
         invalidate();
     }
 
@@ -194,16 +201,6 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         }
     }
 
-    /** change selection view inAnimator in runtime*/
-    public void setSelectionInAnimator(Animator selectionInAnimator) {
-        this.selectionInAnimator = selectionInAnimator;
-    }
-
-    /** change selection view outAnimator in runtime*/
-    public void setSelectionOutAnimator(Animator selectionOutAnimator) {
-        this.selectionOutAnimator = selectionOutAnimator;
-    }
-
     //very big duct tape
     private int calcItemWidth() {
         if (itemWidth == null) {
@@ -229,6 +226,14 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         overlayPlaceholder = ((ViewGroup)getParent()).findViewById(placeHolderId);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+        setCurrentItem(ss.currentItemPosition);
+        setGravity(ss.selectionGravity);
     }
 
     @Override
@@ -277,6 +282,14 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         } else {
             skipNextOnLayout = false;
         }
+    }
+
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+        return new SavedState(superState,
+                currentItemPosition, selectionGravity);
     }
 
     private void startSelectedViewOutAnimation(int position) {
@@ -355,6 +368,53 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
     @IntDef({SELECTION_GRAVITY_START, SELECTION_GRAVITY_END})
     public @interface GravityAttr {
+    }
+
+    public static class SavedState extends BaseSavedState implements Parcelable{
+
+        public int currentItemPosition;
+        @GravityAttr
+        private int selectionGravity;
+
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        public int describeContents() {
+            return 0;
+        }
+
+        // упаковываем объект в Parcel
+        public void writeToParcel(Parcel parcel, int flags) {
+            parcel.writeInt(currentItemPosition);
+            parcel.writeInt(selectionGravity);
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+            // распаковываем объект из Parcel
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+
+        // конструктор, считывающий данные из Parcel
+        private SavedState(Parcel parcel) {
+            super(parcel);
+            currentItemPosition = parcel.readInt();
+            @GravityAttr
+            int selectionGravity = parcel.readInt();
+            this.selectionGravity = selectionGravity;
+        }
+
+        public SavedState(Parcelable superState, int currentItemPosition, int selectionGravity) {
+            super(superState);
+            this.currentItemPosition = currentItemPosition;
+            this.selectionGravity = selectionGravity;
+        }
     }
 
 }
