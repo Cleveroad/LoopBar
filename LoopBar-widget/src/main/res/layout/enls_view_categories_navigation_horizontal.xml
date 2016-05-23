@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:background="@android:color/white"
+    android:clipToPadding="false"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listItem="@layout/item_default"
+            android:layout_gravity="bottom"
+            tools:background="@color/enls_default_list_background"
+            />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/rvCategories"
+            android:layout_alignBottom="@id/rvCategories"
+            android:background="@drawable/left_shadow"
+            android:layout_gravity="start"
+            />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/rvCategories"
+            android:layout_alignBottom="@id/rvCategories"
+            android:background="@drawable/right_shadow"
+            android:layout_gravity="end"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/flContainerSelected"
+        android:layout_width="@dimen/enls_selected_view_width"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/enls_margin_selected_view"
+        android:layout_marginLeft="@dimen/enls_margin_selected_view"
+        android:background="@drawable/enls_top_right_shadow"
+        android:animateLayoutChanges="true"
+        >
+
+        <FrameLayout
+            android:id="@+id/viewColorable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </FrameLayout>
+
+
+
+</FrameLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="cleveroad.com.endlessnavigationview.MainActivity">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/placeHolder"
+        android:layout_toEndOf="@+id/placeHolder"
+        android:background="@android:color/holo_red_dark"
+        />
+
+    <Button
+        android:id="@+id/btnOrientation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_orientation"
+        android:layout_centerInParent="true"
+        android:onClick="onBtnOrientationClicked"
+        />
+
+    <Button
+        android:id="@+id/btnGravity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnOrientation"
+        android:text="@string/change_gravity"
+        android:layout_centerInParent="true"
+        android:onClick="onBtnGravityClicked"
+        />
+
+    <View
+        android:id="@+id/placeHolder"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        />
+
+    <cleveroad.com.lib.widget.LoopBarView
+        android:id="@+id/endlessView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        app:enls_placeholderId="@+id/placeHolder"
+        app:enls_orientation="vertical"
+        app:enls_selectionGravity="start"
+        app:enls_selectionMargin="10dp"
+        app:enls_overlaySize="5dp"
+        app:enls_selectionBackground="@android:color/holo_blue_dark"
+        />
+
+</RelativeLayout>

@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cleveroad.com.lib">
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/enls_app_name"
+        android:supportsRtl="true"
+        android:hardwareAccelerated="true"
+        >
+
+    </application>
+
+</manifest>
