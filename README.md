@@ -53,7 +53,7 @@ Android Studio layouts preview is supported.
         />
 ```
 
-enls_overlaySize & enls_placeholderId are used for overlay feature.
+```enls_overlaySize``` & ```enls_placeholderId``` are used for overlay feature.
 
 |  attribute name | description |
 |---|---|
@@ -64,6 +64,8 @@ enls_overlaySize & enls_placeholderId are used for overlay feature.
 | enls_selectionInAnimation | an animation of appearing an icon inside selection view |
 | enls_selectionOutAnimation | an animation of hiding an icon inside selection view |
 | enls_selectionBackground | selection background |                     
+
+View have yellow background by default. Use standart ```android:background``` attribute to change it
 
 <br />
 #### Support ####

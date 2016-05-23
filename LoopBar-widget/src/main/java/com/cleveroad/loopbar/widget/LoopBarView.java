@@ -119,17 +119,28 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         int selectionAnimatorOutId = a.getResourceId(R.styleable.LoopBarView_enls_selectionOutAnimation, R.animator.enls_scale_small);
         placeHolderId = a.getResourceId(R.styleable.LoopBarView_enls_placeholderId, -1);
         @GravityAttr int selectionGravity = a.getInteger(R.styleable.LoopBarView_enls_selectionGravity, SELECTION_GRAVITY_START);
+
         this.selectionGravity = selectionGravity;
+
         selectionMargin = a.getDimensionPixelSize(R.styleable.LoopBarView_enls_selectionMargin,
                 getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view));
         overlaySize = a.getDimensionPixelSize(R.styleable.LoopBarView_enls_overlaySize, 0);
         a.recycle();
+
+        //check attributes you need, for example all paddings
+        int [] attributes = new int [] {android.R.attr.background};
+        //then obtain typed array
+        a = context.obtainStyledAttributes(attrs, attributes);
+        int backgroundResource = a.getResourceId(0, R.color.enls_default_list_background);
+        a.recycle();
+
         selectionInAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorInId);
         selectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
 
         //current view has two state : horizontal & vertical. State design pattern
         orientationState = getOrientationStateFromParam(orientation);
         inflate(orientationState, placeHolderId);
+        setBackgroundResource(backgroundResource);
         setGravity(selectionGravity);
 
         ColorDrawable colorDrawable = new NegativeMarginFixColorDrawable(colorCodeSelectionView);
