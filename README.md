@@ -15,8 +15,14 @@ If you strive to create an application with unusual looks and navigation, you ar
 [![Awesome](/images/logo-footer.png)](https://www.cleveroad.com/?utm_source=github&utm_medium=label&utm_campaign=contacts)
 <br/>
 ## Setup and usage
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
+### Installation
+by gradle : 
+```
+dependencies {
+    compile project(':LoopBar-widget')
+}
+```
+or just download zip and import module "LoopBar-widget" to be able to modify the sources
 <br />
 #### Support ####
 * * *
