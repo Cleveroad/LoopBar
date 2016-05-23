@@ -17,12 +17,18 @@ If you strive to create an application with unusual looks and navigation, you ar
 ## Setup and usage
 ### Installation
 by gradle : 
-```
+```groovy
 dependencies {
-    compile project(':LoopBar-widget')
+    compile "com.cleveroad:loopbar:1.0.0"
 }
 ```
+
 or just download zip and import module "LoopBar-widget" to be able to modify the sources
+
+### Usage
+
+
+
 <br />
 #### Support ####
 * * *

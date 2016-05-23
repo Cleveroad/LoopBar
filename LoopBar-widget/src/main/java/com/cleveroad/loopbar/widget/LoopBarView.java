@@ -239,40 +239,46 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (overlaySize > 0 && overlayPlaceholder == null) {
-            Log.e(TAG, "You have to add placeholder and set it id with #enls_placeHolderId parameter to use overlaySize");
-        }
 
-        orientationState.initPlaceHolderAndOverlay(overlayPlaceholder, rvCategories, overlaySize);
+        if (!skipNextOnLayout) {
 
-        if (rvCategories.getChildCount() > 0) {
-            int itemWidth = calcItemWidth();
-            int itemHeight = calcItemHeight();
+            if (overlaySize > 0 && overlayPlaceholder == null) {
+                Log.e(TAG, "You have to add placeholder and set it id with #enls_placeHolderId parameter to use overlaySize");
+            }
 
-            /** true if current set of category items fit on screen, so view shouldn't be indeterminate */
-            boolean isFitOnScreen = orientationState.isItemsFitOnScreen(rvCategories.getWidth(),
-                    rvCategories.getHeight(), itemWidth, itemHeight, categoriesAdapter.getWrappedItems().size());
+            orientationState.initPlaceHolderAndOverlay(overlayPlaceholder, rvCategories, overlaySize);
 
-            if (isFitOnScreen) {
-                rvCategories.removeItemDecoration(spacesItemDecoration);
-                Log.i(TAG, "all items fit on screen");
-                categoriesAdapter.setIndeterminate(false);
-                spacesItemDecoration = orientationState.getSelectionViewItemDecoration(selectionMargin,
-                        categoriesHolder.itemView.getWidth(), categoriesHolder.itemView.getHeight());
-                rvCategories.addItemDecoration(spacesItemDecoration);
-                //changing item decoration will call onLayout again, so this flag needed to avoid indeterminate loop
-                skipNextOnLayout = true;
-                isIndeterminateInitialized = false;
+            if (rvCategories.getChildCount() > 0) {
+                int itemWidth = calcItemWidth();
+                int itemHeight = calcItemHeight();
 
-                rvCategories.removeOnScrollListener(indeterminateOnScrollListener);
-            } else {
-                if (!isIndeterminateInitialized) {
-                    //scroll to middle of indeterminate recycler view on initialization and if user somehow scrolled to start or end
-                    linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.enls_selected_view_size_plus_margin));
-                    rvCategories.addOnScrollListener(indeterminateOnScrollListener);
-                    isIndeterminateInitialized = true;
+                /** true if current set of category items fit on screen, so view shouldn't be indeterminate */
+                boolean isFitOnScreen = orientationState.isItemsFitOnScreen(rvCategories.getWidth(),
+                        rvCategories.getHeight(), itemWidth, itemHeight, categoriesAdapter.getWrappedItems().size());
+
+                if (isFitOnScreen) {
+                    rvCategories.removeItemDecoration(spacesItemDecoration);
+                    Log.i(TAG, "all items fit on screen");
+                    categoriesAdapter.setIndeterminate(false);
+                    spacesItemDecoration = orientationState.getSelectionViewItemDecoration(selectionMargin,
+                            categoriesHolder.itemView.getWidth(), categoriesHolder.itemView.getHeight());
+                    rvCategories.addItemDecoration(spacesItemDecoration);
+                    //changing item decoration will call onLayout again, so this flag needed to avoid indeterminate loop
+                    skipNextOnLayout = true;
+                    isIndeterminateInitialized = false;
+
+                    rvCategories.removeOnScrollListener(indeterminateOnScrollListener);
+                } else {
+                    if (!isIndeterminateInitialized) {
+                        //scroll to middle of indeterminate recycler view on initialization and if user somehow scrolled to start or end
+                        linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.enls_selected_view_size_plus_margin));
+                        rvCategories.addOnScrollListener(indeterminateOnScrollListener);
+                        isIndeterminateInitialized = true;
+                    }
                 }
             }
+
+            skipNextOnLayout = true;
         }
     }
 
