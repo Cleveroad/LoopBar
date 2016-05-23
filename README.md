@@ -25,14 +25,51 @@ dependencies {
 
 or just download zip and import module "LoopBar-widget" to be able to modify the sources
 
+### Features
+View consist from two parts:
+ - An infinite list of your selectable groups
+ - Selected view
+ 
+A list of groups will be infinite if all adapter items didn't fit on screen in other case it will be a static list.
+Selected view by request could overlay layout on screen on which it placed. 
+Widget has horizontal and vertical layouts and also start or end gravity of selected view. 
+
+Android Studio layouts preview is supported.
+
 ### Usage
+```XML
+    <com.cleveroad.loopbar.widget.LoopBarView
+        android:id="@+id/endlessView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:enls_placeholderId="@id/placeHolder"
+        app:enls_orientation="horizontal"
+        app:enls_selectionGravity="start"
+        app:enls_selectionMargin="10dp"
+        app:enls_overlaySize="5dp"
+        app:enls_selectionInAnimation="@animator/enls_scale_restore"
+        app:enls_selectionOutAnimation="@animator/enls_scale_small"
+        app:enls_selectionBackground="@android:color/holo_blue_dark"
+        />
+```
 
+enls_overlaySize & enls_placeholderId are used for overlay feature.
 
+|  attribute name | description |
+|---|---|
+| enls_overlaySize  | a size of selected view overlaying |
+| enls_placeholderId | an id of view on which you should use layout:above or other attributes of RelativeLayouts,  because LoopBarView will have increased height in this case. See more in sample |
+| enls_selectionGravity | a gravity of selection view. Can be vertical or horizontal. Default horizontal |
+| enls_selectionMargin | a margin of selectionView from bounds of view |
+| enls_selectionInAnimation | an animation of appearing an icon inside selection view |
+| enls_selectionOutAnimation | an animation of hiding an icon inside selection view |
+| enls_selectionBackground | selection background |                     
 
 <br />
 #### Support ####
 * * *
-If you have any other questions regarding the use of this library, please contact us for support at info@cleveroad.com (email subject: "LoopBar. Support request.") 
+If you have any other questions regarding the use of this library, please contact us for support at info@cleveroad.com (email subject: "LoopBar. Support request.")
+Also pull requests are welcome;
 
 <br />
 #### License ####

@@ -112,8 +112,6 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     private void init(Context context, @Nullable AttributeSet attrs) {
         //read customization attributes
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LoopBarView);
-        int colorCodeListBackground = a.getColor(R.styleable.LoopBarView_enls_listBackground,
-                ContextCompat.getColor(getContext(), R.color.enls_default_list_background));
         colorCodeSelectionView = a.getColor(R.styleable.LoopBarView_enls_selectionBackground,
                 ContextCompat.getColor(getContext(), R.color.enls_default_selection_view_background));
         int orientation = a.getInteger(R.styleable.LoopBarView_enls_orientation, Orientation.ORIENTATION_HORIZONTAL);
@@ -139,8 +137,6 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
         linearLayoutManager = orientationState.getLayoutManager(getContext());
         rvCategories.setLayoutManager(linearLayoutManager);
-
-        rvCategories.setBackgroundColor(colorCodeListBackground);
 
         if (isInEditMode()) {
             setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq()));

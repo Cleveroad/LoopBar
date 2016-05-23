@@ -15,7 +15,6 @@
         <attr name="enls_selectionMargin" format="dimension"/>
         <attr name="enls_overlaySize" format="dimension"/>
 
-        <attr name="enls_listBackground" format="color"/>
         <attr name="enls_selectionBackground" format="color"/>
 
         <attr name="enls_placeholderId" format="reference"/>
