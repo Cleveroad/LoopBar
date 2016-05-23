@@ -1,13 +1,13 @@
-# Text Header 1 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome) <img src="https://www.cleveroad.com/public/comercial/label-android.svg" height="19"> <a href="https://www.cleveroad.com/?utm_source=github&utm_medium=label&utm_campaign=contacts"><img src="https://www.cleveroad.com/public/comercial/label-cleveroad.svg" height="19"></a>
+# LoopBar -- Tab Bar with Infinite Scrolling [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome) <img src="https://www.cleveroad.com/public/comercial/label-android.svg" height="19"> <a href="https://www.cleveroad.com/?utm_source=github&utm_medium=label&utm_campaign=contacts"><img src="https://www.cleveroad.com/public/comercial/label-cleveroad.svg" height="19"></a>
 ![Header image](/images/header.jpg)
 
-## Text Header 2
+## Meet LoopBar for Android by Cleveroad
 
-Text 1 Text 1 Text 1 Text 1 Text 1 Text 1 Text 1 Text 1 Text 1 Text 1 Text 1 Text 1 Text 1 Text 1 Text 1 Text 1 
+At Cleveroad we’ve recently come to realize that navigation through categories in an app using nothing but a navigation panel is pretty boring and trivial. That’s why, armed with our designer’s creativity, we introduce you our new component for Android-based applications -- LoopBar. The idea was to make the navigation menu right at fingerprints, in a tab bar. What's more the view has a few specific features that make it stand out from the crowd of similar ones. So, try out the LoopBar library in your app and you’ll see the difference.
 
 ![Demo image](/images/demo.gif)
 
-Text 2 Text 2 Text 2 Text 2 Text 2 Text 2 Text 2 Text 2 Text 2 Text 2 Text 2 Text 2 Text 2 Text 2 Text 2 Text 2
+If you strive to create an application with unusual looks and navigation, you are welcome to use the LoopBar library. It’s really easy to integrate and can add spice to any app!
 
 @@@@@@ при нажатии на картинку должен быть переход на статью в Блоге - попроси у Наташи Харченко ссылку 
 [![Article image](/images/article.jpg)](https://www.cleveroad.com/blog/case-study-audio-widget-overlay-view-by-cleveroad)
