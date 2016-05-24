@@ -60,10 +60,10 @@ Android Studio layouts preview is supported.
 | enls_overlaySize  | a size of selected view overlaying |
 | enls_placeholderId | an id of view on which you should use layout:above or other attributes of RelativeLayouts,  because LoopBarView will have increased height in this case. See more in sample |
 | enls_selectionGravity | a gravity of selection view. Can be vertical or horizontal. Default horizontal |
-| enls_selectionMargin | a margin of selectionView from bounds of view |
+| enls_selectionMargin | a margin of selectionView from bounds of view. Default 5dp |
 | enls_selectionInAnimation | an animation of appearing an icon inside selection view |
 | enls_selectionOutAnimation | an animation of hiding an icon inside selection view |
-| enls_selectionBackground | selection background |                     
+| enls_selectionBackground | selection background. Default #ffc829|                     
 
 View have yellow background by default. Use standart ```android:background``` attribute to change it
 
