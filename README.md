@@ -33,6 +33,7 @@ View consist from two parts:
 A list of groups will be infinite if all adapter items didn't fit on screen in other case it will be a static list.
 Selected view by request could overlay layout on screen on which it placed. 
 Widget has horizontal and vertical layouts and also start or end gravity of selected view. 
+<p>You are allowed to use any RecyclerView adapter, which you want. Concrete infinite scroll logic is fully incapsulated</p>
 
 Android Studio layouts preview is supported.
 
