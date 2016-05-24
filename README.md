@@ -9,7 +9,7 @@ At Cleveroad we’ve recently come to realize that navigation through categories
 
 If you strive to create an application with unusual looks and navigation, you are welcome to use the LoopBar library. It’s really easy to integrate and can add spice to any app!
 
-@@@@@@ при нажатии на картинку должен быть переход на статью в Блоге - попроси у Наташи Харченко ссылку 
+@@@@@@
 [![Article image](/images/article.jpg)](https://www.cleveroad.com/blog/case-study-audio-widget-overlay-view-by-cleveroad)
 <br/><br/>
 [![Awesome](/images/logo-footer.png)](https://www.cleveroad.com/?utm_source=github&utm_medium=label&utm_campaign=contacts)
@@ -33,6 +33,7 @@ View consist from two parts:
 A list of groups will be infinite if all adapter items didn't fit on screen in other case it will be a static list.
 Selected view by request could overlay layout on screen on which it placed. 
 Widget has horizontal and vertical layouts and also start or end gravity of selected view. 
+You are allowed to use any RecyclerView adapter, which you want. Concrete infinite scroll logic is fully incapsulated
 
 Android Studio layouts preview is supported.
 
