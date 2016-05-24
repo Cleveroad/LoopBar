@@ -69,7 +69,7 @@ Android Studio layouts preview is supported.
 View have yellow background by default. Use standart ```android:background``` attribute to change it
 
 
-To initialize items in widget you should setup adapter to it:
+To initialize items in widget and work with it you should setup adapter to it and add item click listener:
 ```
 LoopBarView loopBarView = findViewById(..);
 categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq());
