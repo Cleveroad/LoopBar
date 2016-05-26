@@ -64,9 +64,8 @@ Android Studio layouts preview is supported.
 | enls_selectionMargin | a margin of selectionView from bounds of view. Default 5dp |
 | enls_selectionInAnimation | an animation of appearing an icon inside selection view |
 | enls_selectionOutAnimation | an animation of hiding an icon inside selection view |
-| enls_selectionBackground | selection background. Default #ffc829|                     
-
-View have yellow background by default. Use standart ```android:background``` attribute to change it
+| enls_selectionBackground | selection background. Default #ff0099cc|
+| android:background | View have yellow background by default. Use standart ```android:background``` attribute to change it. Default #ffc829|
 
 
 To initialize items in widget and work with it you should setup adapter to it and add item click listener:

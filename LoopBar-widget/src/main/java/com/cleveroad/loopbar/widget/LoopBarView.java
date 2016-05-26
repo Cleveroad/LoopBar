@@ -113,7 +113,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         //read customization attributes
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LoopBarView);
         colorCodeSelectionView = a.getColor(R.styleable.LoopBarView_enls_selectionBackground,
-                ContextCompat.getColor(getContext(), R.color.enls_default_selection_view_background));
+                ContextCompat.getColor(getContext(), android.R.color.holo_blue_dark));
         int orientation = a.getInteger(R.styleable.LoopBarView_enls_orientation, Orientation.ORIENTATION_HORIZONTAL);
         int selectionAnimatorInId = a.getResourceId(R.styleable.LoopBarView_enls_selectionInAnimation, R.animator.enls_scale_restore);
         int selectionAnimatorOutId = a.getResourceId(R.styleable.LoopBarView_enls_selectionOutAnimation, R.animator.enls_scale_small);
