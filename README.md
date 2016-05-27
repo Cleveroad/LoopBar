@@ -9,8 +9,7 @@ At Cleveroad we’ve recently come to realize that navigation through categories
 
 If you strive to create an application with unusual looks and navigation, you are welcome to use the LoopBar library. It’s really easy to integrate and can add spice to any app!
 
-@@@@@@ при нажатии на картинку должен быть переход на статью в Блоге - попроси у Наташи Харченко ссылку 
-[![Article image](/images/article.jpg)](https://www.cleveroad.com/blog/case-study-audio-widget-overlay-view-by-cleveroad)
+[![Article image](/images/article.png)](https://www.cleveroad.com/blog/case-study-loop-bar-for-android)
 <br/><br/>
 [![Awesome](/images/logo-footer.png)](https://www.cleveroad.com/?utm_source=github&utm_medium=label&utm_campaign=contacts)
 <br/>
