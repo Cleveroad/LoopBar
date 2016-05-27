@@ -205,6 +205,10 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         }
     }
 
+    public RecyclerView getWrappedRecyclerView() {
+        return rvCategories;
+    }
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();

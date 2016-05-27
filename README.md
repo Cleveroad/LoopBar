@@ -78,6 +78,8 @@ loopBarView.addOnItemClickListener(this);
 Here SimpleCategoriesAdapter is used which required collection of ICategoryItem objects (to draw default view with icon and text).
 And also you are free to use your own adapter with custom items. 
 
+To control wrapped ```RecyclerView``` animations you are able to use ```getWrappedRecyclerView()```.
+
 <br />
 #### Support ####
 * * *
