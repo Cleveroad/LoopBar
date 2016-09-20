@@ -74,7 +74,7 @@ Android Studio layouts preview is supported.
 To initialize items in widget and work with it you should setup adapter to it and add item click listener:
 ```
 LoopBarView loopBarView = findViewById(..);
-categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq());
+categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItems(getContext()));
 loopBarView.setCategoriesAdapter(categoriesAdapter);
 loopBarView.addOnItemClickListener(this);
 ```
