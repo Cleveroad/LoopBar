@@ -94,7 +94,7 @@ Here SimpleCategoriesAdapter is used which required collection of ICategoryItem 
         app:enls_menu="@menu/loopbar"
         />
 ```
-* **PagerAdapter**. In this case your adapter must implement [ILoopBarPagerAdapter] interface:
+* **ViewPager**. In this case your ViewPager adapter must implement [ILoopBarPagerAdapter] interface:
 ```
     loopBarView.setupWithViewPager(viewPager);
 ```
