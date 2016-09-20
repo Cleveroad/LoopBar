@@ -82,10 +82,10 @@ Here SimpleCategoriesAdapter is used which required collection of ICategoryItem 
 <br /> Also you can setup adapter through:
 *   **Menu** via Java code:
 ``` 
-        loopBarView.setCategoriesAdapter(R.menu.loopbar);
+        loopBarView.setCategoriesAdapterFromMenu(R.menu.loopbar);
         //or
         Menu menu = ...;
-        loopBarView.setCategoriesAdapter(menu);
+        loopBarView.setCategoriesAdapterFromMenu(menu);
 ```
     or via XML:
 ```
@@ -96,13 +96,7 @@ Here SimpleCategoriesAdapter is used which required collection of ICategoryItem 
 ```
 * **PagerAdapter**. In this case your adapter must implement [ILoopBarPagerAdapter] interface:
 ```
-    List<Fragment> fragments = ...
-    SimpleFragmentStatePagerAdapter pagerAdapter = 
-                    new SimpleFragmentStatePagerAdapter(
-                        getSupportFragmentManager(), 
-                        fragments, 
-                        MockedItemsFactory.getCategoryItems(this));
-    loopBarView.setCategoriesAdapter(pagerAdapter);
+    loopBarView.setupWithViewPager(viewPager);
 ```
 Or you can implement your own adapter with custom items. 
 
