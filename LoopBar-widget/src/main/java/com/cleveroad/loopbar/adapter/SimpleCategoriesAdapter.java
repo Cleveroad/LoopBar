@@ -58,7 +58,7 @@ public class SimpleCategoriesAdapter extends RecyclerView.Adapter<SimpleCategori
         @Override
         protected void onBindItem(ICategoryItem item) {
             tvCategoryName.setText(item.getCategoryName());
-            ivCategoryIcon.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), item.getCategoryIconDrawable()));
+            ivCategoryIcon.setImageDrawable(item.getCategoryIconDrawable());
         }
 
     }

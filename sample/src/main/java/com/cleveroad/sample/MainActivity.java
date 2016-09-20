@@ -2,19 +2,16 @@ package com.cleveroad.sample;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cleveroad.loopbar.adapter.ICategoryItem;
 import com.cleveroad.loopbar.adapter.SimpleCategoriesAdapter;
 import com.cleveroad.loopbar.model.MockedItemsFactory;
 import com.cleveroad.loopbar.widget.LoopBarView;
@@ -36,9 +33,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
     private int orientation;
     @LoopBarView.GravityAttr
     private int endlessGravity = LoopBarView.SELECTION_GRAVITY_START;
-
-    @Nullable
-    private Toast toast;
 
     public static void start(Context context, int orientation) {
         Intent starter = new Intent(context, MainActivity.class);
@@ -72,8 +66,9 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         loopBarView = (LoopBarView) findViewById(R.id.endlessView);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
-        categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq());
-        loopBarView.setCategoriesAdapter(categoriesAdapter);
+        categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItems(this));
+//        loopBarView.setCategoriesAdapter(categoriesAdapter);
+//        loopBarView.setCategoriesAdapter(R.menu.loopbar);
         loopBarView.addOnItemClickListener(this);
 
         List<Fragment> list = new ArrayList<>(8);
@@ -86,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         list.add(ColorFragment.newInstance(android.R.color.holo_purple));
         list.add(ColorFragment.newInstance(android.R.color.white));
 
-        pagerAdapter = new SimpleFragmentStatePagerAdapter(getSupportFragmentManager(), list);
+        pagerAdapter = new SimpleFragmentStatePagerAdapter(getSupportFragmentManager(), list, MockedItemsFactory.getCategoryItems(this));
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new AbstractPageChangedListener() {
             @Override
@@ -101,18 +96,12 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
             }
         });
 
+        loopBarView.setCategoriesAdapter(pagerAdapter);
+
     }
 
     @Override
     public void onItemClicked(int position) {
-        if (toast != null) {
-            toast.cancel();
-        }
-
-        ICategoryItem categoryItem = categoriesAdapter.getItem(position);
         viewPager.setCurrentItem(position);
-
-//        toast = Toast.makeText(this, getString(R.string.mask_on_item_clicked, position, categoryItem.getCategoryName()), Toast.LENGTH_SHORT);
-//        toast.show();
     }
 }
