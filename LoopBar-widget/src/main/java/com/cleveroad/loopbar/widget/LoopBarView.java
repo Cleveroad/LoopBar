@@ -14,6 +14,8 @@ import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -162,7 +164,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
         int menuId = typedArray.getResourceId(R.styleable.LoopBarView_enls_menu, -1);
         if(menuId != -1) {
-            setCategoriesAdapter(menuId);
+            setCategoriesAdapterFromMenu(menuId);
         }
         typedArray.recycle();
     }
@@ -202,20 +204,32 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         layoutParams.gravity = Gravity.CENTER;
     }
 
-    public void setCategoriesAdapter(@MenuRes int menuRes) {
+    public void setCategoriesAdapterFromMenu(@MenuRes int menuRes) {
         Menu menu = new MenuBuilder(getContext());
         new MenuInflater(getContext()).inflate(menuRes, menu);
-        setCategoriesAdapter(menu);
+        setCategoriesAdapterFromMenu(menu);
     }
 
-    public void setCategoriesAdapter(@NonNull Menu menu) {
+    public void setCategoriesAdapterFromMenu(@NonNull Menu menu) {
         setCategoriesAdapter(new SimpleCategoriesMenuAdapter(menu));
     }
 
-    public void setCategoriesAdapter(@NonNull ILoopBarPagerAdapter adapter) {
-        List<ICategoryItem> categoryItems = new ArrayList<>(adapter.getCount());
-        for(int i=0, size = adapter.getCount(); i < size; i++) {
-            categoryItems.add(new CategoryItem(adapter.getPageDrawable(i), String.valueOf(adapter.getPageTitle(i))));
+    /**
+     * You can setup {@code {@link LoopBarView#categoriesAdapter}} through {@link ViewPager} adapter.
+     * Your {@link ViewPager} adapter must implement {@link ILoopBarPagerAdapter}
+     * @param viewPager - viewPager, which must have {@link ILoopBarPagerAdapter}
+     */
+    public void setupWithViewPager(@NonNull ViewPager viewPager) {
+        PagerAdapter pagerAdapter = viewPager.getAdapter();
+        List<ICategoryItem> categoryItems = new ArrayList<>(pagerAdapter.getCount());
+        ILoopBarPagerAdapter loopBarPagerAdapter =
+                pagerAdapter instanceof ILoopBarPagerAdapter
+                        ? (ILoopBarPagerAdapter) pagerAdapter : null;
+        for(int i=0, size = pagerAdapter.getCount(); i < size; i++) {
+            categoryItems.add(new CategoryItem(
+                    loopBarPagerAdapter != null ? loopBarPagerAdapter.getPageDrawable(i) : null,
+                    String.valueOf(pagerAdapter.getPageTitle(i))
+            ));
         }
         setCategoriesAdapter(new SimpleCategoriesAdapter(categoryItems));
     }

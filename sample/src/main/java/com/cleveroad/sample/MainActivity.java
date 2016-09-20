@@ -89,8 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
             }
         });
 
-        loopBarView.setCategoriesAdapter(pagerAdapter);
-
+        loopBarView.setupWithViewPager(viewPager);
     }
 
     @Override

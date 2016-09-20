@@ -1,6 +1,7 @@
 package com.cleveroad.sample;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -30,11 +31,13 @@ public final class SimpleFragmentStatePagerAdapter extends FragmentStatePagerAda
         return fragmentList.size();
     }
 
+    @NonNull
     @Override
     public CharSequence getPageTitle(int position) {
         return categoryItems.get(position).getCategoryName();
     }
 
+    @NonNull
     @Override
     public Drawable getPageDrawable(int position) {
         return categoryItems.get(position).getCategoryIconDrawable();
