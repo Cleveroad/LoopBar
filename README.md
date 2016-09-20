@@ -67,7 +67,7 @@ Android Studio layouts preview is supported.
 | enls_selectionInAnimation | an animation of appearing an icon inside selection view |
 | enls_selectionOutAnimation | an animation of hiding an icon inside selection view |
 | enls_selectionBackground | selection background. Default #ff0099cc|
-| enls_menu | an id of menu which will be used for getting catigories titles and icons  |
+| enls_menu | an id of menu which will be used for getting title and icon items  |
 | android:background | View have yellow background by default. Use standart ```android:background``` attribute to change it. Default #ffc829|
 
 
