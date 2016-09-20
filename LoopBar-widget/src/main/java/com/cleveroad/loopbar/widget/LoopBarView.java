@@ -216,7 +216,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
     /**
      * You can setup {@code {@link LoopBarView#categoriesAdapter}} through {@link ViewPager} adapter.
-     * Your {@link ViewPager} adapter must implement {@link ILoopBarPagerAdapter}
+     * Your {@link ViewPager} adapter must implement {@link ILoopBarPagerAdapter} otherwise - the icons will not be shown
      * @param viewPager - viewPager, which must have {@link ILoopBarPagerAdapter}
      */
     public void setupWithViewPager(@NonNull ViewPager viewPager) {
