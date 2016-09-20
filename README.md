@@ -52,6 +52,7 @@ Android Studio layouts preview is supported.
         app:enls_selectionInAnimation="@animator/enls_scale_restore"
         app:enls_selectionOutAnimation="@animator/enls_scale_small"
         app:enls_selectionBackground="@android:color/holo_blue_dark"
+        app:enls_menu="@menu/loopbar"
         />
 ```
 
@@ -66,6 +67,7 @@ Android Studio layouts preview is supported.
 | enls_selectionInAnimation | an animation of appearing an icon inside selection view |
 | enls_selectionOutAnimation | an animation of hiding an icon inside selection view |
 | enls_selectionBackground | selection background. Default #ff0099cc|
+| enls_menu | an id of menu which will be used for getting catigories titles and icons  |
 | android:background | View have yellow background by default. Use standart ```android:background``` attribute to change it. Default #ffc829|
 
 
@@ -77,7 +79,28 @@ loopBarView.setCategoriesAdapter(categoriesAdapter);
 loopBarView.addOnItemClickListener(this);
 ```
 Here SimpleCategoriesAdapter is used which required collection of ICategoryItem objects (to draw default view with icon and text).
-And also you are free to use your own adapter with custom items. 
+<br /> Also you can setup adapter through:
+*   **Menu** via Java code:
+``` 
+        loopBarView.setCategoriesAdapter(R.menu.loopbar);
+        //or
+        Menu menu = ...;
+        loopBarView.setCategoriesAdapter(menu);
+```
+    or via XML:
+```
+        <com.cleveroad.loopbar.widget.LoopBarView
+        ...
+        app:enls_menu="@menu/loopbar"
+        />
+```
+* **PagerAdapter**. In this case your adapter must implement [ILoopBarPagerAdapter] interface:
+```
+    List<Fragment> fragments = ...
+    SimpleFragmentStatePagerAdapter pagerAdapter = new SimpleFragmentStatePagerAdapter(getSupportFragmentManager(), fragments, MockedItemsFactory.getCategoryItems(this));
+    loopBarView.setCategoriesAdapter(pagerAdapter);
+```
+Or you can implement your own adapter with custom items. 
 
 To control wrapped ```RecyclerView``` animations you are able to use ```getWrappedRecyclerView()```.
 
@@ -111,3 +134,6 @@ Also pull requests are welcome.
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
+    
+    
+[ILoopBarPagerAdapter]: /LoopBar-widget/src/main/java/com/cleveroad/loopbar/adapter/ILoopBarPagerAdapter.java
