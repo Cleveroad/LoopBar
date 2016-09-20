@@ -97,7 +97,11 @@ Here SimpleCategoriesAdapter is used which required collection of ICategoryItem 
 * **PagerAdapter**. In this case your adapter must implement [ILoopBarPagerAdapter] interface:
 ```
     List<Fragment> fragments = ...
-    SimpleFragmentStatePagerAdapter pagerAdapter = new SimpleFragmentStatePagerAdapter(getSupportFragmentManager(), fragments, MockedItemsFactory.getCategoryItems(this));
+    SimpleFragmentStatePagerAdapter pagerAdapter = 
+                    new SimpleFragmentStatePagerAdapter(
+                        getSupportFragmentManager(), 
+                        fragments, 
+                        MockedItemsFactory.getCategoryItems(this));
     loopBarView.setCategoriesAdapter(pagerAdapter);
 ```
 Or you can implement your own adapter with custom items. 
