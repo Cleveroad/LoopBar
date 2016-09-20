@@ -2,30 +2,26 @@ package com.cleveroad.sample;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.cleveroad.loopbar.adapter.SimpleCategoriesAdapter;
 import com.cleveroad.loopbar.model.MockedItemsFactory;
 import com.cleveroad.loopbar.widget.LoopBarView;
 import com.cleveroad.loopbar.widget.OnItemClickListener;
 import com.cleveroad.loopbar.widget.Orientation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements OnItemClickListener {
     private static final String EXTRA_ORIENTATION = "orientation";
 
     private LoopBarView loopBarView;
-
-    private SimpleCategoriesAdapter categoriesAdapter;
     private SimpleFragmentStatePagerAdapter pagerAdapter;
-
     private ViewPager viewPager;
 
     //args
@@ -66,9 +62,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         loopBarView = (LoopBarView) findViewById(R.id.endlessView);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
-        categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItems(this));
-//        loopBarView.setCategoriesAdapter(categoriesAdapter);
-//        loopBarView.setCategoriesAdapter(R.menu.loopbar);
         loopBarView.addOnItemClickListener(this);
 
         List<Fragment> list = new ArrayList<>(8);
