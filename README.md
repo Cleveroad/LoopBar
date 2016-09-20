@@ -63,7 +63,7 @@ Android Studio layouts preview is supported.
 | enls_overlaySize  | a size of selected view overlaying |
 | enls_placeholderId | an id of view on which you should use layout:above or other attributes of RelativeLayouts,  because LoopBarView will have increased height in this case. See more in sample |
 | enls_selectionGravity | a gravity of selection view. Can be vertical or horizontal. Default horizontal |
-| enls_selectionMargin | a margin of selectionView from bounds of view. Default 5dp |
+| enls_selectionMargin | a margin of selectionView from bounds of view. Default ```5dp``` |
 | enls_selectionInAnimation | an animation of appearing an icon inside selection view |
 | enls_selectionOutAnimation | an animation of hiding an icon inside selection view |
 | enls_selectionBackground | selection background. Default ```#ff0099cc``` |
@@ -73,14 +73,14 @@ Android Studio layouts preview is supported.
 
 To initialize items in widget and work with it you should setup adapter to it and add item click listener:
 ```
-LoopBarView loopBarView = findViewById(..);
+LoopBarView loopBarView = findViewById(...);
 categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItems(getContext()));
 loopBarView.setCategoriesAdapter(categoriesAdapter);
 loopBarView.addOnItemClickListener(this);
 ```
 Here SimpleCategoriesAdapter is used which required collection of ICategoryItem objects (to draw default view with icon and text).
 <br /> Also you can setup adapter through:
-*   **Menu** via Java code:
+*   **Menu** via Java code (see example [MenuLoopBarFragment]):
 ``` 
         loopBarView.setCategoriesAdapterFromMenu(R.menu.loopbar);
         //or
@@ -94,11 +94,11 @@ Here SimpleCategoriesAdapter is used which required collection of ICategoryItem 
         app:enls_menu="@menu/loopbar"
         />
 ```
-* **ViewPager**. In this case your ViewPager adapter must implement [ILoopBarPagerAdapter] interface:
+* **ViewPager**. In this case your ViewPager adapter must implement [ILoopBarPagerAdapter] interface (see example [ViewPagerLoopBarFragment]):
 ```
     loopBarView.setupWithViewPager(viewPager);
 ```
-Or you can implement your own adapter with custom items. 
+Or you can implement your own adapter with custom items (see example [CategoriesAdapterLoopBarFragment]). 
 
 To control wrapped ```RecyclerView``` animations you are able to use ```getWrappedRecyclerView()```.
 
@@ -135,3 +135,7 @@ Also pull requests are welcome.
     
     
 [ILoopBarPagerAdapter]: /LoopBar-widget/src/main/java/com/cleveroad/loopbar/adapter/ILoopBarPagerAdapter.java
+[MenuLoopBarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/MenuLoopBarFragment.java
+[ViewPagerLoopbarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/ViewPagerLoopBarFragment.java
+[CategoriesAdapterLoopBarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/CategoriesAdapterLoopBarFragment.java
+
