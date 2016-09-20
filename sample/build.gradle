@@ -7,9 +7,9 @@ android {
     defaultConfig {
         applicationId "com.cleveroad.loopbar.sample"
         minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 24
+        versionCode 5
+        versionName "1.0.1"
     }
     buildTypes {
         release {
@@ -20,8 +20,10 @@ android {
 }
 
 dependencies {
+    final SUPPORT_LIB_VERSION = '24.2.1'
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
     compile project(':LoopBar-widget')
-    compile 'com.android.support:support-v4:23.4.0'
+    //noinspection GradleCompatible
+    compile "com.android.support:support-v4:$SUPPORT_LIB_VERSION"
 }

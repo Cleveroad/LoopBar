@@ -1,7 +1,6 @@
 package com.cleveroad.loopbar.adapter;
 
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,8 +57,7 @@ public class SimpleCategoriesAdapter extends RecyclerView.Adapter<SimpleCategori
         @Override
         protected void onBindItem(ICategoryItem item) {
             tvCategoryName.setText(item.getCategoryName());
-            ivCategoryIcon.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(), item.getCategoryIconDrawable()));
+            ivCategoryIcon.setImageDrawable(item.getCategoryIconDrawable());
         }
-
     }
 }

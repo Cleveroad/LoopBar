@@ -1,13 +1,15 @@
-# LoopBar -- Tab Bar with Infinite Scrolling [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome) <img src="https://www.cleveroad.com/public/comercial/label-android.svg" height="19"> <a href="https://www.cleveroad.com/?utm_source=github&utm_medium=label&utm_campaign=contacts"><img src="https://www.cleveroad.com/public/comercial/label-cleveroad.svg" height="19"></a>
+# LoopBar [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome) <img src="https://www.cleveroad.com/public/comercial/label-android.svg" height="19"> <a href="https://www.cleveroad.com/?utm_source=github&utm_medium=label&utm_campaign=contacts"><img src="https://www.cleveroad.com/public/comercial/label-cleveroad.svg" height="19"></a>
 ![Header image](/images/header.png)
 
-## Meet LoopBar for Android by Cleveroad
+## Meet LoopBar - Tab Bar with Infinite Scrolling for Android by Cleveroad
 
 At Cleveroad we’ve recently come to realize that navigation through categories in an app using nothing but a navigation panel is pretty boring and trivial. That’s why, armed with our designer’s creativity, we introduce you our new component for Android-based applications -- LoopBar. The idea was to make the navigation menu right at fingerprints, in a tab bar. What's more the view has a few specific features that make it stand out from the crowd of similar ones. So, try out the LoopBar library in your app and you’ll see the difference.
 
 ![Demo image](/images/demo.gif)
 
 If you strive to create an application with unusual looks and navigation, you are welcome to use the LoopBar library. It’s really easy to integrate and can add spice to any app!
+
+If you need more details on how you can use the component and what benefits it provides, read our blog post: <strong><a href="https://www.cleveroad.com/blog/case-study-loop-bar-for-android">Case Study: Loop Bar for Android</a></strong>
 
 [![Article image](/images/article.png)](https://www.cleveroad.com/blog/case-study-loop-bar-for-android)
 <br/><br/>
@@ -18,7 +20,7 @@ If you strive to create an application with unusual looks and navigation, you ar
 by gradle : 
 ```groovy
 dependencies {
-    compile "com.cleveroad:loopbar:1.0.0"
+    compile "com.cleveroad:loopbar:1.0.1"
 }
 ```
 
@@ -50,6 +52,7 @@ Android Studio layouts preview is supported.
         app:enls_selectionInAnimation="@animator/enls_scale_restore"
         app:enls_selectionOutAnimation="@animator/enls_scale_small"
         app:enls_selectionBackground="@android:color/holo_blue_dark"
+        app:enls_menu="@menu/loopbar"
         />
 ```
 
@@ -60,22 +63,42 @@ Android Studio layouts preview is supported.
 | enls_overlaySize  | a size of selected view overlaying |
 | enls_placeholderId | an id of view on which you should use layout:above or other attributes of RelativeLayouts,  because LoopBarView will have increased height in this case. See more in sample |
 | enls_selectionGravity | a gravity of selection view. Can be vertical or horizontal. Default horizontal |
-| enls_selectionMargin | a margin of selectionView from bounds of view. Default 5dp |
+| enls_selectionMargin | a margin of selectionView from bounds of view. Default ```5dp``` |
 | enls_selectionInAnimation | an animation of appearing an icon inside selection view |
 | enls_selectionOutAnimation | an animation of hiding an icon inside selection view |
-| enls_selectionBackground | selection background. Default #ff0099cc|
-| android:background | View have yellow background by default. Use standart ```android:background``` attribute to change it. Default #ffc829|
+| enls_selectionBackground | selection background. Default ```#ff0099cc``` |
+| enls_menu | an id of menu which will be used for getting title and icon items  |
+| android:background | View have yellow background by default. Use standart ```android:background``` attribute to change it. Default ```#ffc829``` |
 
 
 To initialize items in widget and work with it you should setup adapter to it and add item click listener:
 ```
-LoopBarView loopBarView = findViewById(..);
-categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq());
+LoopBarView loopBarView = findViewById(...);
+categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItems(getContext()));
 loopBarView.setCategoriesAdapter(categoriesAdapter);
 loopBarView.addOnItemClickListener(this);
 ```
 Here SimpleCategoriesAdapter is used which required collection of ICategoryItem objects (to draw default view with icon and text).
-And also you are free to use your own adapter with custom items. 
+<br /> Also you can setup adapter through:
+*   **Menu** via Java code (see example [MenuLoopBarFragment]):
+``` 
+        loopBarView.setCategoriesAdapterFromMenu(R.menu.loopbar);
+        //or
+        Menu menu = ...;
+        loopBarView.setCategoriesAdapterFromMenu(menu);
+```
+    or via XML:
+```
+        <com.cleveroad.loopbar.widget.LoopBarView
+        ...
+        app:enls_menu="@menu/loopbar"
+        />
+```
+* **ViewPager**. Just set a viewPager into your LoopBar. If you want to show category icons, your ViewPager adapter must implement [ILoopBarPagerAdapter] interface (see example [ViewPagerLoopBarFragment]), otherwise the icons will not be shown:
+```
+    loopBarView.setupWithViewPager(viewPager);
+```
+Or you can implement your own adapter with custom items (see example [CategoriesAdapterLoopBarFragment]). 
 
 To control wrapped ```RecyclerView``` animations you are able to use ```getWrappedRecyclerView()```.
 
@@ -109,3 +132,10 @@ Also pull requests are welcome.
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
+    
+    
+[ILoopBarPagerAdapter]: /LoopBar-widget/src/main/java/com/cleveroad/loopbar/adapter/ILoopBarPagerAdapter.java
+[MenuLoopBarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/MenuLoopBarFragment.java
+[ViewPagerLoopbarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/ViewPagerLoopBarFragment.java
+[CategoriesAdapterLoopBarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/CategoriesAdapterLoopBarFragment.java
+
