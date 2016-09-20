@@ -94,7 +94,7 @@ Here SimpleCategoriesAdapter is used which required collection of ICategoryItem 
         app:enls_menu="@menu/loopbar"
         />
 ```
-* **ViewPager**. In this case your ViewPager adapter must implement [ILoopBarPagerAdapter] interface (see example [ViewPagerLoopBarFragment]):
+* **ViewPager**. If you want to show category icons, your ViewPager adapter must implement [ILoopBarPagerAdapter] interface (see example [ViewPagerLoopBarFragment]):
 ```
     loopBarView.setupWithViewPager(viewPager);
 ```
