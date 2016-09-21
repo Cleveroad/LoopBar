@@ -20,7 +20,7 @@ If you need more details on how you can use the component and what benefits it p
 by gradle : 
 ```groovy
 dependencies {
-    compile "com.cleveroad:loopbar:1.0.0"
+    compile "com.cleveroad:loopbar:1.0.1"
 }
 ```
 
@@ -52,6 +52,7 @@ Android Studio layouts preview is supported.
         app:enls_selectionInAnimation="@animator/enls_scale_restore"
         app:enls_selectionOutAnimation="@animator/enls_scale_small"
         app:enls_selectionBackground="@android:color/holo_blue_dark"
+        app:enls_menu="@menu/loopbar"
         />
 ```
 
@@ -62,22 +63,41 @@ Android Studio layouts preview is supported.
 | enls_overlaySize  | a size of selected view overlaying |
 | enls_placeholderId | an id of view on which you should use layout:above or other attributes of RelativeLayouts,  because LoopBarView will have increased height in this case. See more in sample |
 | enls_selectionGravity | a gravity of selection view. Can be vertical or horizontal. Default horizontal |
-| enls_selectionMargin | a margin of selectionView from bounds of view. Default 5dp |
+| enls_selectionMargin | a margin of selectionView from bounds of view. Default ```5dp``` |
 | enls_selectionInAnimation | an animation of appearing an icon inside selection view |
 | enls_selectionOutAnimation | an animation of hiding an icon inside selection view |
-| enls_selectionBackground | selection background. Default #ff0099cc|
-| android:background | View have yellow background by default. Use standart ```android:background``` attribute to change it. Default #ffc829|
+| enls_selectionBackground | selection background. Default ```#ff0099cc``` |
+| enls_menu | an id of menu which will be used for getting title and icon items  |
+| android:background | View have yellow background by default. Use standart ```android:background``` attribute to change it. Default ```#ffc829``` |
 
 
 To initialize items in widget and work with it you should setup adapter to it and add item click listener:
 ```
-LoopBarView loopBarView = findViewById(..);
-categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq());
+LoopBarView loopBarView = findViewById(...);
+categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItems(getContext()));
 loopBarView.setCategoriesAdapter(categoriesAdapter);
 loopBarView.addOnItemClickListener(this);
 ```
-Here SimpleCategoriesAdapter is used which required collection of ICategoryItem objects (to draw default view with icon and text).
-And also you are free to use your own adapter with custom items. 
+Here SimpleCategoriesAdapter is used which required collection of [ICategoryItem] objects (to draw default view with icon and text).
+<br /> Also you can setup adapter through:
+*   **Menu** via Java code (see example [MenuLoopBarFragment]):
+``` 
+        loopBarView.setCategoriesAdapterFromMenu(R.menu.loopbar);
+        //or
+        Menu menu = ...;
+        loopBarView.setCategoriesAdapterFromMenu(menu);
+```
+    or via XML:
+```
+        <com.cleveroad.loopbar.widget.LoopBarView
+        ...
+        app:enls_menu="@menu/loopbar"
+        />
+```
+* **ViewPager**. Just set a viewPager into your LoopBar. If you want to show category icons, your ViewPager adapter must implement [ILoopBarPagerAdapter] interface (see example [ViewPagerLoopBarFragment]), otherwise the icons will not be shown:
+```
+    loopBarView.setupWithViewPager(viewPager);
+```
 
 To control wrapped ```RecyclerView``` animations you are able to use ```getWrappedRecyclerView()```.
 
@@ -111,3 +131,11 @@ Also pull requests are welcome.
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
+    
+    
+[ILoopBarPagerAdapter]: /LoopBar-widget/src/main/java/com/cleveroad/loopbar/adapter/ILoopBarPagerAdapter.java
+[MenuLoopBarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/MenuLoopBarFragment.java
+[ViewPagerLoopbarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/ViewPagerLoopBarFragment.java
+[CategoriesAdapterLoopBarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/CategoriesAdapterLoopBarFragment.java
+[ICategoryItem]: /LoopBar-widget/src/main/java/com/cleveroad/loopbar/adapter/ICategoryItem.java
+

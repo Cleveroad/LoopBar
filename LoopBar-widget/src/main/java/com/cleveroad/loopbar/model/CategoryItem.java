@@ -1,19 +1,21 @@
 package com.cleveroad.loopbar.model;
 
+import android.graphics.drawable.Drawable;
+
 import com.cleveroad.loopbar.adapter.ICategoryItem;
 
-class CategoryItem implements ICategoryItem {
-    private int categoryItemDrawableId;
+public class CategoryItem implements ICategoryItem {
+    private Drawable categoryDrawable;
     private String categoryName;
 
-    public CategoryItem(int categoryItemDrawableId, String categoryName) {
-        this.categoryItemDrawableId = categoryItemDrawableId;
+    public CategoryItem(Drawable drawable, String categoryName) {
+        this.categoryDrawable = drawable;
         this.categoryName = categoryName;
     }
 
     @Override
-    public int getCategoryIconDrawable() {
-        return categoryItemDrawableId;
+    public Drawable getCategoryIconDrawable() {
+        return categoryDrawable;
     }
 
     @Override

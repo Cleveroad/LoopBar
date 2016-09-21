@@ -21,6 +21,8 @@
 
         <attr name="enls_selectionInAnimation" format="reference"/>
         <attr name="enls_selectionOutAnimation" format="reference"/>
+        
+        <attr name="enls_menu" format="reference"/>
 
     </declare-styleable>
 </resources>

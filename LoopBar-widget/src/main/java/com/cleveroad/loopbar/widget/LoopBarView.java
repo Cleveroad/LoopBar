@@ -10,14 +10,20 @@ import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.IntDef;
+import android.support.annotation.MenuRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -26,8 +32,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cleveroad.loopbar.R;
+import com.cleveroad.loopbar.adapter.ICategoryItem;
+import com.cleveroad.loopbar.adapter.ILoopBarPagerAdapter;
 import com.cleveroad.loopbar.adapter.IOperationItem;
 import com.cleveroad.loopbar.adapter.SimpleCategoriesAdapter;
+import com.cleveroad.loopbar.adapter.SimpleCategoriesMenuAdapter;
+import com.cleveroad.loopbar.model.CategoryItem;
 import com.cleveroad.loopbar.model.MockedItemsFactory;
 import com.cleveroad.loopbar.util.AbstractAnimatorListener;
 
@@ -111,28 +121,27 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
     private void init(Context context, @Nullable AttributeSet attrs) {
         //read customization attributes
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LoopBarView);
-        colorCodeSelectionView = a.getColor(R.styleable.LoopBarView_enls_selectionBackground,
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LoopBarView);
+        colorCodeSelectionView = typedArray.getColor(R.styleable.LoopBarView_enls_selectionBackground,
                 ContextCompat.getColor(getContext(), android.R.color.holo_blue_dark));
-        int orientation = a.getInteger(R.styleable.LoopBarView_enls_orientation, Orientation.ORIENTATION_HORIZONTAL);
-        int selectionAnimatorInId = a.getResourceId(R.styleable.LoopBarView_enls_selectionInAnimation, R.animator.enls_scale_restore);
-        int selectionAnimatorOutId = a.getResourceId(R.styleable.LoopBarView_enls_selectionOutAnimation, R.animator.enls_scale_small);
-        placeHolderId = a.getResourceId(R.styleable.LoopBarView_enls_placeholderId, -1);
-        @GravityAttr int selectionGravity = a.getInteger(R.styleable.LoopBarView_enls_selectionGravity, SELECTION_GRAVITY_START);
+        int orientation = typedArray.getInteger(R.styleable.LoopBarView_enls_orientation, Orientation.ORIENTATION_HORIZONTAL);
+        int selectionAnimatorInId = typedArray.getResourceId(R.styleable.LoopBarView_enls_selectionInAnimation, R.animator.enls_scale_restore);
+        int selectionAnimatorOutId = typedArray.getResourceId(R.styleable.LoopBarView_enls_selectionOutAnimation, R.animator.enls_scale_small);
+        placeHolderId = typedArray.getResourceId(R.styleable.LoopBarView_enls_placeholderId, -1);
+        @GravityAttr int selectionGravity = typedArray.getInteger(R.styleable.LoopBarView_enls_selectionGravity, SELECTION_GRAVITY_START);
 
         this.selectionGravity = selectionGravity;
 
-        selectionMargin = a.getDimensionPixelSize(R.styleable.LoopBarView_enls_selectionMargin,
+        selectionMargin = typedArray.getDimensionPixelSize(R.styleable.LoopBarView_enls_selectionMargin,
                 getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view));
-        overlaySize = a.getDimensionPixelSize(R.styleable.LoopBarView_enls_overlaySize, 0);
-        a.recycle();
+        overlaySize = typedArray.getDimensionPixelSize(R.styleable.LoopBarView_enls_overlaySize, 0);
+        typedArray.recycle();
 
         //check attributes you need, for example all paddings
         int [] attributes = new int [] {android.R.attr.background};
         //then obtain typed array
-        a = context.obtainStyledAttributes(attrs, attributes);
-        int backgroundResource = a.getResourceId(0, R.color.enls_default_list_background);
-        a.recycle();
+        typedArray = context.obtainStyledAttributes(attrs, attributes);
+        int backgroundResource = typedArray.getResourceId(0, R.color.enls_default_list_background);
 
         selectionInAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorInId);
         selectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
@@ -150,8 +159,14 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         rvCategories.setLayoutManager(linearLayoutManager);
 
         if (isInEditMode()) {
-            setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItemsUniq()));
+            setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItems(getContext())));
         }
+
+        int menuId = typedArray.getResourceId(R.styleable.LoopBarView_enls_menu, -1);
+        if(menuId != -1) {
+            setCategoriesAdapterFromMenu(menuId);
+        }
+        typedArray.recycle();
     }
 
     public void setGravity(@GravityAttr int selectionGravity) {
@@ -187,6 +202,36 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
         FrameLayout.LayoutParams layoutParams = (LayoutParams) categoriesHolder.itemView.getLayoutParams();
         layoutParams.gravity = Gravity.CENTER;
+    }
+
+    public void setCategoriesAdapterFromMenu(@MenuRes int menuRes) {
+        Menu menu = new MenuBuilder(getContext());
+        new MenuInflater(getContext()).inflate(menuRes, menu);
+        setCategoriesAdapterFromMenu(menu);
+    }
+
+    public void setCategoriesAdapterFromMenu(@NonNull Menu menu) {
+        setCategoriesAdapter(new SimpleCategoriesMenuAdapter(menu));
+    }
+
+    /**
+     * You can setup {@code {@link LoopBarView#categoriesAdapter}} through {@link ViewPager} adapter.
+     * Your {@link ViewPager} adapter must implement {@link ILoopBarPagerAdapter} otherwise - the icons will not be shown
+     * @param viewPager - viewPager, which must have {@link ILoopBarPagerAdapter}
+     */
+    public void setupWithViewPager(@NonNull ViewPager viewPager) {
+        PagerAdapter pagerAdapter = viewPager.getAdapter();
+        List<ICategoryItem> categoryItems = new ArrayList<>(pagerAdapter.getCount());
+        ILoopBarPagerAdapter loopBarPagerAdapter =
+                pagerAdapter instanceof ILoopBarPagerAdapter
+                        ? (ILoopBarPagerAdapter) pagerAdapter : null;
+        for(int i=0, size = pagerAdapter.getCount(); i < size; i++) {
+            categoryItems.add(new CategoryItem(
+                    loopBarPagerAdapter != null ? loopBarPagerAdapter.getPageDrawable(i) : null,
+                    String.valueOf(pagerAdapter.getPageTitle(i))
+            ));
+        }
+        setCategoriesAdapter(new SimpleCategoriesAdapter(categoryItems));
     }
 
     /** add item click listener to this view*/
