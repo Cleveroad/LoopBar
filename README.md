@@ -98,7 +98,6 @@ Here SimpleCategoriesAdapter is used which required collection of ICategoryItem 
 ```
     loopBarView.setupWithViewPager(viewPager);
 ```
-Or you can implement your own adapter with custom items (see example [CategoriesAdapterLoopBarFragment]). 
 
 To control wrapped ```RecyclerView``` animations you are able to use ```getWrappedRecyclerView()```.
 
