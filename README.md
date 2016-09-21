@@ -78,7 +78,7 @@ categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryIt
 loopBarView.setCategoriesAdapter(categoriesAdapter);
 loopBarView.addOnItemClickListener(this);
 ```
-Here SimpleCategoriesAdapter is used which required collection of ICategoryItem objects (to draw default view with icon and text).
+Here SimpleCategoriesAdapter is used which required collection of [ICategoryItem] objects (to draw default view with icon and text).
 <br /> Also you can setup adapter through:
 *   **Menu** via Java code (see example [MenuLoopBarFragment]):
 ``` 
@@ -137,4 +137,5 @@ Also pull requests are welcome.
 [MenuLoopBarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/MenuLoopBarFragment.java
 [ViewPagerLoopbarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/ViewPagerLoopBarFragment.java
 [CategoriesAdapterLoopBarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/CategoriesAdapterLoopBarFragment.java
+[ICategoryItem]: /LoopBar-widget/src/main/java/com/cleveroad/loopbar/adapter/ICategoryItem.java
 
