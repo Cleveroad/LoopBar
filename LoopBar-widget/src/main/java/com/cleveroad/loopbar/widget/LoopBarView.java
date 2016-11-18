@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import com.cleveroad.loopbar.R;
@@ -308,7 +309,6 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
                 /** true if current set of category items fit on screen, so view shouldn't be indeterminate */
                 boolean isFitOnScreen = orientationState.isItemsFitOnScreen(rvCategories, categoriesAdapter.getWrappedItems().size());
-
                 if (isFitOnScreen) {
                     rvCategories.removeItemDecoration(spacesItemDecoration);
                     Log.i(TAG, "all items fit on screen");
@@ -323,10 +323,19 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
                     rvCategories.removeOnScrollListener(indeterminateOnScrollListener);
                 } else {
                     if (!isIndeterminateInitialized) {
-                        //scroll to middle of indeterminate recycler view on initialization and if user somehow scrolled to start or end
-                        linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.enls_selected_view_size_plus_margin));
-                        rvCategories.addOnScrollListener(indeterminateOnScrollListener);
+
+//                        linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.enls_selected_view_size_plus_margin));
+//                        rvCategories.addOnScrollListener(indeterminateOnScrollListener);
                         isIndeterminateInitialized = true;
+                        //scroll to middle of indeterminate recycler view on initialization and if user somehow scrolled to start or end
+                        rvCategories.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                            @Override
+                            public void onGlobalLayout() {
+                                linearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.enls_selected_view_size_plus_margin));
+                                rvCategories.addOnScrollListener(indeterminateOnScrollListener);
+                                rvCategories.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                            }
+                        });
                     }
                 }
             }

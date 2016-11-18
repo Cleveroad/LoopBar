@@ -20,7 +20,7 @@ public class MockedItemsFactory {
         items.add(new CategoryItem(ContextCompat.getDrawable(context, R.drawable.enls_vector_camera_alt_white_24dp), "camera"));
         items.add(new CategoryItem(ContextCompat.getDrawable(context, R.drawable.enls_vector_landscape_white_24dp), "rock"));
         items.add(new CategoryItem(ContextCompat.getDrawable(context, R.drawable.enls_vector_palette_white_24dp), "palette"));
-        items.add(new CategoryItem(ContextCompat.getDrawable(context, R.drawable.enls_vector_moon_white_24dp), "moon" + " "));
+        items.add(new CategoryItem(ContextCompat.getDrawable(context, R.drawable.enls_vector_moon_white_24dp), "moon"));
         return items;
     }
 }
