@@ -12,6 +12,7 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
     private T item;
     @Nullable
     private OnItemClickListener listener;
+    private int currentPosition;
 
     public BaseRecyclerViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -35,9 +36,14 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
         return item;
     }
 
-    public final void bindItem(T item) {
+    public final void bindItem(T item, int position) {
         this.item = item;
-        onBindItem(item);
+        currentPosition = position;
+        onBindItem(item, position);
+    }
+
+    public int getCurrentPosition() {
+        return currentPosition;
     }
 
     /**
@@ -50,7 +56,7 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
         return true;
     }
 
-    protected abstract void onBindItem(T item);
+    protected abstract void onBindItem(T item, int position);
 
     @Override
     public void onClick(View v) {
@@ -58,7 +64,8 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
         if (tag != null && tag.equals(TAG_ITEM_VIEW) && getAdapterPosition() != -1 && isClickAllowed()) {
             onItemClicked(getItem());
             if (listener != null) {
-                listener.onItemClicked(getAdapterPosition());
+//                listener.onItemClicked(getAdapterPosition());
+                listener.onItemClicked(getCurrentPosition());
             }
         }
     }

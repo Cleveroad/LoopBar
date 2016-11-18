@@ -125,14 +125,14 @@ public class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHold
 
     @Override
     public void onItemClicked(int position) {
-        listener.onItemClicked(position);
         position = normalizePosition(position);
+        listener.onItemClicked(position);
         notifyItemClicked(position);
     }
 
     @Override
     public void onBindViewHolder(BaseRecyclerViewHolder<IOperationItem> holder, int position) {
-        holder.bindItem(getItem(position));
+        holder.bindItem(getItem(position), position);
     }
 
     @Override
@@ -153,7 +153,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHold
         }
 
         @Override
-        protected void onBindItem(IOperationItem item) {
+        protected void onBindItem(IOperationItem item, int position) {
             //do nothing
         }
 
@@ -177,8 +177,8 @@ public class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHold
 
 
         @Override
-        protected final void onBindItem(IOperationItem item) {
-            bindItemWildcardHelper(inputAdapter, getAdapterPosition());
+        protected final void onBindItem(IOperationItem item, int position) {
+            bindItemWildcardHelper(inputAdapter, position);
             itemView.setVisibility(item.isVisible() ? View.VISIBLE : View.GONE);
         }
 

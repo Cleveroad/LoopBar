@@ -15,8 +15,8 @@ import java.util.Collection;
 
 public class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOperationItem>> {
 
-    public static final int VIEW_TYPE_OFFSET = 1;
-
+    public static final int VIEW_TYPE_CHANGE_SCROLL_MODE = 2;
+    private static final int VIEW_TYPE_OFFSET = 1;
     @Orientation
     private int orientation = Orientation.ORIENTATION_VERTICAL;
     private CategoriesAdapter inputAdapter;
@@ -33,6 +33,9 @@ public class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVi
         if (viewType == VIEW_TYPE_OFFSET) {
             return new HeaderHolder(createHeaderView(parent));
         }
+        if (viewType == VIEW_TYPE_CHANGE_SCROLL_MODE) {
+            return new ChangeScrollModeHolder((CategoriesAdapter.CategoriesHolder) inputAdapter.onCreateViewHolder(parent, CategoriesAdapter.VIEW_TYPE_OTHER));
+        }
         return inputAdapter.onCreateViewHolder(parent, viewType);
     }
 
@@ -40,26 +43,17 @@ public class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVi
     public void onBindViewHolder(BaseRecyclerViewHolder<IOperationItem> holder, int position) {
         if (!isIndeterminate && ((selectedGravity == LoopBarView.SELECTION_GRAVITY_START && position == 0)
                 || (selectedGravity == LoopBarView.SELECTION_GRAVITY_END && position == getItemCount() - 1))) {
-            holder.bindItem(null);
+            holder.bindItem(null, position);
         } else {
             position = offsetPosition(position);
             inputAdapter.onBindViewHolder(holder, position);
         }
     }
 
-    CategoriesAdapter getInnerAdapter() {
-        return inputAdapter;
-    }
-
     @Override
     public int getItemCount() {
         return isIndeterminate ? inputAdapter.getItemCount() : inputAdapter.getItemCount() + 1;
     }
-//
-//    @Override
-//    public void onItemClicked(int position) {
-//
-//    }
 
     @Override
     public int getItemViewType(int position) {
@@ -73,14 +67,20 @@ public class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVi
     }
 
 
-    private int offsetPosition(int position) {
+    int offsetPosition(int position) {
         return !isIndeterminate && selectedGravity == LoopBarView.SELECTION_GRAVITY_START ? position - 1 : position;
     }
 
+    int unOffsetPosition(int position) {
+        return !isIndeterminate && selectedGravity == LoopBarView.SELECTION_GRAVITY_START ? position + 1 : position;
+    }
+
+    // TODO: 18.11.16 update
     public void addOnItemClickListener(OnItemClickListener onItemClickListener) {
         inputAdapter.addOnItemClickListener(onItemClickListener);
     }
 
+    // TODO: 18.11.16 update
     public void removeOnItemClickListener(OnItemClickListener onItemClickListener) {
         inputAdapter.removeOnItemClickListener(onItemClickListener);
     }
@@ -109,18 +109,13 @@ public class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVi
         return inputAdapter.getItem(position);
     }
 
-//    private IOperationItem getItemWithOffset(int position) {
-//        position = normalizePosition(position);
-//        return wrappedItems.get(position);
-//    }
 
-    public void setOrientation(int orientation) {
+    void setOrientation(int orientation) {
         this.orientation = orientation;
         inputAdapter.setOrientation(orientation);
-
     }
 
-    public int getSelectedGravity() {
+    int getSelectedGravity() {
         return selectedGravity;
     }
 
@@ -133,13 +128,6 @@ public class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVi
         return inputAdapter.normalizePosition(position);
     }
 
-//    private int normalizePositionOffset(int position) {
-//        return isIndeterminate ? normalizePosition(position) : normalizePosition(position) - 1;
-//    }
-//
-//    private int unNormalizePosition(int position) {
-//        return isIndeterminate ? normalizePosition(position) : normalizePosition(position) + 1;
-//    }
 
     private View createHeaderView(ViewGroup parent) {
         @LayoutRes int layoutId = orientation == Orientation.ORIENTATION_VERTICAL
@@ -148,21 +136,35 @@ public class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVi
         return LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
     }
 
-    public void notifyItemChangedFix(int position) {
-        position = offsetPosition(position);
-        notifyItemChanged(position);
-//        inputAdapter.notifyItemChanged(position);
-    }
+    class HeaderHolder extends BaseRecyclerViewHolder<IOperationItem> {
 
-    static class HeaderHolder extends BaseRecyclerViewHolder<IOperationItem> {
-
-        public HeaderHolder(@NonNull View itemView) {
+        HeaderHolder(@NonNull View itemView) {
             super(itemView);
         }
 
         @Override
-        protected void onBindItem(IOperationItem item) {
+        protected void onBindItem(IOperationItem item, int position) {
             // do nothing
+        }
+    }
+
+    // this class is only for encapsulation CategoriesHolder
+    public class ChangeScrollModeHolder extends BaseRecyclerViewHolder<IOperationItem> {
+
+        private CategoriesAdapter.CategoriesHolder categoriesHolder;
+
+        public ChangeScrollModeHolder(CategoriesAdapter.CategoriesHolder categoriesHolder) {
+            super(categoriesHolder.itemView);
+            this.categoriesHolder = categoriesHolder;
+        }
+
+        @Override
+        protected void onBindItem(IOperationItem item, int position) {
+            categoriesHolder.onBindItem(item, position);
+        }
+
+        public <T extends RecyclerView.ViewHolder> void bindItemWildcardHelper(RecyclerView.Adapter<T> adapter, int position) {
+            categoriesHolder.bindItemWildcardHelper(adapter, position);
         }
     }
 }

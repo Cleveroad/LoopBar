@@ -73,7 +73,8 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     private View overlayPlaceholder;
     private View viewColorable;
 
-    private CategoriesAdapter.CategoriesHolder categoriesHolder;
+//    private CategoriesAdapter.CategoriesHolder categoriesHolder;
+    private ChangeScrollModeAdapter.ChangeScrollModeHolder categoriesHolder;
     private ChangeScrollModeAdapter categoriesAdapter;
 
     private LinearLayoutManager linearLayoutManager;
@@ -206,10 +207,11 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         categoriesAdapter.setIndeterminate(isInfinite);
         categoriesAdapter.setListener(this);
         categoriesAdapter.setOrientation(orientationState.getOrientation());
+        categoriesAdapter.setSelectedGravity(selectionGravity);
         rvCategories.setAdapter(categoriesAdapter);
 
-        categoriesHolder = (CategoriesAdapter.CategoriesHolder) categoriesAdapter.createViewHolder(rvCategories, CategoriesAdapter.VIEW_TYPE_OTHER);
-        //set first item to selectionView
+        categoriesHolder = (ChangeScrollModeAdapter.ChangeScrollModeHolder) categoriesAdapter.createViewHolder(rvCategories, ChangeScrollModeAdapter.VIEW_TYPE_CHANGE_SCROLL_MODE);
+        // set first item to selectionView
         categoriesHolder.bindItemWildcardHelper(inputAdapter, 0);
         categoriesHolder.itemView.setBackgroundColor(colorCodeSelectionView);
 
@@ -395,12 +397,12 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
         startSelectedViewOutAnimation(position);
 
-        categoriesAdapter.notifyItemChanged(position);
+        categoriesAdapter.notifyItemChanged(categoriesAdapter.unOffsetPosition(position));
         realHidedPosition = realPosition;
 
         oldHidedItem.setVisible(true);
         flContainerSelected.requestLayout();
-        categoriesAdapter.notifyItemChanged(itemToShowAdapterPosition);
+        categoriesAdapter.notifyItemChanged(categoriesAdapter.unOffsetPosition(itemToShowAdapterPosition));
 
         this.currentItemPosition = realPosition;
 
