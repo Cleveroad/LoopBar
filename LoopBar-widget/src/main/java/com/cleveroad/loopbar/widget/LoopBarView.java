@@ -28,9 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.cleveroad.loopbar.R;
 import com.cleveroad.loopbar.adapter.ICategoryItem;
 import com.cleveroad.loopbar.adapter.ILoopBarPagerAdapter;
@@ -41,7 +38,11 @@ import com.cleveroad.loopbar.model.CategoryItem;
 import com.cleveroad.loopbar.model.MockedItemsFactory;
 import com.cleveroad.loopbar.util.AbstractAnimatorListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LoopBarView extends FrameLayout implements OnItemClickListener {
+
     public static final int SELECTION_GRAVITY_START = 0;
     public static final int SELECTION_GRAVITY_END = 1;
     private static final String TAG = LoopBarView.class.getSimpleName();
@@ -73,12 +74,13 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     private View viewColorable;
 
     private CategoriesAdapter.CategoriesHolder categoriesHolder;
-    private CategoriesAdapter categoriesAdapter;
+    private ChangeScrollModeAdapter categoriesAdapter;
 
     private LinearLayoutManager linearLayoutManager;
     private AbstractSpacesItemDecoration spacesItemDecoration;
     private boolean skipNextOnLayout;
     private boolean isIndeterminateInitialized;
+    private boolean isInfinite;
 
     private RecyclerView.OnScrollListener indeterminateOnScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -129,7 +131,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         int selectionAnimatorOutId = typedArray.getResourceId(R.styleable.LoopBarView_enls_selectionOutAnimation, R.animator.enls_scale_small);
         placeHolderId = typedArray.getResourceId(R.styleable.LoopBarView_enls_placeholderId, -1);
         @GravityAttr int selectionGravity = typedArray.getInteger(R.styleable.LoopBarView_enls_selectionGravity, SELECTION_GRAVITY_START);
-
+        isInfinite = typedArray.getBoolean(R.styleable.LoopBarView_enls_infiniteScrolling, true);
         this.selectionGravity = selectionGravity;
 
         selectionMargin = typedArray.getDimensionPixelSize(R.styleable.LoopBarView_enls_selectionMargin,
@@ -138,7 +140,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         typedArray.recycle();
 
         //check attributes you need, for example all paddings
-        int [] attributes = new int [] {android.R.attr.background};
+        int[] attributes = new int[]{android.R.attr.background};
         //then obtain typed array
         typedArray = context.obtainStyledAttributes(attrs, attributes);
         int backgroundResource = typedArray.getResourceId(0, R.color.enls_default_list_background);
@@ -163,7 +165,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         }
 
         int menuId = typedArray.getResourceId(R.styleable.LoopBarView_enls_menu, -1);
-        if(menuId != -1) {
+        if (menuId != -1) {
             setCategoriesAdapterFromMenu(menuId);
         }
         typedArray.recycle();
@@ -178,15 +180,30 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         flContainerSelected.setLayoutParams(params);
         this.selectionGravity = selectionGravity;
         invalidate();
+        if (categoriesAdapter != null) {
+            categoriesAdapter.setSelectedGravity(selectionGravity);
+        }
+    }
+
+    public void setIsInfinite(boolean isInfinite) {
+        this.isInfinite = isInfinite;
+        if (categoriesAdapter != null) {
+            categoriesAdapter.setIndeterminate(isInfinite);
+//            invalidate();
+        }
+    }
+
+    public boolean isInfinite() {
+        return isInfinite;
     }
 
     @SuppressWarnings("unchecked assigment")
     public void setCategoriesAdapter(@NonNull RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter) {
         this.inputAdapter = inputAdapter;
-        this.categoriesAdapter = new CategoriesAdapter(inputAdapter);
+        this.categoriesAdapter = new ChangeScrollModeAdapter(inputAdapter);
         IOperationItem firstItem = categoriesAdapter.getItem(0);
         firstItem.setVisible(false);
-
+        categoriesAdapter.setIndeterminate(isInfinite);
         categoriesAdapter.setListener(this);
         categoriesAdapter.setOrientation(orientationState.getOrientation());
         rvCategories.setAdapter(categoriesAdapter);
@@ -217,6 +234,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     /**
      * You can setup {@code {@link LoopBarView#categoriesAdapter}} through {@link ViewPager} adapter.
      * Your {@link ViewPager} adapter must implement {@link ILoopBarPagerAdapter} otherwise - the icons will not be shown
+     *
      * @param viewPager - viewPager, which must have {@link ILoopBarPagerAdapter}
      */
     public void setupWithViewPager(@NonNull ViewPager viewPager) {
@@ -225,7 +243,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         ILoopBarPagerAdapter loopBarPagerAdapter =
                 pagerAdapter instanceof ILoopBarPagerAdapter
                         ? (ILoopBarPagerAdapter) pagerAdapter : null;
-        for(int i=0, size = pagerAdapter.getCount(); i < size; i++) {
+        for (int i = 0, size = pagerAdapter.getCount(); i < size; i++) {
             categoryItems.add(new CategoryItem(
                     loopBarPagerAdapter != null ? loopBarPagerAdapter.getPageDrawable(i) : null,
                     String.valueOf(pagerAdapter.getPageTitle(i))
@@ -234,12 +252,16 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         setCategoriesAdapter(new SimpleCategoriesAdapter(categoryItems));
     }
 
-    /** add item click listener to this view*/
+    /**
+     * add item click listener to this view
+     */
     public boolean addOnItemClickListener(OnItemClickListener itemClickListener) {
         return clickListeners.add(itemClickListener);
     }
 
-    /** remove item click listener from this view*/
+    /**
+     * remove item click listener from this view
+     */
     public boolean removeOnItemClickListener(OnItemClickListener itemClickListener) {
         return clickListeners.remove(itemClickListener);
     }
@@ -257,7 +279,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        overlayPlaceholder = ((ViewGroup)getParent()).findViewById(placeHolderId);
+        overlayPlaceholder = ((ViewGroup) getParent()).findViewById(placeHolderId);
     }
 
     @Override
@@ -340,16 +362,22 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         animator.start();
     }
 
-    /** set selected item in endless view. OnItemSelected listeners won't be invoked
-     * @param currentItemPosition selected position*/
+    /**
+     * set selected item in endless view. OnItemSelected listeners won't be invoked
+     *
+     * @param currentItemPosition selected position
+     */
     public void setCurrentItem(int currentItemPosition) {
         selectItem(currentItemPosition, false);
     }
 
-    /** set selected item in endless view.
+    /**
+     * set selected item in endless view.
      * OnItemSelected listeners won't be invoked
+     *
      * @param currentItemPosition selected position
-     * @param isInvokeListeners should view notify OnItemSelected listeners about this selection*/
+     * @param isInvokeListeners   should view notify OnItemSelected listeners about this selection
+     */
     public void setCurrentItem(int currentItemPosition, boolean isInvokeListeners) {
         selectItem(currentItemPosition, isInvokeListeners);
     }
@@ -397,25 +425,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     public @interface GravityAttr {
     }
 
-    public static class SavedState extends BaseSavedState implements Parcelable{
-
-        public int currentItemPosition;
-        @GravityAttr
-        private int selectionGravity;
-
-        public SavedState(Parcelable superState) {
-            super(superState);
-        }
-
-        public int describeContents() {
-            return 0;
-        }
-
-        // упаковываем объект в Parcel
-        public void writeToParcel(Parcel parcel, int flags) {
-            parcel.writeInt(currentItemPosition);
-            parcel.writeInt(selectionGravity);
-        }
+    public static class SavedState extends BaseSavedState implements Parcelable {
 
         public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
             // распаковываем объект из Parcel
@@ -427,6 +437,13 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
                 return new SavedState[size];
             }
         };
+        public int currentItemPosition;
+        @GravityAttr
+        private int selectionGravity;
+
+        public SavedState(Parcelable superState) {
+            super(superState);
+        }
 
         // конструктор, считывающий данные из Parcel
         private SavedState(Parcel parcel) {
@@ -441,6 +458,16 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
             super(superState);
             this.currentItemPosition = currentItemPosition;
             this.selectionGravity = selectionGravity;
+        }
+
+        public int describeContents() {
+            return 0;
+        }
+
+        // упаковываем объект в Parcel
+        public void writeToParcel(Parcel parcel, int flags) {
+            parcel.writeInt(currentItemPosition);
+            parcel.writeInt(selectionGravity);
         }
     }
 

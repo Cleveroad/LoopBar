@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
-
 import com.cleveroad.loopbar.R;
+
+import java.util.List;
 
 public class SimpleCategoriesAdapter extends RecyclerView.Adapter<SimpleCategoriesAdapter.SimpleCategoriesHolder> {
 
@@ -20,7 +20,9 @@ public class SimpleCategoriesAdapter extends RecyclerView.Adapter<SimpleCategori
         this.categoryItems = items;
     }
 
-    /** create itemView*/
+    /**
+     * create itemView
+     */
     public View createView(ViewGroup parent) {
         return LayoutInflater.from(parent.getContext()).inflate(R.layout.enls_item_default, parent, false);
     }

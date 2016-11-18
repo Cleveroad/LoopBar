@@ -3,6 +3,7 @@ package com.cleveroad.loopbar.widget;
 import android.view.ViewGroup;
 
 abstract class AbstractOrientationState implements IOrientationState {
+
     private ISelectionGravityState selectionGravityState;
 
     AbstractOrientationState() {
@@ -21,7 +22,7 @@ abstract class AbstractOrientationState implements IOrientationState {
 
     protected abstract ISelectionGravityState retrieveGravityState(int gravityAttribute);
 
-    protected  ISelectionGravityState getGravityState() {
+    protected ISelectionGravityState getGravityState() {
         return selectionGravityState;
     }
 

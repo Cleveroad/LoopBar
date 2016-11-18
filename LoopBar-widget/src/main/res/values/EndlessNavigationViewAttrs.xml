@@ -23,6 +23,6 @@
         <attr name="enls_selectionOutAnimation" format="reference"/>
         
         <attr name="enls_menu" format="reference"/>
-
+        <attr name="enls_infiniteScrolling" format="boolean"/>
     </declare-styleable>
 </resources>

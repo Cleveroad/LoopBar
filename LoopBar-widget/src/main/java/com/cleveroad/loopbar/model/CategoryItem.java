@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import com.cleveroad.loopbar.adapter.ICategoryItem;
 
 public class CategoryItem implements ICategoryItem {
+
     private Drawable categoryDrawable;
     private String categoryName;
 

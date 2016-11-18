@@ -52,6 +52,7 @@ public abstract class AbstractLoopBarFragment extends Fragment implements View.O
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
         rootView.findViewById(R.id.btnOrientation).setOnClickListener(this);
         rootView.findViewById(R.id.btnGravity).setOnClickListener(this);
+        rootView.findViewById(R.id.btnInfinite).setOnClickListener(this);
         loopBarView.addOnItemClickListener(this);
 
         pagerAdapter = new SimpleFragmentStatePagerAdapter(
@@ -102,6 +103,10 @@ public abstract class AbstractLoopBarFragment extends Fragment implements View.O
                 Fragment fragment = getNewInstance(orientation == Orientation.ORIENTATION_VERTICAL ?
                         Orientation.ORIENTATION_HORIZONTAL : Orientation.ORIENTATION_VERTICAL);
                 ((IFragmentReplacer) getActivity()).replaceFragment(fragment);
+                break;
+            }
+            case R.id.btnInfinite: {
+                loopBarView.setIsInfinite(!loopBarView.isInfinite());
                 break;
             }
         }

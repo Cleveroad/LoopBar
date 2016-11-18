@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.cleveroad.loopbar.widget.Orientation;
 import com.cleveroad.sample.fragments.CategoriesAdapterLoopBarFragment;
-import com.cleveroad.sample.fragments.MenuLoopBarFragment;
-import com.cleveroad.sample.fragments.ViewPagerLoopBarFragment;
 
 public class MainActivity extends AppCompatActivity implements IFragmentReplacer {
 

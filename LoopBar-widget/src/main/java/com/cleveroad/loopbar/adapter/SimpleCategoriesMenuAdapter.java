@@ -19,7 +19,7 @@ public class SimpleCategoriesMenuAdapter extends SimpleCategoriesAdapter {
     private static List<ICategoryItem> convertMenuToCategoriesList(@NonNull Menu menu) {
         List<ICategoryItem> result = new ArrayList<>(menu.size());
 
-        for(int i=0, size = menu.size(); i < size; i++) {
+        for (int i = 0, size = menu.size(); i < size; i++) {
             MenuItem menuItem = menu.getItem(i);
             result.add(new CategoryItem(menuItem.getIcon(), String.valueOf(menuItem.getTitle())));
         }

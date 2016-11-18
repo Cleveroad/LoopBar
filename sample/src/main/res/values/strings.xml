@@ -4,4 +4,5 @@
     <string name="change_orientation">Change orientation</string>
     <string name="bottom_left_pager_text">Bottom left pager text</string>
     <string name="change_gravity">Change gravity</string>
+    <string name="change_scroll_mode">Change scrolling mode</string>
 </resources>

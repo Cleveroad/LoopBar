@@ -8,15 +8,16 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.UnknownFormatFlagsException;
-
 import com.cleveroad.loopbar.R;
+
+import java.util.UnknownFormatFlagsException;
 
 class OrientationStateHorizontal extends AbstractOrientationState implements IOrientationState {
 
     private Integer itemWidth;
 
-    OrientationStateHorizontal() {}
+    OrientationStateHorizontal() {
+    }
 
     @Override
     public LinearLayoutManager getLayoutManager(Context context) {

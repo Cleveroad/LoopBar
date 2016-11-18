@@ -3,6 +3,7 @@ package com.cleveroad.loopbar.util;
 import android.animation.Animator;
 
 public class AbstractAnimatorListener implements Animator.AnimatorListener {
+
     @Override
     public void onAnimationStart(Animator animation) {
 

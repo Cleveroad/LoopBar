@@ -21,6 +21,7 @@ public class CategoriesAdapterLoopBarFragment extends AbstractLoopBarFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         loopBarView.setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItems(getContext())));
+//        loopBarView.setIsInfinite(false);
     }
 
     @Override

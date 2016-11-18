@@ -5,7 +5,7 @@ import android.graphics.Region;
 
 public class NegativeMarginFixColorDrawable extends android.graphics.drawable.ColorDrawable {
 
-    public NegativeMarginFixColorDrawable(int color){
+    public NegativeMarginFixColorDrawable(int color) {
         super(color);
     }
 

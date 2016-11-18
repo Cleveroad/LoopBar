@@ -8,6 +8,7 @@ import android.view.View;
 import com.cleveroad.loopbar.widget.OnItemClickListener;
 
 public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener {
+
     protected static final int KEY_VIEW_TAG = -1;
     private static final String TAG_ITEM_VIEW = "itemView";
     private T item;

@@ -1,51 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:background="@android:color/white">
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvCategories"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            tools:listItem="@layout/item_default"
             android:gravity="center"
             tools:background="@color/enls_default_list_background"
             tools:layout_marginRight="5dp"
-            />
+            tools:listItem="@layout/item_default" />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/rvCategories"
-            android:layout_alignLeft="@+id/rvCategories"
-            android:layout_alignEnd="@+id/rvCategories"
-            android:layout_alignRight="@+id/rvCategories"
-            android:layout_alignTop="@id/rvCategories"
             android:layout_alignBottom="@id/rvCategories"
-            android:background="@drawable/enls_top_shadow"
-            />
+            android:layout_alignEnd="@+id/rvCategories"
+            android:layout_alignLeft="@+id/rvCategories"
+            android:layout_alignRight="@+id/rvCategories"
+            android:layout_alignStart="@+id/rvCategories"
+            android:layout_alignTop="@id/rvCategories"
+            android:background="@drawable/enls_top_shadow" />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/rvCategories"
-            android:layout_alignLeft="@+id/rvCategories"
             android:layout_alignEnd="@+id/rvCategories"
-            android:layout_alignRight="@+id/rvCategories"
-
-            android:background="@drawable/enls_bottom_shadow"
-            android:layout_gravity="end"
+            android:layout_alignLeft="@+id/rvCategories"
             android:layout_alignParentBottom="true"
-            />
+            android:layout_alignRight="@+id/rvCategories"
+            android:layout_alignStart="@+id/rvCategories"
+            android:layout_gravity="end"
+            android:background="@drawable/enls_bottom_shadow" />
 
     </RelativeLayout>
 
@@ -54,15 +48,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/enls_selected_view_height"
         android:layout_marginTop="@dimen/enls_margin_selected_view"
-        android:background="@drawable/enls_bottom_right_shadow"
         android:animateLayoutChanges="true"
-        >
+        android:background="@drawable/enls_bottom_right_shadow">
 
         <FrameLayout
             android:id="@+id/viewColorable"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 

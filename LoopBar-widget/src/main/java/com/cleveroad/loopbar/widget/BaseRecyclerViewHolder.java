@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener {
+
     protected static final int KEY_VIEW_TAG = -1;
     private static final String TAG_ITEM_VIEW = "itemView";
     private T item;

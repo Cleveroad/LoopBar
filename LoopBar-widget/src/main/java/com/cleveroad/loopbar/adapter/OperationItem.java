@@ -1,6 +1,7 @@
 package com.cleveroad.loopbar.adapter;
 
-public class OperationItem implements IOperationItem{
+public class OperationItem implements IOperationItem {
+
     private boolean isVisible = true;
 
     @Override

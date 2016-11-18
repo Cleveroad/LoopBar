@@ -12,7 +12,7 @@ class SpacesRightItemDecoration extends AbstractSpacesItemDecoration {
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() -1 )
+        if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1)
             outRect.right = getSpace();
     }
 

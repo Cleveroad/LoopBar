@@ -1,55 +1,57 @@
 package com.cleveroad.loopbar.widget;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cleveroad.loopbar.R;
+import com.cleveroad.loopbar.adapter.IOperationItem;
+import com.cleveroad.loopbar.adapter.OperationItem;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.cleveroad.loopbar.R;
-import com.cleveroad.loopbar.adapter.IOperationItem;
-import com.cleveroad.loopbar.adapter.OperationItem;
-
 public class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOperationItem>>
         implements OnItemClickListener {
-    private static final String TAG = CategoriesAdapter.class.getSimpleName();
+
     public static final int VIEW_TYPE_RESERVED_HIDDEN = -1;
     public static final int VIEW_TYPE_OTHER = 0;
 
+    private static final String TAG = CategoriesAdapter.class.getSimpleName();
     @Orientation
     private int orientation = Orientation.ORIENTATION_VERTICAL;
 
     private RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter;
 
+    @SuppressLint("UseSparseArrays")
     private HashMap<Integer, IOperationItem> wrappedItems = new HashMap<>();
     private OnItemClickListener listener;
     private List<OnItemClickListener> outerItemClickListeners = new LinkedList<>();
-
-    public void addOnItemClickListener(OnItemClickListener onItemClickListener){
-        outerItemClickListeners.add(onItemClickListener);
-    }
-
-    public void removeOnItemClickListener(OnItemClickListener onItemClickListener){
-        outerItemClickListeners.remove(onItemClickListener);
-    }
-
-    private void notifyItemClicked(int position){
-        for (OnItemClickListener listener : outerItemClickListeners){
-            listener.onItemClicked(position);
-        }
-    }
-
     private boolean isIndeterminate = true;
 
     public CategoriesAdapter(RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter) {
         this.inputAdapter = inputAdapter;
-        for (int i =0; i < inputAdapter.getItemCount(); i ++) {
+        for (int i = 0; i < inputAdapter.getItemCount(); i++) {
             wrappedItems.put(i, new OperationItem());
+        }
+    }
+
+    public void addOnItemClickListener(OnItemClickListener onItemClickListener) {
+        outerItemClickListeners.add(onItemClickListener);
+    }
+
+    public void removeOnItemClickListener(OnItemClickListener onItemClickListener) {
+        outerItemClickListeners.remove(onItemClickListener);
+    }
+
+    private void notifyItemClicked(int position) {
+        for (OnItemClickListener listener : outerItemClickListeners) {
+            listener.onItemClicked(position);
         }
     }
 
@@ -65,8 +67,14 @@ public class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHold
         return LayoutInflater.from(parent.getContext()).inflate(R.layout.enls_empty_view, parent, false);
     }
 
+    /**
+     * Set mode for scrolling (Infinite or finite)
+     *
+     * @param isIndeterminate true for infinite
+     */
     public void setIndeterminate(boolean isIndeterminate) {
         this.isIndeterminate = isIndeterminate;
+        notifyDataSetChanged();
     }
 
     public IOperationItem getItem(int position) {
@@ -127,9 +135,9 @@ public class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHold
         holder.bindItem(getItem(position));
     }
 
-    //indeterminate scroll
     @Override
     public int getItemCount() {
+        //infinite scroll
         if (isIndeterminate) {
             return Integer.MAX_VALUE;
         } else {
@@ -171,7 +179,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHold
         @Override
         protected final void onBindItem(IOperationItem item) {
             bindItemWildcardHelper(inputAdapter, getAdapterPosition());
-            itemView.setVisibility(item.isVisible()? View.VISIBLE : View.GONE);
+            itemView.setVisibility(item.isVisible() ? View.VISIBLE : View.GONE);
         }
 
         @Override
