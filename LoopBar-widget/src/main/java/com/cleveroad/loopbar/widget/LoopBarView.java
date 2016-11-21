@@ -187,9 +187,11 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     }
 
     public void setIsInfinite(boolean isInfinite) {
-        mInfinite = isInfinite;
-        if (mOuterAdapter != null) {
-            mOuterAdapter.setIndeterminate(isInfinite);
+        if (mInfinite != isInfinite) {
+            mInfinite = isInfinite;
+            if (mOuterAdapter != null) {
+                mOuterAdapter.setIsIndeterminate(isInfinite);
+            }
         }
     }
 
@@ -203,7 +205,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         this.mOuterAdapter = new ChangeScrollModeAdapter(inputAdapter);
         IOperationItem firstItem = mOuterAdapter.getItem(0);
         firstItem.setVisible(false);
-        mOuterAdapter.setIndeterminate(mInfinite);
+        mOuterAdapter.setIsIndeterminate(mInfinite);
         mOuterAdapter.setListener(this);
         mOuterAdapter.setOrientation(mOrientationState.getOrientation());
         mOuterAdapter.setSelectedGravity(mSelectionGravity);
@@ -403,8 +405,6 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
      *
      * @param listener listener to set or null to clear
      */
-
-
     @SuppressWarnings("unused")
     public final void addOnScrollListener(RecyclerView.OnScrollListener listener) {
         getRvCategories().addOnScrollListener(listener);

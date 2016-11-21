@@ -20,7 +20,7 @@ class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolde
     @Orientation
     private int mOrientation = Orientation.ORIENTATION_VERTICAL;
     private CategoriesAdapter mInputAdapter;
-    private boolean isIndeterminate = true;
+    private boolean mIsIndeterminate = true;
     @LoopBarView.GravityAttr
     private int mSelectedGravity = LoopBarView.SELECTION_GRAVITY_START;
 
@@ -41,40 +41,42 @@ class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolde
 
     @Override
     public void onBindViewHolder(BaseRecyclerViewHolder<IOperationItem> holder, int position) {
-        if ((mSelectedGravity == LoopBarView.SELECTION_GRAVITY_START && position == 0)
-                || (mSelectedGravity == LoopBarView.SELECTION_GRAVITY_END && position == getItemCount() - 1))
-            if (!isIndeterminate) {
-                holder.bindItem(null, position);
-            } else {
-                mInputAdapter.onBindViewHolder(holder, offsetPosition(position));
-            }
-        else {
+        if (needToOffset(position)) {
+            holder.bindItem(null, position);
+        } else {
             mInputAdapter.onBindViewHolder(holder, offsetPosition(position));
         }
     }
 
     @Override
     public int getItemCount() {
-        return isIndeterminate ? mInputAdapter.getItemCount() : mInputAdapter.getItemCount() + 1;
+        return mIsIndeterminate ? mInputAdapter.getItemCount() : mInputAdapter.getItemCount() + 1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        boolean needOffsetView = (mSelectedGravity == LoopBarView.SELECTION_GRAVITY_START && position == 0)
-                || (mSelectedGravity == LoopBarView.SELECTION_GRAVITY_END && position == getItemCount() - 1);
-        if (!isIndeterminate && needOffsetView) {
+        if (needToOffset(position)) {
             return VIEW_TYPE_OFFSET;
         }
         return mInputAdapter.getItemViewType(offsetPosition(position));
     }
 
+    private boolean needToOffsetByGravity(int position) {
+        return (mSelectedGravity == LoopBarView.SELECTION_GRAVITY_START && position == 0)
+                || (mSelectedGravity == LoopBarView.SELECTION_GRAVITY_END && position == getItemCount() - 1);
+    }
+
+    private boolean needToOffset(int position) {
+        return !mIsIndeterminate && needToOffsetByGravity(position);
+    }
+
 
     private int offsetPosition(int position) {
-        return !isIndeterminate && mSelectedGravity == LoopBarView.SELECTION_GRAVITY_START ? position - 1 : position;
+        return !mIsIndeterminate && mSelectedGravity == LoopBarView.SELECTION_GRAVITY_START ? position - 1 : position;
     }
 
     private int unOffsetPosition(int position) {
-        return !isIndeterminate && mSelectedGravity == LoopBarView.SELECTION_GRAVITY_START ? position + 1 : position;
+        return !mIsIndeterminate && mSelectedGravity == LoopBarView.SELECTION_GRAVITY_START ? position + 1 : position;
     }
 
     void notifyRealItemChanged(int position) {
@@ -103,10 +105,12 @@ class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolde
      *
      * @param isIndeterminate true for infinite
      */
-    void setIndeterminate(boolean isIndeterminate) {
-        this.isIndeterminate = isIndeterminate;
-        mInputAdapter.setIndeterminate(isIndeterminate);
-        notifyDataSetChanged();
+    void setIsIndeterminate(boolean isIndeterminate) {
+        if (mIsIndeterminate != isIndeterminate) {
+            mIsIndeterminate = isIndeterminate;
+            mInputAdapter.setIndeterminate(isIndeterminate);
+            notifyDataSetChanged();
+        }
     }
 
     IOperationItem getItem(int position) {
@@ -115,8 +119,10 @@ class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolde
 
 
     void setOrientation(int orientation) {
-        this.mOrientation = orientation;
-        mInputAdapter.setOrientation(orientation);
+        if (mOrientation != orientation) {
+            mOrientation = orientation;
+            mInputAdapter.setOrientation(orientation);
+        }
     }
 
     int getSelectedGravity() {
@@ -124,8 +130,10 @@ class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolde
     }
 
     void setSelectedGravity(int selectedGravity) {
-        this.mSelectedGravity = selectedGravity;
-        notifyDataSetChanged();
+        if (mSelectedGravity != selectedGravity) {
+            mSelectedGravity = selectedGravity;
+            notifyDataSetChanged();
+        }
     }
 
     int normalizePosition(int position) {
