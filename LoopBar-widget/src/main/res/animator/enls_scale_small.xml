@@ -2,17 +2,17 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
     <objectAnimator
+        android:duration="100"
         android:interpolator="@android:interpolator/accelerate_decelerate"
-        android:valueFrom="1"
-        android:valueTo="0.3"
         android:propertyName="scaleX"
-        android:duration="100" />
+        android:valueFrom="1"
+        android:valueTo="0.3" />
 
     <objectAnimator
+        android:duration="100"
         android:interpolator="@android:interpolator/accelerate_decelerate"
-        android:valueFrom="1"
-        android:valueTo="0.3"
         android:propertyName="scaleY"
-        android:duration="100" />
+        android:valueFrom="1"
+        android:valueTo="0.3" />
 
 </set>

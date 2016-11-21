@@ -8,15 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 interface IOrientationState extends ISelectionGravityState {
+
     LinearLayoutManager getLayoutManager(Context context);
 
     int getLayoutId();
 
     /**
-     * check if all items of recyclerView fit on screen
+     * Check if all items of recyclerView fit on screen
+     *
      * @param container recyclerView with items
      * @param itemsSize count of items
-     * */
+     */
     boolean isItemsFitOnScreen(RecyclerView container, int itemsSize);
 
     AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight);

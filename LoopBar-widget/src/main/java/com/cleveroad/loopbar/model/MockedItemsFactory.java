@@ -11,6 +11,8 @@ import java.util.List;
 
 public class MockedItemsFactory {
 
+    private MockedItemsFactory() {}
+
     public static List<ICategoryItem> getCategoryItems(Context context) {
         List<ICategoryItem> items = new ArrayList<>();
         items.add(new CategoryItem(ContextCompat.getDrawable(context, R.drawable.enls_ic_local_taxi), "auto"));

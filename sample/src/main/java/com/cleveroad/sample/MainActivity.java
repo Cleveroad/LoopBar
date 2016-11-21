@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.cleveroad.loopbar.widget.Orientation;
 import com.cleveroad.sample.fragments.CategoriesAdapterLoopBarFragment;
-import com.cleveroad.sample.fragments.MenuLoopBarFragment;
-import com.cleveroad.sample.fragments.ViewPagerLoopBarFragment;
 
 public class MainActivity extends AppCompatActivity implements IFragmentReplacer {
 
@@ -18,8 +16,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentReplacer
 
         if (savedInstanceState == null) {
             replaceFragment(CategoriesAdapterLoopBarFragment.newInstance(Orientation.ORIENTATION_VERTICAL));
-//            replaceFragment(MenuLoopBarFragment.newInstance(Orientation.ORIENTATION_VERTICAL));
-//            replaceFragment(ViewPagerLoopBarFragment.newInstance(Orientation.ORIENTATION_VERTICAL));
         }
     }
 

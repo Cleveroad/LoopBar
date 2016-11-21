@@ -6,17 +6,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener {
+
     protected static final int KEY_VIEW_TAG = -1;
     private static final String TAG_ITEM_VIEW = "itemView";
     private T item;
     @Nullable
-    private OnItemClickListener listener;
+    private OnItemClickListener mListener;
+    private int currentPosition;
 
-    public BaseRecyclerViewHolder(@NonNull View itemView) {
+    BaseRecyclerViewHolder(@NonNull View itemView) {
         super(itemView);
     }
 
-    public void setClickable(boolean clickable) {
+    private void setClickable(boolean clickable) {
         if (clickable) {
             itemView.setTag(KEY_VIEW_TAG, TAG_ITEM_VIEW);
             itemView.setOnClickListener(this);
@@ -25,39 +27,47 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
         }
     }
 
-    public void setListener(@Nullable OnItemClickListener listener) {
+    void setListener(@Nullable OnItemClickListener listener) {
         setClickable(true);
-        this.listener = listener;
+        mListener = listener;
     }
 
     public T getItem() {
         return item;
     }
 
-    public final void bindItem(T item) {
+    final void bindItem(T item, int position) {
         this.item = item;
-        onBindItem(item);
+        currentPosition = position;
+        onBindItem(item, position);
+    }
+
+    private int getCurrentPosition() {
+        return currentPosition;
     }
 
     /**
-     * override this method with {@link #setClickable(boolean)} to receive click events on viewHolder item in child class
+     * Override this method with {@link #setClickable(boolean)} to receive click events on viewHolder item in child class
      */
-    public void onItemClicked(T item) {
+
+    @SuppressWarnings("WeakerAccess")
+    void onItemClicked(T item) {
+
     }
 
     public boolean isClickAllowed() {
         return true;
     }
 
-    protected abstract void onBindItem(T item);
+    protected abstract void onBindItem(T item, int position);
 
     @Override
     public void onClick(View v) {
         Object tag = v.getTag(KEY_VIEW_TAG);
         if (tag != null && tag.equals(TAG_ITEM_VIEW) && getAdapterPosition() != -1 && isClickAllowed()) {
             onItemClicked(getItem());
-            if (listener != null) {
-                listener.onItemClicked(getAdapterPosition());
+            if (mListener != null) {
+                mListener.onItemClicked(getCurrentPosition());
             }
         }
     }

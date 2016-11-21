@@ -37,3 +37,4 @@ proguard/
 # Android Studio Navigation editor temp files
 .navigation/
 
+/.idea/

@@ -6,13 +6,13 @@ import android.view.View;
 
 class SpacesRightItemDecoration extends AbstractSpacesItemDecoration {
 
-    public SpacesRightItemDecoration(int space) {
+    SpacesRightItemDecoration(int space) {
         super(space);
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() -1 )
+        if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1)
             outRect.right = getSpace();
     }
 

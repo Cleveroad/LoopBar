@@ -8,15 +8,16 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.UnknownFormatFlagsException;
-
 import com.cleveroad.loopbar.R;
+
+import java.util.UnknownFormatFlagsException;
 
 class OrientationStateVertical extends AbstractOrientationState implements IOrientationState {
 
     private Integer itemHeight;
 
-    OrientationStateVertical() {}
+    OrientationStateVertical() {
+    }
 
     @Override
     public LinearLayoutManager getLayoutManager(Context context) {
@@ -47,7 +48,9 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
         if (itemHeight == null) {
             for (int i = 0; i < rvCategories.getChildCount(); i++) {
                 itemHeight = rvCategories.getChildAt(i).getHeight();
-                if (itemHeight != 0) break;
+                if (itemHeight != 0) {
+                    break;
+                }
             }
         }
         return itemHeight;
@@ -95,7 +98,7 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
         return getGravityState().getOffsetItemDecoration();
     }
 
-    static class TopGravityState implements ISelectionGravityState {
+    private static class TopGravityState implements ISelectionGravityState {
 
         private SpacesTopItemDecoration itemDecoration = new SpacesTopItemDecoration(0);
 
@@ -116,7 +119,7 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
         }
     }
 
-    static class BottomGravityState implements ISelectionGravityState {
+    private static class BottomGravityState implements ISelectionGravityState {
 
         private SpacesBottomItemDecoration itemDecoration = new SpacesBottomItemDecoration(0);
 

@@ -20,7 +20,7 @@ If you need more details on how you can use the component and what benefits it p
 by gradle : 
 ```groovy
 dependencies {
-    compile "com.cleveroad:loopbar:1.0.1"
+    compile "com.cleveroad:loopbar:1.1.0"
 }
 ```
 
@@ -53,6 +53,7 @@ Android Studio layouts preview is supported.
         app:enls_selectionOutAnimation="@animator/enls_scale_small"
         app:enls_selectionBackground="@android:color/holo_blue_dark"
         app:enls_menu="@menu/loopbar"
+        app:enls_infiniteScrolling="true"
         />
 ```
 
@@ -68,10 +69,11 @@ Android Studio layouts preview is supported.
 | enls_selectionOutAnimation | an animation of hiding an icon inside selection view |
 | enls_selectionBackground | selection background. Default ```#ff0099cc``` |
 | enls_menu | an id of menu which will be used for getting title and icon items  |
+| enls_infiniteScrolling | infinite scrolling mode. Default ```true``` |
 | android:background | View have yellow background by default. Use standart ```android:background``` attribute to change it. Default ```#ffc829``` |
 
 
-To initialize items in widget and work with it you should setup adapter to it and add item click listener:
+To initialize items in widget and work with it you should setup adapter to it and add item click mListener:
 ```
 LoopBarView loopBarView = findViewById(...);
 categoriesAdapter = new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItems(getContext()));
@@ -99,7 +101,19 @@ Here SimpleCategoriesAdapter is used which required collection of [ICategoryItem
     loopBarView.setupWithViewPager(viewPager);
 ```
 
-To control wrapped ```RecyclerView``` animations you are able to use ```getWrappedRecyclerView()```.
+To customize wrapped ```RecyclerView``` (control animations, decorators or add ```RecyclerView.OnScrollListener```) you are able to use following methods:
+
+|  method name | description |
+|---|---|
+| ```setItemAnimator(RecyclerView.ItemAnimator animator)```  | Sets the ```ItemAnimator``` to wrapped RecyclerView |
+| ```isAnimating()```  | Returns true if wrapped RecyclerView is currently running some animations |
+| ```addItemDecoration(RecyclerView.ItemDecoration decor)```   | Add an ```ItemDecoration``` to wrapped RecyclerView |
+| ```addItemDecoration(RecyclerView.ItemDecoration decor, int index)```  | Add an ```ItemDecoration``` to wrapped RecyclerView |
+| ```removeItemDecoration(RecyclerView.ItemDecoration decor)``` | Remove an ```ItemDecoration``` from wrapped RecyclerView |
+| ```invalidateItemDecorations()``` | Invalidates all ```ItemDecoration```s in wrapped RecyclerView |
+| ```addOnScrollListener(RecyclerView.OnScrollListener listener)``` | Add a ```OnScrollListener``` to wrapped RecyclerView |
+| ```removeOnScrollListener(RecyclerView.OnScrollListener listener)``` | Remove a ```OnScrollListener``` from wrapped RecyclerView |
+| ```clearOnScrollListeners()``` | Remove all secondary ```OnScrollListener``` from wrapped RecyclerView |
 
 <br />
 #### Support ####

@@ -6,13 +6,13 @@ import android.view.View;
 
 class SpacesBottomItemDecoration extends AbstractSpacesItemDecoration {
 
-    public SpacesBottomItemDecoration(int space) {
+    SpacesBottomItemDecoration(int space) {
         super(space);
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() -1 )
+        if (parent.getChildAdapterPosition(view) == parent.getAdapter().getItemCount() - 1)
             outRect.bottom = getSpace();
     }
 

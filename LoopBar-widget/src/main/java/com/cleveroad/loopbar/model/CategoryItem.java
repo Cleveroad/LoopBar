@@ -5,31 +5,37 @@ import android.graphics.drawable.Drawable;
 import com.cleveroad.loopbar.adapter.ICategoryItem;
 
 public class CategoryItem implements ICategoryItem {
-    private Drawable categoryDrawable;
-    private String categoryName;
+
+    private Drawable mCategoryDrawable;
+    private String mCategoryName;
 
     public CategoryItem(Drawable drawable, String categoryName) {
-        this.categoryDrawable = drawable;
-        this.categoryName = categoryName;
+        mCategoryDrawable = drawable;
+        mCategoryName = categoryName;
     }
 
     @Override
     public Drawable getCategoryIconDrawable() {
-        return categoryDrawable;
+        return mCategoryDrawable;
     }
 
     @Override
     public String getCategoryName() {
-        return categoryName;
+        return mCategoryName;
     }
 
     @Override
     public String toString() {
-        return categoryName;
+        return mCategoryName;
+    }
+
+    @Override
+    public int hashCode() {
+        return mCategoryName.hashCode();
     }
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof CategoryItem && ((CategoryItem) o).categoryName.equals(categoryName);
+        return o instanceof CategoryItem && ((CategoryItem) o).mCategoryName.equals(mCategoryName);
     }
 }
