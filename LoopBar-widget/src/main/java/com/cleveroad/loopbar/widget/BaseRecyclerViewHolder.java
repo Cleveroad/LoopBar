@@ -11,14 +11,14 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
     private static final String TAG_ITEM_VIEW = "itemView";
     private T item;
     @Nullable
-    private OnItemClickListener listener;
+    private OnItemClickListener mListener;
     private int currentPosition;
 
-    public BaseRecyclerViewHolder(@NonNull View itemView) {
+    BaseRecyclerViewHolder(@NonNull View itemView) {
         super(itemView);
     }
 
-    public void setClickable(boolean clickable) {
+    private void setClickable(boolean clickable) {
         if (clickable) {
             itemView.setTag(KEY_VIEW_TAG, TAG_ITEM_VIEW);
             itemView.setOnClickListener(this);
@@ -27,29 +27,32 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
         }
     }
 
-    public void setListener(@Nullable OnItemClickListener listener) {
+    void setListener(@Nullable OnItemClickListener listener) {
         setClickable(true);
-        this.listener = listener;
+        mListener = listener;
     }
 
     public T getItem() {
         return item;
     }
 
-    public final void bindItem(T item, int position) {
+    final void bindItem(T item, int position) {
         this.item = item;
         currentPosition = position;
         onBindItem(item, position);
     }
 
-    public int getCurrentPosition() {
+    private int getCurrentPosition() {
         return currentPosition;
     }
 
     /**
-     * override this method with {@link #setClickable(boolean)} to receive click events on viewHolder item in child class
+     * Override this method with {@link #setClickable(boolean)} to receive click events on viewHolder item in child class
      */
-    public void onItemClicked(T item) {
+
+    @SuppressWarnings("WeakerAccess")
+    void onItemClicked(T item) {
+
     }
 
     public boolean isClickAllowed() {
@@ -63,9 +66,8 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
         Object tag = v.getTag(KEY_VIEW_TAG);
         if (tag != null && tag.equals(TAG_ITEM_VIEW) && getAdapterPosition() != -1 && isClickAllowed()) {
             onItemClicked(getItem());
-            if (listener != null) {
-//                listener.onItemClicked(getAdapterPosition());
-                listener.onItemClicked(getCurrentPosition());
+            if (mListener != null) {
+                mListener.onItemClicked(getCurrentPosition());
             }
         }
     }

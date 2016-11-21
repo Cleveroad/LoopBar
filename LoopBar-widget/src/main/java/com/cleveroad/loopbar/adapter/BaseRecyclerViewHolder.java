@@ -7,13 +7,14 @@ import android.view.View;
 
 import com.cleveroad.loopbar.widget.OnItemClickListener;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     protected static final int KEY_VIEW_TAG = -1;
     private static final String TAG_ITEM_VIEW = "itemView";
     private T item;
     @Nullable
-    private OnItemClickListener listener;
+    private OnItemClickListener mListener;
 
     public BaseRecyclerViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -28,9 +29,10 @@ public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder 
         }
     }
 
+    @SuppressWarnings("unused")
     public void setListener(@Nullable OnItemClickListener listener) {
         setClickable(true);
-        this.listener = listener;
+        mListener = listener;
     }
 
     public T getItem() {
@@ -59,8 +61,8 @@ public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder 
         Object tag = v.getTag(KEY_VIEW_TAG);
         if (tag != null && tag.equals(TAG_ITEM_VIEW) && getAdapterPosition() != -1 && isClickAllowed()) {
             onItemClicked(getItem());
-            if (listener != null) {
-                listener.onItemClicked(getAdapterPosition());
+            if (mListener != null) {
+                mListener.onItemClicked(getAdapterPosition());
             }
         }
     }

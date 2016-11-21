@@ -16,8 +16,6 @@ public class MainActivity extends AppCompatActivity implements IFragmentReplacer
 
         if (savedInstanceState == null) {
             replaceFragment(CategoriesAdapterLoopBarFragment.newInstance(Orientation.ORIENTATION_VERTICAL));
-//            replaceFragment(MenuLoopBarFragment.newInstance(Orientation.ORIENTATION_VERTICAL));
-//            replaceFragment(ViewPagerLoopBarFragment.newInstance(Orientation.ORIENTATION_VERTICAL));
         }
     }
 

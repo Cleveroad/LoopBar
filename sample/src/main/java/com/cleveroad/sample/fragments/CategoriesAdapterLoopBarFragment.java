@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.cleveroad.loopbar.adapter.SimpleCategoriesAdapter;
 import com.cleveroad.loopbar.model.MockedItemsFactory;
+import com.cleveroad.loopbar.widget.LoopBarView;
 
 public class CategoriesAdapterLoopBarFragment extends AbstractLoopBarFragment {
     public static CategoriesAdapterLoopBarFragment newInstance(int orientation) {
@@ -20,8 +21,8 @@ public class CategoriesAdapterLoopBarFragment extends AbstractLoopBarFragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        LoopBarView loopBarView = getLoopBarView();
         loopBarView.setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItems(getContext())));
-//        loopBarView.setIsInfinite(false);
     }
 
     @Override

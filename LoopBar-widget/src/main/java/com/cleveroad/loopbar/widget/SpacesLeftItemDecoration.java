@@ -6,7 +6,7 @@ import android.view.View;
 
 class SpacesLeftItemDecoration extends AbstractSpacesItemDecoration {
 
-    public SpacesLeftItemDecoration(int space) {
+    SpacesLeftItemDecoration(int space) {
         super(space);
     }
 

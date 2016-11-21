@@ -60,7 +60,9 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
         if (itemWidth == null) {
             for (int i = 0; i < rvCategories.getChildCount(); i++) {
                 itemWidth = rvCategories.getChildAt(i).getWidth();
-                if (itemWidth != 0) break;
+                if (itemWidth != 0) {
+                    break;
+                }
             }
         }
         return itemWidth;
@@ -95,7 +97,7 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
         return getGravityState().getOffsetItemDecoration();
     }
 
-    static class StartGravityState implements ISelectionGravityState {
+    private static class StartGravityState implements ISelectionGravityState {
 
         private SpacesLeftItemDecoration itemDecoration = new SpacesLeftItemDecoration(0);
 
@@ -115,7 +117,7 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
         }
     }
 
-    static class EndGravityState implements ISelectionGravityState {
+    private static class EndGravityState implements ISelectionGravityState {
 
         private SpacesRightItemDecoration itemDecoration = new SpacesRightItemDecoration(0);
 

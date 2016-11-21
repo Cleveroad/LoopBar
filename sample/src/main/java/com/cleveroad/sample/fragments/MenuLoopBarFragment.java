@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.cleveroad.loopbar.widget.LoopBarView;
 import com.cleveroad.sample.R;
 
 public class MenuLoopBarFragment extends AbstractLoopBarFragment {
@@ -20,6 +21,7 @@ public class MenuLoopBarFragment extends AbstractLoopBarFragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        LoopBarView loopBarView = getLoopBarView();
         loopBarView.setCategoriesAdapterFromMenu(R.menu.loopbar);
     }
 

@@ -4,17 +4,17 @@ import android.support.v7.widget.RecyclerView;
 
 class AbstractSpacesItemDecoration extends RecyclerView.ItemDecoration {
 
-    private int space;
+    private int mSpace;
 
-    public AbstractSpacesItemDecoration(int space) {
-        this.space = space;
+    AbstractSpacesItemDecoration(int space) {
+        mSpace = space;
     }
 
-    protected int getSpace() {
-        return space;
+    int getSpace() {
+        return mSpace;
     }
 
-    public void setSpace(int space) {
-        this.space = space;
+    void setSpace(int space) {
+        mSpace = space;
     }
 }

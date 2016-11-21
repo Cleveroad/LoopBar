@@ -24,13 +24,12 @@ import java.util.List;
 public abstract class AbstractLoopBarFragment extends Fragment implements View.OnClickListener, OnItemClickListener {
     static final String EXTRA_ORIENTATION = "EXTRA_ORIENTATION";
 
-    LoopBarView loopBarView;
-    SimpleFragmentStatePagerAdapter pagerAdapter;
-    ViewPager viewPager;
+    private LoopBarView loopBarView;
+    private ViewPager viewPager;
 
     //args
     @Orientation
-    private int orientation;
+    private int mOrientation;
     @LoopBarView.GravityAttr
     private int endlessGravity = LoopBarView.SELECTION_GRAVITY_START;
 
@@ -40,7 +39,7 @@ public abstract class AbstractLoopBarFragment extends Fragment implements View.O
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         @Orientation
         int orientation = getArguments().getInt(EXTRA_ORIENTATION, Orientation.ORIENTATION_HORIZONTAL);
-        this.orientation = orientation;
+        this.mOrientation = orientation;
 
         View rootView = inflater.inflate(
                 orientation == Orientation.ORIENTATION_VERTICAL
@@ -55,7 +54,7 @@ public abstract class AbstractLoopBarFragment extends Fragment implements View.O
         rootView.findViewById(R.id.btnInfinite).setOnClickListener(this);
         loopBarView.addOnItemClickListener(this);
 
-        pagerAdapter = new SimpleFragmentStatePagerAdapter(
+        SimpleFragmentStatePagerAdapter pagerAdapter = new SimpleFragmentStatePagerAdapter(
                 getChildFragmentManager(),
                 getMockFragments(),
                 MockedItemsFactory.getCategoryItems(getContext()));
@@ -92,23 +91,18 @@ public abstract class AbstractLoopBarFragment extends Fragment implements View.O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnGravity: {
-                int nextGravity = endlessGravity == LoopBarView.SELECTION_GRAVITY_START ?
-                        LoopBarView.SELECTION_GRAVITY_END : LoopBarView.SELECTION_GRAVITY_START;
-                endlessGravity = nextGravity;
-                loopBarView.setGravity(nextGravity);
+            case R.id.btnGravity:
+                changeGravity();
                 break;
-            }
-            case R.id.btnOrientation: {
-                Fragment fragment = getNewInstance(orientation == Orientation.ORIENTATION_VERTICAL ?
-                        Orientation.ORIENTATION_HORIZONTAL : Orientation.ORIENTATION_VERTICAL);
-                ((IFragmentReplacer) getActivity()).replaceFragment(fragment);
+            case R.id.btnOrientation:
+                changeOrientation();
                 break;
-            }
-            case R.id.btnInfinite: {
-                loopBarView.setIsInfinite(!loopBarView.isInfinite());
+            case R.id.btnInfinite:
+                changeScrollingMode();
                 break;
-            }
+            default:
+                // nothing
+                break;
         }
     }
 
@@ -118,4 +112,31 @@ public abstract class AbstractLoopBarFragment extends Fragment implements View.O
     }
 
     protected abstract Fragment getNewInstance(int orientation);
+
+    protected ViewPager getViewPager() {
+        return viewPager;
+    }
+
+    protected LoopBarView getLoopBarView() {
+        return loopBarView;
+    }
+
+    private void changeGravity() {
+        int nextGravity = endlessGravity == LoopBarView.SELECTION_GRAVITY_START ?
+                LoopBarView.SELECTION_GRAVITY_END : LoopBarView.SELECTION_GRAVITY_START;
+        endlessGravity = nextGravity;
+        loopBarView.setGravity(nextGravity);
+    }
+
+    private void changeOrientation() {
+        Fragment fragment = getNewInstance(mOrientation == Orientation.ORIENTATION_VERTICAL ?
+                Orientation.ORIENTATION_HORIZONTAL : Orientation.ORIENTATION_VERTICAL);
+        ((IFragmentReplacer) getActivity()).replaceFragment(fragment);
+    }
+
+    private void changeScrollingMode() {
+        loopBarView.setIsInfinite(!loopBarView.isInfinite());
+    }
+
+
 }

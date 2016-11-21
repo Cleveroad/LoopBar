@@ -12,12 +12,14 @@ import com.cleveroad.loopbar.R;
 
 import java.util.List;
 
+
+@SuppressWarnings("WeakerAccess")
 public class SimpleCategoriesAdapter extends RecyclerView.Adapter<SimpleCategoriesAdapter.SimpleCategoriesHolder> {
 
-    private List<ICategoryItem> categoryItems;
+    private List<ICategoryItem> mCategoryItems;
 
     public SimpleCategoriesAdapter(List<ICategoryItem> items) {
-        this.categoryItems = items;
+        mCategoryItems = items;
     }
 
     /**
@@ -38,12 +40,12 @@ public class SimpleCategoriesAdapter extends RecyclerView.Adapter<SimpleCategori
     }
 
     public ICategoryItem getItem(int position) {
-        return categoryItems.get(position);
+        return mCategoryItems.get(position);
     }
 
     @Override
     public int getItemCount() {
-        return categoryItems.size();
+        return mCategoryItems.size();
     }
 
     public static class SimpleCategoriesHolder extends BaseRecyclerViewHolder<ICategoryItem> {

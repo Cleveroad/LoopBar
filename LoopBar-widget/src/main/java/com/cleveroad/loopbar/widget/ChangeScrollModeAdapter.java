@@ -13,19 +13,19 @@ import com.cleveroad.loopbar.adapter.IOperationItem;
 import java.util.Collection;
 
 
-public class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOperationItem>> {
+class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOperationItem>> {
 
-    public static final int VIEW_TYPE_CHANGE_SCROLL_MODE = 2;
+    static final int VIEW_TYPE_CHANGE_SCROLL_MODE = 2;
     private static final int VIEW_TYPE_OFFSET = 1;
     @Orientation
-    private int orientation = Orientation.ORIENTATION_VERTICAL;
-    private CategoriesAdapter inputAdapter;
+    private int mOrientation = Orientation.ORIENTATION_VERTICAL;
+    private CategoriesAdapter mInputAdapter;
     private boolean isIndeterminate = true;
     @LoopBarView.GravityAttr
-    private int selectedGravity = LoopBarView.SELECTION_GRAVITY_START;
+    private int mSelectedGravity = LoopBarView.SELECTION_GRAVITY_START;
 
-    public ChangeScrollModeAdapter(@NonNull RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter) {
-        this.inputAdapter = new CategoriesAdapter(inputAdapter);
+    ChangeScrollModeAdapter(@NonNull RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter) {
+        mInputAdapter = new CategoriesAdapter(inputAdapter);
     }
 
     @Override
@@ -34,64 +34,68 @@ public class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVi
             return new HeaderHolder(createHeaderView(parent));
         }
         if (viewType == VIEW_TYPE_CHANGE_SCROLL_MODE) {
-            return new ChangeScrollModeHolder((CategoriesAdapter.CategoriesHolder) inputAdapter.onCreateViewHolder(parent, CategoriesAdapter.VIEW_TYPE_OTHER));
+            return new ChangeScrollModeHolder((CategoriesAdapter.CategoriesHolder) mInputAdapter.onCreateViewHolder(parent, CategoriesAdapter.VIEW_TYPE_OTHER));
         }
-        return inputAdapter.onCreateViewHolder(parent, viewType);
+        return mInputAdapter.onCreateViewHolder(parent, viewType);
     }
 
     @Override
     public void onBindViewHolder(BaseRecyclerViewHolder<IOperationItem> holder, int position) {
-        if (!isIndeterminate && ((selectedGravity == LoopBarView.SELECTION_GRAVITY_START && position == 0)
-                || (selectedGravity == LoopBarView.SELECTION_GRAVITY_END && position == getItemCount() - 1))) {
-            holder.bindItem(null, position);
-        } else {
-            position = offsetPosition(position);
-            inputAdapter.onBindViewHolder(holder, position);
+        if ((mSelectedGravity == LoopBarView.SELECTION_GRAVITY_START && position == 0)
+                || (mSelectedGravity == LoopBarView.SELECTION_GRAVITY_END && position == getItemCount() - 1))
+            if (!isIndeterminate) {
+                holder.bindItem(null, position);
+            } else {
+                mInputAdapter.onBindViewHolder(holder, offsetPosition(position));
+            }
+        else {
+            mInputAdapter.onBindViewHolder(holder, offsetPosition(position));
         }
     }
 
     @Override
     public int getItemCount() {
-        return isIndeterminate ? inputAdapter.getItemCount() : inputAdapter.getItemCount() + 1;
+        return isIndeterminate ? mInputAdapter.getItemCount() : mInputAdapter.getItemCount() + 1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (!isIndeterminate &&
-                ((selectedGravity == LoopBarView.SELECTION_GRAVITY_START && position == 0)
-                        || (selectedGravity == LoopBarView.SELECTION_GRAVITY_END && position == getItemCount() - 1))) {
+        boolean needOffsetView = (mSelectedGravity == LoopBarView.SELECTION_GRAVITY_START && position == 0)
+                || (mSelectedGravity == LoopBarView.SELECTION_GRAVITY_END && position == getItemCount() - 1);
+        if (!isIndeterminate && needOffsetView) {
             return VIEW_TYPE_OFFSET;
         }
-        position = offsetPosition(position);
-        return inputAdapter.getItemViewType(position);
+        return mInputAdapter.getItemViewType(offsetPosition(position));
     }
 
 
-    int offsetPosition(int position) {
-        return !isIndeterminate && selectedGravity == LoopBarView.SELECTION_GRAVITY_START ? position - 1 : position;
+    private int offsetPosition(int position) {
+        return !isIndeterminate && mSelectedGravity == LoopBarView.SELECTION_GRAVITY_START ? position - 1 : position;
     }
 
-    int unOffsetPosition(int position) {
-        return !isIndeterminate && selectedGravity == LoopBarView.SELECTION_GRAVITY_START ? position + 1 : position;
+    private int unOffsetPosition(int position) {
+        return !isIndeterminate && mSelectedGravity == LoopBarView.SELECTION_GRAVITY_START ? position + 1 : position;
     }
 
-    // TODO: 18.11.16 update
-    public void addOnItemClickListener(OnItemClickListener onItemClickListener) {
-        inputAdapter.addOnItemClickListener(onItemClickListener);
+    void notifyRealItemChanged(int position) {
+        notifyItemChanged(unOffsetPosition(position));
     }
 
-    // TODO: 18.11.16 update
-    public void removeOnItemClickListener(OnItemClickListener onItemClickListener) {
-        inputAdapter.removeOnItemClickListener(onItemClickListener);
+    void addOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mInputAdapter.addOnItemClickListener(onItemClickListener);
+    }
+
+    void removeOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mInputAdapter.removeOnItemClickListener(onItemClickListener);
+    }
+
+    Collection<IOperationItem> getWrappedItems() {
+        return mInputAdapter.getWrappedItems();
     }
 
 
-    public Collection<IOperationItem> getWrappedItems() {
-        return inputAdapter.getWrappedItems();
-    }
-
-    public void setListener(OnItemClickListener listener) {
-        inputAdapter.setListener(listener);
+    void setListener(OnItemClickListener listener) {
+        mInputAdapter.setListener(listener);
     }
 
     /**
@@ -99,43 +103,44 @@ public class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVi
      *
      * @param isIndeterminate true for infinite
      */
-    public void setIndeterminate(boolean isIndeterminate) {
+    void setIndeterminate(boolean isIndeterminate) {
         this.isIndeterminate = isIndeterminate;
-        inputAdapter.setIndeterminate(isIndeterminate);
+        mInputAdapter.setIndeterminate(isIndeterminate);
         notifyDataSetChanged();
     }
 
-    public IOperationItem getItem(int position) {
-        return inputAdapter.getItem(position);
+    IOperationItem getItem(int position) {
+        return mInputAdapter.getItem(position);
     }
 
 
     void setOrientation(int orientation) {
-        this.orientation = orientation;
-        inputAdapter.setOrientation(orientation);
+        this.mOrientation = orientation;
+        mInputAdapter.setOrientation(orientation);
     }
 
     int getSelectedGravity() {
-        return selectedGravity;
+        return mSelectedGravity;
     }
 
     void setSelectedGravity(int selectedGravity) {
-        this.selectedGravity = selectedGravity;
+        this.mSelectedGravity = selectedGravity;
         notifyDataSetChanged();
     }
 
     int normalizePosition(int position) {
-        return inputAdapter.normalizePosition(position);
+        return mInputAdapter.normalizePosition(position);
     }
 
 
     private View createHeaderView(ViewGroup parent) {
-        @LayoutRes int layoutId = orientation == Orientation.ORIENTATION_VERTICAL
+        @LayoutRes int layoutId = mOrientation == Orientation.ORIENTATION_VERTICAL
                 ? R.layout.enls_empty_header_vertical
                 : R.layout.enls_empty_header_horizontal;
         return LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
     }
 
+    @SuppressWarnings("WeakerAccess")
     class HeaderHolder extends BaseRecyclerViewHolder<IOperationItem> {
 
         HeaderHolder(@NonNull View itemView) {
@@ -148,12 +153,12 @@ public class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVi
         }
     }
 
-    // this class is only for encapsulation CategoriesHolder
-    public class ChangeScrollModeHolder extends BaseRecyclerViewHolder<IOperationItem> {
+    // this class is only for encapsulation CategoriesHolder, actually now it doesn't change any logic
+    class ChangeScrollModeHolder extends BaseRecyclerViewHolder<IOperationItem> {
 
         private CategoriesAdapter.CategoriesHolder categoriesHolder;
 
-        public ChangeScrollModeHolder(CategoriesAdapter.CategoriesHolder categoriesHolder) {
+        ChangeScrollModeHolder(CategoriesAdapter.CategoriesHolder categoriesHolder) {
             super(categoriesHolder.itemView);
             this.categoriesHolder = categoriesHolder;
         }
@@ -163,7 +168,7 @@ public class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVi
             categoriesHolder.onBindItem(item, position);
         }
 
-        public <T extends RecyclerView.ViewHolder> void bindItemWildcardHelper(RecyclerView.Adapter<T> adapter, int position) {
+        <T extends RecyclerView.ViewHolder> void bindItemWildcardHelper(RecyclerView.Adapter<T> adapter, int position) {
             categoriesHolder.bindItemWildcardHelper(adapter, position);
         }
     }
