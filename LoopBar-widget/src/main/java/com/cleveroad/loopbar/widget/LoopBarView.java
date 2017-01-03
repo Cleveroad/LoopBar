@@ -47,6 +47,11 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
     public static final int SELECTION_GRAVITY_START = 0;
     public static final int SELECTION_GRAVITY_END = 1;
+
+    public static final int SCROLL_MODE_AUTO = 0;
+    public static final int SCROLL_MODE_INFINITE = 1;
+    public static final int SCROLL_MODE_FINITE = 2;
+
     private static final String TAG = LoopBarView.class.getSimpleName();
 
     //outside params
@@ -82,6 +87,9 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     private boolean mSkipNextOnLayout;
     private boolean mIndeterminateInitialized;
     private boolean mInfinite;
+
+    @ScrollAttr
+    private int mScrollMode;
 
     private RecyclerView.OnScrollListener mIndeterminateOnScrollListener = new RecyclerView.OnScrollListener() {
         @Override
@@ -127,13 +135,22 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LoopBarView);
         mColorCodeSelectionView = typedArray.getColor(R.styleable.LoopBarView_enls_selectionBackground,
                 ContextCompat.getColor(getContext(), android.R.color.holo_blue_dark));
-        int orientation = typedArray.getInteger(R.styleable.LoopBarView_enls_orientation, Orientation.ORIENTATION_HORIZONTAL);
-        int selectionAnimatorInId = typedArray.getResourceId(R.styleable.LoopBarView_enls_selectionInAnimation, R.animator.enls_scale_restore);
-        int selectionAnimatorOutId = typedArray.getResourceId(R.styleable.LoopBarView_enls_selectionOutAnimation, R.animator.enls_scale_small);
+        int orientation = typedArray
+                .getInteger(R.styleable.LoopBarView_enls_orientation, Orientation.ORIENTATION_HORIZONTAL);
+        int selectionAnimatorInId = typedArray
+                .getResourceId(R.styleable.LoopBarView_enls_selectionInAnimation, R.animator.enls_scale_restore);
+        int selectionAnimatorOutId = typedArray
+                .getResourceId(R.styleable.LoopBarView_enls_selectionOutAnimation, R.animator.enls_scale_small);
         mPlaceHolderId = typedArray.getResourceId(R.styleable.LoopBarView_enls_placeholderId, -1);
-        @GravityAttr int selectionGravity = typedArray.getInteger(R.styleable.LoopBarView_enls_selectionGravity, SELECTION_GRAVITY_START);
-        mInfinite = typedArray.getBoolean(R.styleable.LoopBarView_enls_infiniteScrolling, true);
+        @GravityAttr int selectionGravity = typedArray
+                .getInteger(R.styleable.LoopBarView_enls_selectionGravity, SELECTION_GRAVITY_START);
         mSelectionGravity = selectionGravity;
+        mInfinite = typedArray.getBoolean(R.styleable.LoopBarView_enls_infiniteScrolling, true);
+
+        @ScrollAttr int scrollMode = typedArray.getInt(R.styleable.LoopBarView_enls_scrollMode,
+                mInfinite ? SCROLL_MODE_INFINITE : SCROLL_MODE_FINITE);
+        mScrollMode = scrollMode;
+
 
         mSelectionMargin = typedArray.getDimensionPixelSize(R.styleable.LoopBarView_enls_selectionMargin,
                 getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view));
@@ -186,7 +203,16 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         }
     }
 
+    /**
+     * @param isInfinite
+     * @deprecated use {@link #setScrollMode(int)} instead
+     */
+    @Deprecated
     public void setIsInfinite(boolean isInfinite) {
+        setScrollMode(isInfinite ? SCROLL_MODE_INFINITE : SCROLL_MODE_FINITE);
+    }
+
+    private void changeScrolling(boolean isInfinite) {
         if (mInfinite != isInfinite) {
             mInfinite = isInfinite;
             if (mOuterAdapter != null) {
@@ -195,8 +221,36 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         }
     }
 
+    @LoopBarView.ScrollAttr
+    public int getScrollMode() {
+        return mScrollMode;
+    }
+
+    public void setScrollMode(@ScrollAttr int scrollMode) {
+        if (scrollMode != mScrollMode) {
+            mScrollMode = scrollMode;
+            validateScrollMode();
+        }
+    }
+
     public boolean isInfinite() {
         return mInfinite;
+    }
+
+    private void validateScrollMode() {
+        if (mScrollMode == SCROLL_MODE_AUTO) {
+            if (mOrientationState != null
+                    && rvCategories != null
+                    && mOuterAdapter != null) {
+                boolean isFitOnScreen = mOrientationState.isItemsFitOnScreen(rvCategories,
+                        mOuterAdapter.getWrappedItems().size());
+                changeScrolling(!isFitOnScreen);
+            }
+        } else if (mScrollMode == SCROLL_MODE_INFINITE) {
+            changeScrolling(true);
+        } else if (mScrollMode == SCROLL_MODE_FINITE) {
+            changeScrolling(false);
+        }
     }
 
     @SuppressWarnings("unchecked assigment")
@@ -205,6 +259,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         this.mOuterAdapter = new ChangeScrollModeAdapter(inputAdapter);
         IOperationItem firstItem = mOuterAdapter.getItem(0);
         firstItem.setVisible(false);
+        validateScrollMode();
         mOuterAdapter.setIsIndeterminate(mInfinite);
         mOuterAdapter.setListener(this);
         mOuterAdapter.setOrientation(mOrientationState.getOrientation());
@@ -440,7 +495,8 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         super.onRestoreInstanceState(ss.getSuperState());
         setCurrentItem(ss.mCurrentItemPosition);
         setGravity(ss.mSelectionGravity);
-        setIsInfinite(ss.mIsInfinite);
+        mScrollMode = ss.mScrollMode;
+        changeScrolling(ss.mIsInfinite);
     }
 
     @Override
@@ -461,6 +517,10 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
                 rvCategories.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
+                        boolean isFitOnScreen = mOrientationState.isItemsFitOnScreen(rvCategories, mOuterAdapter.getWrappedItems().size());
+                        if (mScrollMode == SCROLL_MODE_AUTO) {
+                            changeScrolling(!isFitOnScreen);
+                        }
                         mLinearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.enls_selected_view_size_plus_margin));
                         rvCategories.addOnScrollListener(mIndeterminateOnScrollListener);
                         rvCategories.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -477,7 +537,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         return new SavedState(superState,
-                mCurrentItemPosition, mSelectionGravity, mInfinite);
+                mCurrentItemPosition, mSelectionGravity, mInfinite, mScrollMode);
     }
 
     private void startSelectedViewOutAnimation(int position) {
@@ -566,6 +626,10 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     public @interface GravityAttr {
     }
 
+    @IntDef({SCROLL_MODE_AUTO, SCROLL_MODE_INFINITE, SCROLL_MODE_FINITE})
+    public @interface ScrollAttr {
+    }
+
     public static class SavedState extends BaseSavedState implements Parcelable {
 
         public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
@@ -581,6 +645,8 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         private int mCurrentItemPosition;
         @GravityAttr
         private int mSelectionGravity;
+        @ScrollAttr
+        private int mScrollMode;
         private boolean mIsInfinite;
 
         public SavedState(Parcelable superState) {
@@ -594,16 +660,21 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
             @GravityAttr
             int gravity = parcel.readInt();
             this.mSelectionGravity = gravity;
+            @ScrollAttr
+            int scrollMode = parcel.readInt();
+            mScrollMode = scrollMode;
             boolean[] booleanValues = new boolean[1];
             parcel.readBooleanArray(booleanValues);
             mIsInfinite = booleanValues[0];
         }
 
-        SavedState(Parcelable superState, int currentItemPosition, int selectionGravity, boolean isInfinite) {
+        SavedState(Parcelable superState, int currentItemPosition,
+                   int selectionGravity, boolean isInfinite, int scrollMode) {
             super(superState);
             mCurrentItemPosition = currentItemPosition;
             mSelectionGravity = selectionGravity;
             mIsInfinite = isInfinite;
+            mScrollMode = scrollMode;
         }
 
         public int describeContents() {
@@ -613,6 +684,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         public void writeToParcel(Parcel parcel, int flags) {
             parcel.writeInt(mCurrentItemPosition);
             parcel.writeInt(mSelectionGravity);
+            parcel.writeInt(mScrollMode);
             parcel.writeBooleanArray(new boolean[]{mIsInfinite});
         }
     }

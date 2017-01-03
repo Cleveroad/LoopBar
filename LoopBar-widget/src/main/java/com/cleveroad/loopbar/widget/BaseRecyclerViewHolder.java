@@ -9,10 +9,10 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
 
     protected static final int KEY_VIEW_TAG = -1;
     private static final String TAG_ITEM_VIEW = "itemView";
-    private T item;
+    private T mItem;
     @Nullable
     private OnItemClickListener mListener;
-    private int currentPosition;
+    private int mCurrentPosition;
 
     BaseRecyclerViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -33,21 +33,21 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
     }
 
     public T getItem() {
-        return item;
+        return mItem;
     }
 
     final void bindItem(T item, int position) {
-        this.item = item;
-        currentPosition = position;
+        mItem = item;
+        mCurrentPosition = position;
         onBindItem(item, position);
     }
 
-    private int getCurrentPosition() {
-        return currentPosition;
+    private int getmCurrentPosition() {
+        return mCurrentPosition;
     }
 
     /**
-     * Override this method with {@link #setClickable(boolean)} to receive click events on viewHolder item in child class
+     * Override this method with {@link #setClickable(boolean)} to receive click events on viewHolder mItem in child class
      */
 
     @SuppressWarnings("WeakerAccess")
@@ -67,7 +67,7 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
         if (tag != null && tag.equals(TAG_ITEM_VIEW) && getAdapterPosition() != -1 && isClickAllowed()) {
             onItemClicked(getItem());
             if (mListener != null) {
-                mListener.onItemClicked(getCurrentPosition());
+                mListener.onItemClicked(getmCurrentPosition());
             }
         }
     }

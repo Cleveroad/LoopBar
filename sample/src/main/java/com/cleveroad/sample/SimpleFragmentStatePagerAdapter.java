@@ -12,34 +12,34 @@ import com.cleveroad.loopbar.adapter.ILoopBarPagerAdapter;
 import java.util.List;
 
 public final class SimpleFragmentStatePagerAdapter extends FragmentStatePagerAdapter implements ILoopBarPagerAdapter {
-    private final List<ICategoryItem> categoryItems;
-    private List<Fragment> fragmentList;
+    private final List<ICategoryItem> mCategoryItems;
+    private List<Fragment> mFragmentList;
 
     public SimpleFragmentStatePagerAdapter(FragmentManager fm, List<Fragment> fragmentList, List<ICategoryItem> categoryItems) {
         super(fm);
-        this.fragmentList = fragmentList;
-        this.categoryItems = categoryItems;
+        mFragmentList = fragmentList;
+        mCategoryItems = categoryItems;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return fragmentList.get(position);
+        return mFragmentList.get(position);
     }
 
     @Override
     public int getCount() {
-        return fragmentList.size();
+        return mFragmentList.size();
     }
 
     @NonNull
     @Override
     public CharSequence getPageTitle(int position) {
-        return categoryItems.get(position).getCategoryName();
+        return mCategoryItems.get(position).getCategoryName();
     }
 
     @NonNull
     @Override
     public Drawable getPageDrawable(int position) {
-        return categoryItems.get(position).getCategoryIconDrawable();
+        return mCategoryItems.get(position).getCategoryIconDrawable();
     }
 }
