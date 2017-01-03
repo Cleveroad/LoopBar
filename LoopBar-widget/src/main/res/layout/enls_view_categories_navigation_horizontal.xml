@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clipToPadding="false"
     android:orientation="vertical"
     tools:background="@android:color/white">
@@ -17,27 +18,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:overScrollMode="never"
+            app:elevation="0dp"
             tools:background="@color/enls_default_list_background"
             tools:layout_marginTop="5dp"
             tools:listItem="@layout/item_default" />
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignBottom="@id/rvCategories"
-            android:layout_alignTop="@id/rvCategories"
-            android:layout_gravity="start"
-            android:background="@drawable/enls_left_shadow" />
+        <!--<FrameLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_alignBottom="@id/rvCategories"-->
+            <!--android:layout_alignTop="@id/rvCategories"-->
+            <!--android:layout_gravity="start"-->
+            <!--android:background="@drawable/enls_left_shadow" />-->
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignBottom="@id/rvCategories"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/rvCategories"
-            android:layout_gravity="end"
-            android:background="@drawable/enls_right_shadow" />
+        <!--<FrameLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_alignBottom="@id/rvCategories"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_alignTop="@id/rvCategories"-->
+            <!--android:layout_gravity="end"-->
+            <!--android:background="@drawable/enls_right_shadow" />-->
 
     </RelativeLayout>
 

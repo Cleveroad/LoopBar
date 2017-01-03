@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:background="@android:color/white">
 
@@ -14,32 +15,34 @@
             android:id="@+id/rvCategories"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            app:elevation="0dp"
             android:gravity="center"
+            android:overScrollMode="never"
             tools:background="@color/enls_default_list_background"
             tools:layout_marginRight="5dp"
             tools:listItem="@layout/item_default" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/rvCategories"
-            android:layout_alignEnd="@+id/rvCategories"
-            android:layout_alignLeft="@+id/rvCategories"
-            android:layout_alignRight="@+id/rvCategories"
-            android:layout_alignStart="@+id/rvCategories"
-            android:layout_alignTop="@id/rvCategories"
-            android:background="@drawable/enls_top_shadow" />
+        <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignBottom="@id/rvCategories"-->
+            <!--android:layout_alignEnd="@+id/rvCategories"-->
+            <!--android:layout_alignLeft="@+id/rvCategories"-->
+            <!--android:layout_alignRight="@+id/rvCategories"-->
+            <!--android:layout_alignStart="@+id/rvCategories"-->
+            <!--android:layout_alignTop="@id/rvCategories"-->
+            <!--android:background="@drawable/enls_top_shadow" />-->
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/rvCategories"
-            android:layout_alignLeft="@+id/rvCategories"
-            android:layout_alignParentBottom="true"
-            android:layout_alignRight="@+id/rvCategories"
-            android:layout_alignStart="@+id/rvCategories"
-            android:layout_gravity="end"
-            android:background="@drawable/enls_bottom_shadow" />
+        <!--<FrameLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignEnd="@+id/rvCategories"-->
+            <!--android:layout_alignLeft="@+id/rvCategories"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignRight="@+id/rvCategories"-->
+            <!--android:layout_alignStart="@+id/rvCategories"-->
+            <!--android:layout_gravity="end"-->
+            <!--android:background="@drawable/enls_bottom_shadow" />-->
 
     </RelativeLayout>
 
