@@ -40,9 +40,6 @@ public abstract class AbstractLoopBarFragment extends Fragment
     //args
     @Orientation
     private int mOrientation;
-    @LoopBarView.GravityAttr
-    private int endlessGravity = LoopBarView.SELECTION_GRAVITY_START;
-
 
     @Nullable
     @Override
@@ -144,9 +141,8 @@ public abstract class AbstractLoopBarFragment extends Fragment
     }
 
     private void changeGravity() {
-        int nextGravity = endlessGravity == LoopBarView.SELECTION_GRAVITY_START ?
+        int nextGravity = loopBarView.getGravity() == LoopBarView.SELECTION_GRAVITY_START ?
                 LoopBarView.SELECTION_GRAVITY_END : LoopBarView.SELECTION_GRAVITY_START;
-        endlessGravity = nextGravity;
         loopBarView.setGravity(nextGravity);
     }
 

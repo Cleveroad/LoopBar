@@ -204,6 +204,11 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         }
     }
 
+    @GravityAttr
+    public int getGravity() {
+        return mSelectionGravity;
+    }
+
     /**
      * Sets scroll mode to infinite or finite
      *
