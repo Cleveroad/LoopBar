@@ -74,11 +74,11 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     private int mRealHidedPosition = 0;
 
     //views
-    private FrameLayout flContainerSelected;
-    private RecyclerView rvCategories;
+    private FrameLayout mFlContainerSelected;
+    private RecyclerView mRvCategories;
     @Nullable
-    private View overlayPlaceholder;
-    private View viewColorable;
+    private View mOverlayPlaceholder;
+    private View mViewColorable;
 
     private ChangeScrollModeAdapter.ChangeScrollModeHolder mSelectorHolder;
     private ChangeScrollModeAdapter mOuterAdapter;
@@ -122,12 +122,14 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         init(context, attrs);
     }
 
-    private void inflate(IOrientationState orientationState, int placeHolderId) {
+    private void inflate(IOrientationState orientationState, int placeHolderId, int backgroundResource) {
         inflate(getContext(), orientationState.getLayoutId(), this);
-        flContainerSelected = (FrameLayout) findViewById(R.id.flContainerSelected);
-        rvCategories = (RecyclerView) findViewById(R.id.rvCategories);
-        overlayPlaceholder = getRootView().findViewById(placeHolderId);
-        viewColorable = getRootView().findViewById(R.id.viewColorable);
+        mFlContainerSelected = (FrameLayout) findViewById(R.id.flContainerSelected);
+        mRvCategories = (RecyclerView) findViewById(R.id.rvCategories);
+        View vRvContainer = findViewById(R.id.vRvContainer);
+        mOverlayPlaceholder = getRootView().findViewById(placeHolderId);
+        mViewColorable = getRootView().findViewById(R.id.viewColorable);
+        vRvContainer.setBackgroundResource(backgroundResource);
     }
 
     private void init(Context context, @Nullable AttributeSet attrs) {
@@ -168,15 +170,14 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
         //current view has two state : horizontal & vertical. State design pattern
         mOrientationState = getOrientationStateFromParam(orientation);
-        inflate(mOrientationState, mPlaceHolderId);
-        setBackgroundResource(backgroundResource);
+        inflate(mOrientationState, mPlaceHolderId, backgroundResource);
         setGravity(selectionGravity);
 
         ColorDrawable colorDrawable = new NegativeMarginFixColorDrawable(mColorCodeSelectionView);
-        viewColorable.setBackground(colorDrawable);
+        mViewColorable.setBackground(colorDrawable);
 
         mLinearLayoutManager = mOrientationState.getLayoutManager(getContext());
-        rvCategories.setLayoutManager(mLinearLayoutManager);
+        mRvCategories.setLayoutManager(mLinearLayoutManager);
 
         if (isInEditMode()) {
             setCategoriesAdapter(new SimpleCategoriesAdapter(MockedItemsFactory.getCategoryItems(getContext())));
@@ -191,11 +192,11 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
     public void setGravity(@GravityAttr int selectionGravity) {
         mOrientationState.setSelectionGravity(selectionGravity);
-        //note that flContainerSelected should be in FrameLayout
-        FrameLayout.LayoutParams params = (LayoutParams) flContainerSelected.getLayoutParams();
+        //note that mFlContainerSelected should be in FrameLayout
+        FrameLayout.LayoutParams params = (LayoutParams) mFlContainerSelected.getLayoutParams();
         params.gravity = mOrientationState.getSelectionGravity();
         mOrientationState.setSelectionMargin(mSelectionMargin, params);
-        flContainerSelected.setLayoutParams(params);
+        mFlContainerSelected.setLayoutParams(params);
         mSelectionGravity = selectionGravity;
         invalidate();
         if (mOuterAdapter != null) {
@@ -204,7 +205,9 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     }
 
     /**
-     * @param isInfinite
+     * Sets scroll mode to infinite or finite
+     *
+     * @param isInfinite value presents is scroll mode need to be infinite
      * @deprecated use {@link #setScrollMode(int)} instead
      */
     @Deprecated
@@ -221,7 +224,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         }
     }
 
-    @LoopBarView.ScrollAttr
+    @ScrollAttr
     public int getScrollMode() {
         return mScrollMode;
     }
@@ -233,6 +236,11 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         }
     }
 
+    /**
+     * Returns boolean value representing is LoopBar in infinite mode or not
+     *
+     * @return true if LoopBar is in infinite mode or false if is in finite
+     */
     public boolean isInfinite() {
         return mInfinite;
     }
@@ -240,9 +248,9 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     private void validateScrollMode() {
         if (mScrollMode == SCROLL_MODE_AUTO) {
             if (mOrientationState != null
-                    && rvCategories != null
+                    && mRvCategories != null
                     && mOuterAdapter != null) {
-                boolean isFitOnScreen = mOrientationState.isItemsFitOnScreen(rvCategories,
+                boolean isFitOnScreen = mOrientationState.isItemsFitOnScreen(mRvCategories,
                         mOuterAdapter.getWrappedItems().size());
                 changeScrolling(!isFitOnScreen);
             }
@@ -256,7 +264,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     @SuppressWarnings("unchecked assigment")
     public void setCategoriesAdapter(@NonNull RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter) {
         mInputAdapter = inputAdapter;
-        this.mOuterAdapter = new ChangeScrollModeAdapter(inputAdapter);
+        mOuterAdapter = new ChangeScrollModeAdapter(inputAdapter);
         IOperationItem firstItem = mOuterAdapter.getItem(0);
         firstItem.setVisible(false);
         validateScrollMode();
@@ -264,16 +272,17 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         mOuterAdapter.setListener(this);
         mOuterAdapter.setOrientation(mOrientationState.getOrientation());
         mOuterAdapter.setSelectedGravity(mSelectionGravity);
-        rvCategories.setAdapter(mOuterAdapter);
+        mRvCategories.setAdapter(mOuterAdapter);
 
-        mSelectorHolder = (ChangeScrollModeAdapter.ChangeScrollModeHolder) mOuterAdapter.createViewHolder(rvCategories, ChangeScrollModeAdapter.VIEW_TYPE_CHANGE_SCROLL_MODE);
+        mSelectorHolder = (ChangeScrollModeAdapter.ChangeScrollModeHolder) mOuterAdapter
+                .createViewHolder(mRvCategories, ChangeScrollModeAdapter.VIEW_TYPE_CHANGE_SCROLL_MODE);
         // set first item to selectionView
         mSelectorHolder.bindItemWildcardHelper(inputAdapter, 0);
         mSelectorHolder.itemView.setBackgroundColor(mColorCodeSelectionView);
 
-        flContainerSelected.addView(mSelectorHolder.itemView);
+        mFlContainerSelected.addView(mSelectorHolder.itemView);
 
-        mOrientationState.initSelectionContainer(flContainerSelected);
+        mOrientationState.initSelectionContainer(mFlContainerSelected);
 
         FrameLayout.LayoutParams layoutParams = (LayoutParams) mSelectorHolder.itemView.getLayoutParams();
         layoutParams.gravity = Gravity.CENTER;
@@ -356,11 +365,11 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
      */
     @Deprecated
     public RecyclerView getWrappedRecyclerView() {
-        return rvCategories;
+        return mRvCategories;
     }
 
     private RecyclerView getRvCategories() {
-        return rvCategories;
+        return mRvCategories;
     }
 
     /**
@@ -486,7 +495,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        overlayPlaceholder = ((ViewGroup) getParent()).findViewById(mPlaceHolderId);
+        mOverlayPlaceholder = ((ViewGroup) getParent()).findViewById(mPlaceHolderId);
     }
 
     @Override
@@ -502,28 +511,30 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-
         if (!mSkipNextOnLayout) {
 
-            if (mOverlaySize > 0 && overlayPlaceholder == null) {
+            if (mOverlaySize > 0 && mOverlayPlaceholder == null) {
                 Log.e(TAG, "You have to add placeholder and set it id with #enls_placeHolderId parameter to use mOverlaySize");
             }
 
-            mOrientationState.initPlaceHolderAndOverlay(overlayPlaceholder, rvCategories, mOverlaySize);
+            mOrientationState.initPlaceHolderAndOverlay(mOverlayPlaceholder, mRvCategories,
+                    mFlContainerSelected, mOverlaySize);
 
-            if (rvCategories.getChildCount() > 0 && !mIndeterminateInitialized) {
+            if (mRvCategories.getChildCount() > 0 && !mIndeterminateInitialized) {
                 mIndeterminateInitialized = true;
                 //scroll to middle of indeterminate recycler view on initialization and if user somehow scrolled to start or end
-                rvCategories.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                mRvCategories.getViewTreeObserver()
+                        .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        boolean isFitOnScreen = mOrientationState.isItemsFitOnScreen(rvCategories, mOuterAdapter.getWrappedItems().size());
+                        boolean isFitOnScreen = mOrientationState
+                                .isItemsFitOnScreen(mRvCategories, mOuterAdapter.getWrappedItems().size());
                         if (mScrollMode == SCROLL_MODE_AUTO) {
                             changeScrolling(!isFitOnScreen);
                         }
                         mLinearLayoutManager.scrollToPositionWithOffset(Integer.MAX_VALUE / 2, getResources().getDimensionPixelOffset(R.dimen.enls_selected_view_size_plus_margin));
-                        rvCategories.addOnScrollListener(mIndeterminateOnScrollListener);
-                        rvCategories.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                        mRvCategories.addOnScrollListener(mIndeterminateOnScrollListener);
+                        mRvCategories.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
                 });
 
@@ -601,9 +612,9 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         mRealHidedPosition = realPosition;
 
         oldHidedItem.setVisible(true);
-        flContainerSelected.requestLayout();
+        mFlContainerSelected.requestLayout();
         mOuterAdapter.notifyRealItemChanged(itemToShowAdapterPosition);
-        this.mCurrentItemPosition = realPosition;
+        mCurrentItemPosition = realPosition;
 
         if (invokeListeners) {
             notifyItemClickListeners(realPosition);
@@ -619,7 +630,9 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
     //orientation state factory method
     public IOrientationState getOrientationStateFromParam(int orientation) {
-        return orientation == Orientation.ORIENTATION_VERTICAL ? new OrientationStateVertical() : new OrientationStateHorizontal();
+        return orientation == Orientation.ORIENTATION_VERTICAL
+                ? new OrientationStateVertical()
+                : new OrientationStateHorizontal();
     }
 
     @IntDef({SELECTION_GRAVITY_START, SELECTION_GRAVITY_END})
@@ -659,7 +672,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
             mCurrentItemPosition = parcel.readInt();
             @GravityAttr
             int gravity = parcel.readInt();
-            this.mSelectionGravity = gravity;
+            mSelectionGravity = gravity;
             @ScrollAttr
             int scrollMode = parcel.readInt();
             mScrollMode = scrollMode;

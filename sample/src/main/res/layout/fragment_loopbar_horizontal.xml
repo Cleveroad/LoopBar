@@ -31,7 +31,7 @@
         android:background="?attr/selectableItemBackground"
         android:text="@string/change_orientation"
         android:textAllCaps="false"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/btnGravity"
@@ -56,15 +56,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-
         app:enls_orientation="horizontal"
-        app:enls_overlaySize="5dp"
+        app:enls_overlaySize="15dp"
         app:enls_placeholderId="@id/placeHolder"
-        app:enls_scrollMode="infinite"
+        app:enls_scrollMode="auto"
         app:enls_selectionBackground="@android:color/holo_blue_dark"
         app:enls_selectionGravity="start"
         app:enls_selectionInAnimation="@animator/enls_scale_restore"
         app:enls_selectionMargin="10dp"
         app:enls_selectionOutAnimation="@animator/enls_scale_small" />
 
-</RelativeLayout><!--app:enls_infiniteScrolling="true"-->
+</RelativeLayout>

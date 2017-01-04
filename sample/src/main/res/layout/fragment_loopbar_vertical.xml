@@ -46,18 +46,18 @@
     <View
         android:id="@+id/placeHolder"
         android:layout_width="0dp"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"/>
 
     <com.cleveroad.loopbar.widget.LoopBarView
         android:id="@+id/endlessView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-
         app:enls_orientation="vertical"
-        app:enls_overlaySize="5dp"
+        app:enls_overlaySize="15dp"
         app:enls_placeholderId="@+id/placeHolder"
-        app:enls_scrollMode="infinite"
+        app:enls_scrollMode="auto"
         app:enls_selectionBackground="@android:color/holo_blue_dark"
         app:enls_selectionGravity="start"
         app:enls_selectionMargin="10dp" />
