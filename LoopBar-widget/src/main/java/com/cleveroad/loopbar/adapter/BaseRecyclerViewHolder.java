@@ -7,6 +7,11 @@ import android.view.View;
 
 import com.cleveroad.loopbar.widget.OnItemClickListener;
 
+/**
+ * Base realization of ViewHolder {@link android.support.v7.widget.RecyclerView.ViewHolder}
+ *
+ * @param <T> Type of models for displaying in ViewHolder
+ */
 @SuppressWarnings("WeakerAccess")
 public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener {
 
