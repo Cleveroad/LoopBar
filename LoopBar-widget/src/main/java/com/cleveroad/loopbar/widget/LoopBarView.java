@@ -311,7 +311,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
      *
      * @param scrollMode must be one of {@link ScrollAttr}
      */
-    public void setScrollMode(@ScrollAttr int scrollMode) {
+    public final void setScrollMode(@ScrollAttr int scrollMode) {
         if (scrollMode != mScrollMode) {
             mScrollMode = scrollMode;
             validateScrollMode();
