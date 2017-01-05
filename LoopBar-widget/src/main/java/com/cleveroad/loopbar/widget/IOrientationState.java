@@ -21,6 +21,8 @@ interface IOrientationState extends ISelectionGravityState {
      */
     boolean isItemsFitOnScreen(RecyclerView container, int itemsSize);
 
+    int getHeaderSize(Context context);
+
     AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight);
 
     @Orientation

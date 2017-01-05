@@ -38,6 +38,12 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
     }
 
     @Override
+    public int getHeaderSize(Context context) {
+        return context.getResources().getDimensionPixelSize(R.dimen.enls_selected_view_height)
+                + 2 * context.getResources().getDimensionPixelOffset(R.dimen.enls_margin_selected_view);
+    }
+
+    @Override
     public AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight) {
         AbstractSpacesItemDecoration itemDecoration = getOffsetItemDecoration();
         itemDecoration.setSpace(margin + selectionViewHeight);

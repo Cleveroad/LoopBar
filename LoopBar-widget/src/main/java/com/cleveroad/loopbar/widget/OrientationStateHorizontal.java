@@ -38,6 +38,12 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
     }
 
     @Override
+    public int getHeaderSize(Context context) {
+        return context.getResources().getDimensionPixelSize(R.dimen.enls_selected_view_width)
+                + 2 * context.getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view);
+    }
+
+    @Override
     public AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight) {
         AbstractSpacesItemDecoration itemDecoration = getGravityState().getOffsetItemDecoration();
         itemDecoration.setSpace(margin + selectionViewWidth);
