@@ -8,6 +8,6 @@
 
 Version | Changes
 ---     | ---
-v.1.1.1 | <ul><li>Added ability to change scroll mode</li><li>Fixed overlay feature</li><li>Updated start position in Infinite scroll mode</li><li>Removed unused dependencies</li><li>Updated versions of dependencies</li><li>unused or old methods were marked as deprecated</li><li>Added auto resize selector logic for different size of items support</li><li>Removed shadows start and end shadows</li></ul>
+v.1.1.1 | <ul><li>Added ability to change scroll mode</li><li>Fixed overlay feature</li><li>Updated start position in Infinite scroll mode</li><li>Removed unused dependencies</li><li>Updated versions of dependencies</li><li>unused or old methods were marked as deprecated</li><li>Added auto resize selector logic for different size of items support</li><li>Removed start and end shadows</li></ul>
 
 <br />
