@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.cleveroad.loopbar.model.MockedItemsFactory;
 import com.cleveroad.loopbar.widget.LoopBarView;
@@ -21,18 +24,22 @@ import com.cleveroad.sample.SimpleFragmentStatePagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractLoopBarFragment extends Fragment implements View.OnClickListener, OnItemClickListener {
+public abstract class AbstractLoopBarFragment extends Fragment
+        implements
+        View.OnClickListener,
+        OnItemClickListener,
+        AdapterView.OnItemSelectedListener {
+
     static final String EXTRA_ORIENTATION = "EXTRA_ORIENTATION";
 
     private LoopBarView loopBarView;
     private ViewPager viewPager;
 
+    private ArrayAdapter<ScrollModeHolder> mSpinnerAdapter;
+
     //args
     @Orientation
     private int mOrientation;
-    @LoopBarView.GravityAttr
-    private int endlessGravity = LoopBarView.SELECTION_GRAVITY_START;
-
 
     @Nullable
     @Override
@@ -49,9 +56,10 @@ public abstract class AbstractLoopBarFragment extends Fragment implements View.O
 
         loopBarView = (LoopBarView) rootView.findViewById(R.id.endlessView);
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
+        Spinner spScrollMode = (Spinner) rootView.findViewById(R.id.spScrollMode);
+        initSpinner(spScrollMode);
         rootView.findViewById(R.id.btnOrientation).setOnClickListener(this);
         rootView.findViewById(R.id.btnGravity).setOnClickListener(this);
-        rootView.findViewById(R.id.btnInfinite).setOnClickListener(this);
         loopBarView.addOnItemClickListener(this);
 
         SimpleFragmentStatePagerAdapter pagerAdapter = new SimpleFragmentStatePagerAdapter(
@@ -78,7 +86,7 @@ public abstract class AbstractLoopBarFragment extends Fragment implements View.O
     protected List<Fragment> getMockFragments() {
         List<Fragment> fragments = new ArrayList<>(8);
         fragments.add(ColorFragment.newInstance(android.R.color.holo_red_dark));
-        fragments.add(ColorFragment.newInstance(android.R.color.black));
+        fragments.add(ColorFragment.newInstance(android.R.color.holo_red_light));
         fragments.add(ColorFragment.newInstance(android.R.color.holo_green_dark));
         fragments.add(ColorFragment.newInstance(android.R.color.holo_orange_dark));
         fragments.add(ColorFragment.newInstance(android.R.color.holo_blue_light));
@@ -97,9 +105,6 @@ public abstract class AbstractLoopBarFragment extends Fragment implements View.O
             case R.id.btnOrientation:
                 changeOrientation();
                 break;
-            case R.id.btnInfinite:
-                changeScrollingMode();
-                break;
             default:
                 // nothing
                 break;
@@ -109,6 +114,20 @@ public abstract class AbstractLoopBarFragment extends Fragment implements View.O
     @Override
     public void onItemClicked(int position) {
         viewPager.setCurrentItem(position);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        ScrollModeHolder scrollModeHolder = mSpinnerAdapter.getItem(position);
+        if (scrollModeHolder != null) {
+            loopBarView.setScrollMode(scrollModeHolder.getScrollMode());
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // nothing
     }
 
     protected abstract Fragment getNewInstance(int orientation);
@@ -122,9 +141,8 @@ public abstract class AbstractLoopBarFragment extends Fragment implements View.O
     }
 
     private void changeGravity() {
-        int nextGravity = endlessGravity == LoopBarView.SELECTION_GRAVITY_START ?
+        int nextGravity = loopBarView.getGravity() == LoopBarView.SELECTION_GRAVITY_START ?
                 LoopBarView.SELECTION_GRAVITY_END : LoopBarView.SELECTION_GRAVITY_START;
-        endlessGravity = nextGravity;
         loopBarView.setGravity(nextGravity);
     }
 
@@ -134,9 +152,20 @@ public abstract class AbstractLoopBarFragment extends Fragment implements View.O
         ((IFragmentReplacer) getActivity()).replaceFragment(fragment);
     }
 
-    private void changeScrollingMode() {
-        loopBarView.setIsInfinite(!loopBarView.isInfinite());
+    private void initSpinner(Spinner spinner) {
+        mSpinnerAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_list_item_1,
+                getScrollModes());
+        spinner.setAdapter(mSpinnerAdapter);
+        spinner.setOnItemSelectedListener(this);
     }
 
+    private List<ScrollModeHolder> getScrollModes() {
+        List<ScrollModeHolder> scrollModeHolders = new ArrayList<>();
+        scrollModeHolders.add(new ScrollModeHolder(LoopBarView.SCROLL_MODE_AUTO, getString(R.string.auto)));
+        scrollModeHolders.add(new ScrollModeHolder(LoopBarView.SCROLL_MODE_INFINITE, getString(R.string.infinite)));
+        scrollModeHolders.add(new ScrollModeHolder(LoopBarView.SCROLL_MODE_FINITE, getString(R.string.finite)));
+        return scrollModeHolders;
+    }
 
 }

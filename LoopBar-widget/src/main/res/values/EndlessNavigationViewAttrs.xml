@@ -24,5 +24,12 @@
 
         <attr name="enls_menu" format="reference" />
         <attr name="enls_infiniteScrolling" format="boolean" />
+
+        <attr name="enls_scrollMode" format="integer">
+            <flag name="auto" value="0" />
+            <flag name="infinite" value="1" />
+            <flag name="finite" value="2" />
+        </attr>
+
     </declare-styleable>
 </resources>

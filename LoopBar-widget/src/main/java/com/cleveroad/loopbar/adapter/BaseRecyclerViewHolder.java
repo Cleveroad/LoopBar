@@ -7,6 +7,11 @@ import android.view.View;
 
 import com.cleveroad.loopbar.widget.OnItemClickListener;
 
+/**
+ * Base realization of ViewHolder {@link android.support.v7.widget.RecyclerView.ViewHolder}
+ *
+ * @param <T> Type of models for displaying in ViewHolder
+ */
 @SuppressWarnings("WeakerAccess")
 public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -45,11 +50,16 @@ public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder 
     }
 
     /**
-     * override this method with {@link #setClickable(boolean)} to receive click events on viewHolder item in child class
+     * Override this method with {@link #setClickable(boolean)} to receive click events on viewHolder item in child class
      */
     public void onItemClicked(T item) {
     }
 
+    /**
+     * Override this method to disable/enable item click
+     *
+     * @return boolean value representing if there is enable item click processing
+     */
     public boolean isClickAllowed() {
         return true;
     }

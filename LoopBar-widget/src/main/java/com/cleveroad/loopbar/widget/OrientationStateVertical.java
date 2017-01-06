@@ -38,6 +38,34 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
     }
 
     @Override
+    public int getHeaderSize(Context context) {
+        if (context == null) {
+            return 0;
+        } else {
+            return context.getResources().getDimensionPixelSize(R.dimen.enls_selected_view_height)
+                    + 2 * getHeaderMargins(context);
+        }
+    }
+
+    @Override
+    public int getHeaderMargins(Context context) {
+        if (context == null) {
+            return 0;
+        } else {
+            return context.getResources().getDimensionPixelOffset(R.dimen.enls_margin_selected_view);
+        }
+    }
+
+    @Override
+    public int getSize(View selector) {
+        if (selector == null) {
+            return 0;
+        } else {
+            return selector.getMeasuredHeight();
+        }
+    }
+
+    @Override
     public AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight) {
         AbstractSpacesItemDecoration itemDecoration = getOffsetItemDecoration();
         itemDecoration.setSpace(margin + selectionViewHeight);
@@ -45,13 +73,17 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
     }
 
     private int calcItemHeight(RecyclerView rvCategories) {
-        if (itemHeight == null) {
+        if (itemHeight == null || itemHeight == 0) {
             for (int i = 0; i < rvCategories.getChildCount(); i++) {
                 itemHeight = rvCategories.getChildAt(i).getHeight();
                 if (itemHeight != 0) {
                     break;
                 }
             }
+        }
+        // in case of call before view was created
+        if (itemHeight == null) {
+            itemHeight = 0;
         }
         return itemHeight;
     }
@@ -69,15 +101,18 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
     }
 
     @Override
-    public void initPlaceHolderAndOverlay(@Nullable View overlayPlaceHolder, RecyclerView rvCategories, int overlaySize) {
+    public void initPlaceHolderAndOverlay(@Nullable View overlayPlaceHolder, View rvContainer,
+                                          View selectorContainer, int overlaySize) {
         if (overlayPlaceHolder != null) {
+            int containerWidth = rvContainer.getMeasuredWidth();
+
             //make placeholder same height as a recyclerView
-            overlayPlaceHolder.getLayoutParams().width = rvCategories.getMeasuredWidth();
+            overlayPlaceHolder.getLayoutParams().width = containerWidth;
             overlayPlaceHolder.requestLayout();
 
-            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) rvCategories.getLayoutParams();
-            marginLayoutParams.setMargins(0, 0, overlaySize, 0);
-            rvCategories.requestLayout();
+            selectorContainer.getLayoutParams().width = containerWidth + overlaySize;
+            selectorContainer.requestLayout();
+
         }
     }
 

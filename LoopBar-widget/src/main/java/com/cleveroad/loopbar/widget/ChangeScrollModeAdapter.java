@@ -13,7 +13,8 @@ import com.cleveroad.loopbar.adapter.IOperationItem;
 import java.util.Collection;
 
 
-class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOperationItem>> {
+final class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOperationItem>>
+        implements IChangeSizeCallback {
 
     static final int VIEW_TYPE_CHANGE_SCROLL_MODE = 2;
     private static final int VIEW_TYPE_OFFSET = 1;
@@ -24,6 +25,8 @@ class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolde
     @LoopBarView.GravityAttr
     private int mSelectedGravity = LoopBarView.SELECTION_GRAVITY_START;
 
+    private int mHeaderSize;
+
     ChangeScrollModeAdapter(@NonNull RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter) {
         mInputAdapter = new CategoriesAdapter(inputAdapter);
     }
@@ -31,7 +34,7 @@ class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolde
     @Override
     public BaseRecyclerViewHolder<IOperationItem> onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_OFFSET) {
-            return new HeaderHolder(createHeaderView(parent));
+            return new HeaderHolder(createHeaderView(parent), this);
         }
         if (viewType == VIEW_TYPE_CHANGE_SCROLL_MODE) {
             return new ChangeScrollModeHolder((CategoriesAdapter.CategoriesHolder) mInputAdapter.onCreateViewHolder(parent, CategoriesAdapter.VIEW_TYPE_OTHER));
@@ -59,6 +62,21 @@ class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolde
             return VIEW_TYPE_OFFSET;
         }
         return mInputAdapter.getItemViewType(offsetPosition(position));
+    }
+
+    @Override
+    public int getHeaderSize() {
+        return mHeaderSize;
+    }
+
+    void setHeaderSize(int size) {
+        mHeaderSize = size;
+    }
+
+    @Override
+    @Orientation
+    public int getOrientation() {
+        return mOrientation;
     }
 
     private boolean needToOffsetByGravity(int position) {
@@ -151,13 +169,24 @@ class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolde
     @SuppressWarnings("WeakerAccess")
     class HeaderHolder extends BaseRecyclerViewHolder<IOperationItem> {
 
-        HeaderHolder(@NonNull View itemView) {
+        private IChangeSizeCallback mChangeSizeCallback;
+
+        private HeaderHolder(@NonNull View itemView, IChangeSizeCallback changeSizeCallback) {
             super(itemView);
+            mChangeSizeCallback = changeSizeCallback;
         }
 
         @Override
         protected void onBindItem(IOperationItem item, int position) {
-            // do nothing
+            int size = mChangeSizeCallback.getHeaderSize();
+            if (size > 0) {
+                ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
+                if (mChangeSizeCallback.getOrientation() == Orientation.ORIENTATION_HORIZONTAL) {
+                    layoutParams.width = size;
+                } else {
+                    layoutParams.height = size;
+                }
+            }
         }
     }
 

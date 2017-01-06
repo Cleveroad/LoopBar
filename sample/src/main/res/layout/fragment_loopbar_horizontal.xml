@@ -14,20 +14,24 @@
         android:layout_above="@+id/placeHolder"
         android:background="@android:color/holo_red_dark" />
 
-    <Button
-        android:id="@+id/btnInfinite"
+
+    <Spinner
+        android:id="@+id/spScrollMode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnOrientation"
         android:layout_centerInParent="true"
-        android:text="@string/change_scroll_mode" />
+        android:background="?attr/selectableItemBackground" />
 
     <Button
         android:id="@+id/btnOrientation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="@string/change_orientation" />
+        android:background="?attr/selectableItemBackground"
+        android:text="@string/change_orientation"
+        android:textAllCaps="false"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/btnGravity"
@@ -35,7 +39,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnOrientation"
         android:layout_centerInParent="true"
-        android:text="@string/change_gravity" />
+        android:background="?attr/selectableItemBackground"
+        android:text="@string/change_gravity"
+        android:textAllCaps="false"
+        android:textSize="16sp" />
 
 
     <View
@@ -49,10 +56,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:enls_infiniteScrolling="true"
         app:enls_orientation="horizontal"
-        app:enls_overlaySize="5dp"
+        app:enls_overlaySize="10dp"
         app:enls_placeholderId="@id/placeHolder"
+        app:enls_scrollMode="auto"
         app:enls_selectionBackground="@android:color/holo_blue_dark"
         app:enls_selectionGravity="start"
         app:enls_selectionInAnimation="@animator/enls_scale_restore"

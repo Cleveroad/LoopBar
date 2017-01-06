@@ -30,7 +30,7 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
     private HashMap<Integer, IOperationItem> mWrappedItems = new HashMap<>();
     private OnItemClickListener mListener;
     private List<OnItemClickListener> mOuterItemClickListeners = new LinkedList<>();
-    private boolean isIndeterminate = true;
+    private boolean mIsIndeterminate = true;
 
     CategoriesAdapter(RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter) {
         mInputAdapter = inputAdapter;
@@ -59,7 +59,7 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
     }
 
     void setListener(OnItemClickListener listener) {
-        this.mListener = listener;
+        mListener = listener;
     }
 
     private View createEmptyView(ViewGroup parent) {
@@ -72,7 +72,7 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
      * @param isIndeterminate true for infinite
      */
     void setIndeterminate(boolean isIndeterminate) {
-        this.isIndeterminate = isIndeterminate;
+        mIsIndeterminate = isIndeterminate;
         notifyDataSetChanged();
     }
 
@@ -136,7 +136,7 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
     @Override
     public int getItemCount() {
         //infinite scroll
-        if (isIndeterminate) {
+        if (mIsIndeterminate) {
             return Integer.MAX_VALUE;
         } else {
             return mWrappedItems.size();
@@ -160,16 +160,16 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
 
     class CategoriesHolder extends BaseRecyclerViewHolder<IOperationItem> {
 
-        private RecyclerView.ViewHolder viewHolder;
+        private RecyclerView.ViewHolder mViewHolder;
 
         CategoriesHolder(RecyclerView.ViewHolder viewHolder) {
             super(viewHolder.itemView);
-            this.viewHolder = viewHolder;
+            mViewHolder = viewHolder;
         }
 
         @SuppressWarnings("unchecked cast")
         <T extends RecyclerView.ViewHolder> void bindItemWildcardHelper(RecyclerView.Adapter<T> adapter, int position) {
-            T vh = (T) viewHolder;
+            T vh = (T) mViewHolder;
             adapter.onBindViewHolder(vh, normalizePosition(position));
         }
 

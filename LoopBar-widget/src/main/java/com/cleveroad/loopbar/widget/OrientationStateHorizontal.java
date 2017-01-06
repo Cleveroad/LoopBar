@@ -38,6 +38,34 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
     }
 
     @Override
+    public int getHeaderSize(Context context) {
+        if (context == null) {
+            return 0;
+        } else {
+            return context.getResources().getDimensionPixelSize(R.dimen.enls_selected_view_width)
+                    + 2 * getHeaderMargins(context);
+        }
+    }
+
+    @Override
+    public int getHeaderMargins(Context context) {
+        if (context == null) {
+            return 0;
+        } else {
+            return context.getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view);
+        }
+    }
+
+    @Override
+    public int getSize(View selector) {
+        if (selector == null) {
+            return 0;
+        } else {
+            return selector.getMeasuredWidth();
+        }
+    }
+
+    @Override
     public AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight) {
         AbstractSpacesItemDecoration itemDecoration = getGravityState().getOffsetItemDecoration();
         itemDecoration.setSpace(margin + selectionViewWidth);
@@ -57,7 +85,7 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
 
     //very big duct tape
     private int calcItemWidth(RecyclerView rvCategories) {
-        if (itemWidth == null) {
+        if (itemWidth == null || itemWidth == 0) {
             for (int i = 0; i < rvCategories.getChildCount(); i++) {
                 itemWidth = rvCategories.getChildAt(i).getWidth();
                 if (itemWidth != 0) {
@@ -65,22 +93,29 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
                 }
             }
         }
+        // in case of call before view was created
+        if (itemWidth == null) {
+            itemWidth = 0;
+        }
         return itemWidth;
     }
 
     @Override
-    public void initPlaceHolderAndOverlay(@Nullable View overlayPlaceHolder, RecyclerView rvCategories, int overlaySize) {
+    public void initPlaceHolderAndOverlay(@Nullable View overlayPlaceHolder,
+                                          View rvContainer, View selectorContainer, int overlaySize) {
         if (overlayPlaceHolder != null) {
+            int containerHeight = rvContainer.getMeasuredHeight();
+
             //make placeholder same height as a recyclerView
-            overlayPlaceHolder.getLayoutParams().height = rvCategories.getMeasuredHeight();
+            overlayPlaceHolder.getLayoutParams().height = containerHeight;
             overlayPlaceHolder.requestLayout();
 
-            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) rvCategories.getLayoutParams();
-            marginLayoutParams.setMargins(0, overlaySize, 0, 0);
-            rvCategories.requestLayout();
+            selectorContainer.getLayoutParams().height = containerHeight + overlaySize;
+            selectorContainer.requestLayout();
         }
     }
 
+    @Override
     protected ISelectionGravityState retrieveGravityState(int gravityAttribute) {
         switch (gravityAttribute) {
             case LoopBarView.SELECTION_GRAVITY_START:
@@ -112,6 +147,7 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
             return layoutParams;
         }
 
+        @Override
         public AbstractSpacesItemDecoration getOffsetItemDecoration() {
             return itemDecoration;
         }

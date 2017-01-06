@@ -21,6 +21,12 @@ interface IOrientationState extends ISelectionGravityState {
      */
     boolean isItemsFitOnScreen(RecyclerView container, int itemsSize);
 
+    int getHeaderSize(Context context);
+
+    int getHeaderMargins(Context context);
+
+    int getSize(View selector);
+
     AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight);
 
     @Orientation
@@ -28,7 +34,8 @@ interface IOrientationState extends ISelectionGravityState {
 
     void initSelectionContainer(ViewGroup selectionViewContainer);
 
-    void initPlaceHolderAndOverlay(@Nullable View overlayPlaceHolder, RecyclerView rvCategories, int overlaySize);
+    void initPlaceHolderAndOverlay(@Nullable View overlayPlaceHolder, View rvContainer,
+                                   View selectorContainer, int overlaySize);
 
     void setSelectionGravity(@LoopBarView.GravityAttr int selectionGravity);
 }
