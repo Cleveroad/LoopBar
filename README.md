@@ -28,13 +28,15 @@ or just download zip and import module "LoopBar-widget" to be able to modify the
 
 ### Features
 View consist from two parts:
- - An infinite list of your selectable groups
+ - A list of your selectable groups
  - Selected view
- 
-A list of groups will be infinite if all adapter items didn't fit on screen in other case it will be a static list.
+
+View can work in three scroll modes: infinite, finite and auto mode.
+Names of first two speak for themselves. In auto mode the list of groups
+will be infinite if all adapter items didn't fit on screen in other case it will be a static list.
 Selected view by request could overlay layout on screen on which it placed. 
 Widget has horizontal and vertical layouts and also start or end gravity of selected view. 
-<p>You are allowed to use any RecyclerView adapter, which you want. Concrete infinite scroll logic is fully incapsulated</p>
+<p>You are allowed to use any RecyclerView adapter, which you want. Concrete infinite scroll logic is fully encapsulated</p>
 
 Android Studio layouts preview is supported.
 
@@ -58,6 +60,10 @@ Android Studio layouts preview is supported.
 ```
 
 ```enls_overlaySize``` & ```enls_placeholderId``` are used for overlay feature.
+Placeholder must be the view lying under the LoopBar. And it's used for setting bounds In layout when selected view has overlay.
+LoopBar will set width or height for this view by itself (depending of LoopBar orientation), it will be the same as LoopBar has.
+Without this placeholder the bounds of LoopBar will be limited by selected view (with overlay). And thanks to placeholder the bounds
+will be limited only by list of groups. You can see an example of overlay usage in sample.
 
 |  attribute name | description |
 |---|---|
@@ -69,7 +75,7 @@ Android Studio layouts preview is supported.
 | enls_selectionOutAnimation | an animation of hiding an icon inside selection view |
 | enls_selectionBackground | selection background. Default ```#ff0099cc``` |
 | enls_menu | an id of menu which will be used for getting title and icon items  |
-| enls_infiniteScrolling | infinite scrolling mode. Default ```true``` |
+| enls_scrollMode | Scrolling mode. Can be ```infinite```, ```finite```, ```auto```. Default ```infinite``` |
 | android:background | View have yellow background by default. Use standart ```android:background``` attribute to change it. Default ```#ffc829``` |
 
 
@@ -116,6 +122,10 @@ To customize wrapped ```RecyclerView``` (control animations, decorators or add `
 | ```clearOnScrollListeners()``` | Remove all secondary ```OnScrollListener``` from wrapped RecyclerView |
 
 <br />
+
+## Changelog
+See [changelog history].
+
 #### Support ####
 * * *
 If you have any other questions regarding the use of this library, please contact us for support at info@cleveroad.com (email subject: "LoopBar. Support request.")
@@ -152,4 +162,5 @@ Also pull requests are welcome.
 [ViewPagerLoopbarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/ViewPagerLoopBarFragment.java
 [CategoriesAdapterLoopBarFragment]: /sample/src/main/java/com/cleveroad/sample/fragments/CategoriesAdapterLoopBarFragment.java
 [ICategoryItem]: /LoopBar-widget/src/main/java/com/cleveroad/loopbar/adapter/ICategoryItem.java
+[changelog history]: /CHANGELOG.md
 
