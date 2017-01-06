@@ -30,5 +30,6 @@
             <flag name="infinite" value="1" />
             <flag name="finite" value="2" />
         </attr>
+
     </declare-styleable>
 </resources>

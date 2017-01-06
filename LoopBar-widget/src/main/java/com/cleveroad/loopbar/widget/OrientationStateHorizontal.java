@@ -39,8 +39,30 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
 
     @Override
     public int getHeaderSize(Context context) {
-        return context.getResources().getDimensionPixelSize(R.dimen.enls_selected_view_width)
-                + 2 * context.getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view);
+        if (context == null) {
+            return 0;
+        } else {
+            return context.getResources().getDimensionPixelSize(R.dimen.enls_selected_view_width)
+                    + getHeaderMargins(context);
+        }
+    }
+
+    @Override
+    public int getHeaderMargins(Context context) {
+        if (context == null) {
+            return 0;
+        } else {
+            return 2 * context.getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view);
+        }
+    }
+
+    @Override
+    public int getSize(View selector) {
+        if (selector == null) {
+            return 0;
+        } else {
+            return selector.getMeasuredWidth();
+        }
     }
 
     @Override
@@ -93,6 +115,7 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
         }
     }
 
+    @Override
     protected ISelectionGravityState retrieveGravityState(int gravityAttribute) {
         switch (gravityAttribute) {
             case LoopBarView.SELECTION_GRAVITY_START:
@@ -124,6 +147,7 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
             return layoutParams;
         }
 
+        @Override
         public AbstractSpacesItemDecoration getOffsetItemDecoration() {
             return itemDecoration;
         }

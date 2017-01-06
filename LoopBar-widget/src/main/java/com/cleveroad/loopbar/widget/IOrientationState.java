@@ -23,6 +23,10 @@ interface IOrientationState extends ISelectionGravityState {
 
     int getHeaderSize(Context context);
 
+    int getHeaderMargins(Context context);
+
+    int getSize(View selector);
+
     AbstractSpacesItemDecoration getSelectionViewItemDecoration(int margin, int selectionViewWidth, int selectionViewHeight);
 
     @Orientation

@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
+import com.cleveroad.loopbar.BuildConfig;
 import com.cleveroad.loopbar.R;
 import com.cleveroad.loopbar.adapter.ICategoryItem;
 import com.cleveroad.loopbar.adapter.ILoopBarPagerAdapter;
@@ -605,7 +606,9 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         if (!mSkipNextOnLayout) {
 
             if (mOverlaySize > 0 && mOverlayPlaceholder == null) {
-                Log.e(TAG, "You have to add placeholder and set it id with #enls_placeHolderId parameter to use mOverlaySize");
+                if (BuildConfig.DEBUG) {
+                    Log.e(TAG, "You have to add placeholder and set it id with #enls_placeHolderId parameter to use mOverlaySize");
+                }
             }
 
             mOrientationState.initPlaceHolderAndOverlay(mOverlayPlaceholder, mRvCategories,
@@ -624,13 +627,12 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
                                     changeScrolling(!isFitOnScreen);
                                 }
                                 checkAndScroll();
+                                updateCategoriesOffsetBySelector(!mInfinite);
                                 mRvCategories.addOnScrollListener(mIndeterminateOnScrollListener);
                                 mRvCategories.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                             }
                         });
-
             }
-
             mSkipNextOnLayout = true;
         }
     }
@@ -647,7 +649,6 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         animator.setTarget(mSelectorHolder.itemView);
         animator.start();
         animator.addListener(new AbstractAnimatorListener() {
-            @SuppressWarnings("unchecked assigment")
             @Override
             public void onAnimationEnd(Animator animation) {
                 //replace selected view
@@ -660,7 +661,40 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     private void startSelectedViewInAnimation() {
         Animator animator = mSelectionInAnimator;
         animator.setTarget(mSelectorHolder.itemView);
+        animator.addListener(new AbstractAnimatorListener() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                updateCategoriesOffsetBySelector();
+            }
+        });
         animator.start();
+    }
+
+    private void updateCategoriesOffsetBySelector() {
+        if (mSelectorHolder == null) {
+            return;
+        }
+        int size;
+        if (mOrientationState != null) {
+            size = mOrientationState.getSize(mSelectorHolder.itemView);
+        } else {
+            size = 0;
+        }
+        updateCategoriesOffset(size);
+    }
+
+    private void updateCategoriesOffsetBySelector(boolean withRecyclerViewNotification) {
+        if (mSelectorHolder == null) {
+            return;
+        }
+        int size;
+        if (mOrientationState != null) {
+            size = mOrientationState.getSize(mSelectorHolder.itemView);
+        } else {
+            size = 0;
+        }
+        updateCategoriesOffset(size, withRecyclerViewNotification);
     }
 
     /**
@@ -668,6 +702,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
      *
      * @param currentItemPosition selected position
      */
+    @SuppressWarnings("unused")
     public void setCurrentItem(int currentItemPosition) {
         selectItem(currentItemPosition, false);
     }
@@ -690,6 +725,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
      * @param position        int value of item position to select
      * @param invokeListeners boolean value for invoking listeners
      */
+    @SuppressWarnings("unused")
     public void selectItem(int position, boolean invokeListeners) {
         IOperationItem item = mOuterAdapter.getItem(position);
         IOperationItem oldHidedItem = mOuterAdapter.getItem(mRealHidedPosition);
@@ -717,7 +753,10 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
             notifyItemClickListeners(realPosition);
         }
 
-        Log.i(TAG, "clicked on position =" + position);
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "clicked on position =" + position);
+        }
+
     }
 
     /**
@@ -757,12 +796,10 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
     private int getScrollOffset() {
         int headerOffset;
-        if (mSelectionGravity == SELECTION_GRAVITY_START) {
-            if (mOrientationState != null) {
-                headerOffset = mOrientationState.getHeaderSize(getContext());
-            } else {
-                headerOffset = 0;
-            }
+        if (mSelectionGravity == SELECTION_GRAVITY_START
+                && mOrientationState != null
+                && mSelectorHolder != null) {
+            headerOffset = mOrientationState.getSize(mSelectorHolder.itemView) + mOrientationState.getHeaderMargins(getContext());
         } else {
             headerOffset = 0;
         }
@@ -770,6 +807,22 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         return headerOffset;
     }
 
+    private void updateCategoriesOffset(int size) {
+        updateCategoriesOffset(size, true);
+    }
+
+    private void updateCategoriesOffset(int size, boolean withAdapterNotification) {
+        if (mOuterAdapter != null) {
+            mOuterAdapter.setHeaderSize(size);
+            if (withAdapterNotification) {
+                if (mSelectionGravity == SELECTION_GRAVITY_START) {
+                    mOuterAdapter.notifyItemChanged(0);
+                } else {
+                    mOuterAdapter.notifyItemChanged(mOuterAdapter.getItemCount() - 1);
+                }
+            }
+        }
+    }
 
     /**
      * Interface with pre-defined limit of gravity constants for selector
@@ -876,5 +929,4 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
         }
     }
-
 }

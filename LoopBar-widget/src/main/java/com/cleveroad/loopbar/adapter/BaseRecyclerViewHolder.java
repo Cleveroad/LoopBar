@@ -50,11 +50,16 @@ public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder 
     }
 
     /**
-     * override this method with {@link #setClickable(boolean)} to receive click events on viewHolder item in child class
+     * Override this method with {@link #setClickable(boolean)} to receive click events on viewHolder item in child class
      */
     public void onItemClicked(T item) {
     }
 
+    /**
+     * Override this method to disable/enable item click
+     *
+     * @return boolean value representing if there is enable item click processing
+     */
     public boolean isClickAllowed() {
         return true;
     }

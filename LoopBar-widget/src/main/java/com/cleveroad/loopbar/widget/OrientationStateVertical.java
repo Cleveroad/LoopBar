@@ -39,8 +39,30 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
 
     @Override
     public int getHeaderSize(Context context) {
-        return context.getResources().getDimensionPixelSize(R.dimen.enls_selected_view_height)
-                + 2 * context.getResources().getDimensionPixelOffset(R.dimen.enls_margin_selected_view);
+        if (context == null) {
+            return 0;
+        } else {
+            return context.getResources().getDimensionPixelSize(R.dimen.enls_selected_view_height)
+                    + getHeaderMargins(context);
+        }
+    }
+
+    @Override
+    public int getHeaderMargins(Context context) {
+        if (context == null) {
+            return 0;
+        } else {
+            return 2 * context.getResources().getDimensionPixelOffset(R.dimen.enls_margin_selected_view);
+        }
+    }
+
+    @Override
+    public int getSize(View selector) {
+        if (selector == null) {
+            return 0;
+        } else {
+            return selector.getMeasuredHeight();
+        }
     }
 
     @Override
