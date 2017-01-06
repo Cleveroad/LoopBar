@@ -43,7 +43,7 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
             return 0;
         } else {
             return context.getResources().getDimensionPixelSize(R.dimen.enls_selected_view_height)
-                    + getHeaderMargins(context);
+                    + 2 * getHeaderMargins(context);
         }
     }
 
@@ -52,7 +52,7 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
         if (context == null) {
             return 0;
         } else {
-            return 2 * context.getResources().getDimensionPixelOffset(R.dimen.enls_margin_selected_view);
+            return context.getResources().getDimensionPixelOffset(R.dimen.enls_margin_selected_view);
         }
     }
 

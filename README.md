@@ -20,7 +20,7 @@ If you need more details on how you can use the component and what benefits it p
 by gradle : 
 ```groovy
 dependencies {
-    compile "com.cleveroad:loopbar:1.1.0"
+    compile "com.cleveroad:loopbar:1.1.1"
 }
 ```
 
@@ -53,7 +53,7 @@ Android Studio layouts preview is supported.
         app:enls_selectionOutAnimation="@animator/enls_scale_small"
         app:enls_selectionBackground="@android:color/holo_blue_dark"
         app:enls_menu="@menu/loopbar"
-        app:enls_infiniteScrolling="true"
+        app:enls_scrollMode="auto"
         />
 ```
 

@@ -3,7 +3,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/enls_selected_view_height"
-    android:layout_marginBottom="@dimen/enls_margin_selected_view"
-    android:layout_marginTop="@dimen/enls_margin_selected_view"
     android:background="@android:color/transparent"
     tools:background="@color/enls_default_selection_view_background" />

@@ -2,10 +2,14 @@ package com.cleveroad.loopbar.widget;
 
 import android.support.annotation.IntDef;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Interface with pre-defined constants for orientation of LoopBar
  */
 @IntDef({Orientation.ORIENTATION_VERTICAL, Orientation.ORIENTATION_HORIZONTAL})
+@Retention(RetentionPolicy.SOURCE)
 public @interface Orientation {
     
     /**

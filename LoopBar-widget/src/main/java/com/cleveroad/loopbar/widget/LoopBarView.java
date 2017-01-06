@@ -41,6 +41,8 @@ import com.cleveroad.loopbar.model.CategoryItem;
 import com.cleveroad.loopbar.model.MockedItemsFactory;
 import com.cleveroad.loopbar.util.AbstractAnimatorListener;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -644,7 +646,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
                 mCurrentItemPosition, mSelectionGravity, mInfinite, mScrollMode);
     }
 
-    private void startSelectedViewOutAnimation(int position) {
+    private void startSelectedViewOutAnimation(final int position) {
         Animator animator = mSelectionOutAnimator;
         animator.setTarget(mSelectorHolder.itemView);
         animator.start();
@@ -677,7 +679,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         }
         int size;
         if (mOrientationState != null) {
-            size = mOrientationState.getSize(mSelectorHolder.itemView);
+            size = mOrientationState.getSize(mSelectorHolder.itemView) + mSelectionMargin;
         } else {
             size = 0;
         }
@@ -690,7 +692,9 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         }
         int size;
         if (mOrientationState != null) {
-            size = mOrientationState.getSize(mSelectorHolder.itemView);
+            size = mOrientationState.getSize(mSelectorHolder.itemView)
+                    + mOrientationState.getHeaderMargins(getContext())
+                    + mSelectionMargin;
         } else {
             size = 0;
         }
@@ -799,7 +803,9 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         if (mSelectionGravity == SELECTION_GRAVITY_START
                 && mOrientationState != null
                 && mSelectorHolder != null) {
-            headerOffset = mOrientationState.getSize(mSelectorHolder.itemView) + mOrientationState.getHeaderMargins(getContext());
+            headerOffset = mOrientationState.getSize(mSelectorHolder.itemView)
+                    + mOrientationState.getHeaderMargins(getContext())
+                    + mSelectionMargin;
         } else {
             headerOffset = 0;
         }
@@ -831,6 +837,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
      * @see #SELECTION_GRAVITY_END
      */
     @IntDef({SELECTION_GRAVITY_START, SELECTION_GRAVITY_END})
+    @Retention(RetentionPolicy.SOURCE)
     public @interface GravityAttr {
     }
 
@@ -842,6 +849,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
      * @see #SCROLL_MODE_FINITE
      */
     @IntDef({SCROLL_MODE_AUTO, SCROLL_MODE_INFINITE, SCROLL_MODE_FINITE})
+    @Retention(RetentionPolicy.SOURCE)
     public @interface ScrollAttr {
     }
 

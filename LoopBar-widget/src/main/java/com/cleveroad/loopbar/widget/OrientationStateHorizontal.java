@@ -43,7 +43,7 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
             return 0;
         } else {
             return context.getResources().getDimensionPixelSize(R.dimen.enls_selected_view_width)
-                    + getHeaderMargins(context);
+                    + 2 * getHeaderMargins(context);
         }
     }
 
@@ -52,7 +52,7 @@ class OrientationStateHorizontal extends AbstractOrientationState implements IOr
         if (context == null) {
             return 0;
         } else {
-            return 2 * context.getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view);
+            return context.getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view);
         }
     }
 
