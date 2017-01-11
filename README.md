@@ -32,7 +32,7 @@ View consist from two parts:
  - Selected view
 
 View can work in three scroll modes: infinite, finite and auto mode.
-Names of first two speak for themselves. In auto mode the list of groups
+Names of first two speak for itself. In auto mode the list of groups
 will be infinite if all adapter items didn't fit on screen in other case it will be a static list.
 Selected view by request could overlay layout on screen on which it placed. 
 Widget has horizontal and vertical layouts and also start or end gravity of selected view. 
