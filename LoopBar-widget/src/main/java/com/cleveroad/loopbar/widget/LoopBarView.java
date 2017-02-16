@@ -353,8 +353,11 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     public void setCategoriesAdapter(@NonNull RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter) {
         mInputAdapter = inputAdapter;
         mOuterAdapter = new ChangeScrollModeAdapter(inputAdapter);
-        IOperationItem firstItem = mOuterAdapter.getItem(0);
-        firstItem.setVisible(false);
+        boolean hasItems = inputAdapter.getItemCount() > 0;
+        if (hasItems) {
+            IOperationItem firstItem = mOuterAdapter.getItem(0);
+            firstItem.setVisible(false);
+        }
         validateScrollMode();
         mOuterAdapter.setIsIndeterminate(mInfinite);
         mOuterAdapter.setListener(this);
@@ -365,7 +368,9 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         mSelectorHolder = (ChangeScrollModeAdapter.ChangeScrollModeHolder) mOuterAdapter
                 .createViewHolder(mRvCategories, ChangeScrollModeAdapter.VIEW_TYPE_CHANGE_SCROLL_MODE);
         // set first item to selectionView
-        mSelectorHolder.bindItemWildcardHelper(inputAdapter, 0);
+        if (hasItems) {
+            mSelectorHolder.bindItemWildcardHelper(inputAdapter, 0);
+        }
         mSelectorHolder.itemView.setBackgroundColor(mColorCodeSelectionView);
 
         mFlContainerSelected.addView(mSelectorHolder.itemView);
@@ -601,7 +606,10 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     public void onRestoreInstanceState(Parcelable state) {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
-        setCurrentItem(ss.mCurrentItemPosition);
+        int adapterSize = ss.mAdapterSize;
+        if (adapterSize > 0) {
+            setCurrentItem(ss.mCurrentItemPosition);
+        }
         setGravity(ss.mSelectionGravity);
         mScrollMode = ss.mScrollMode;
         changeScrolling(ss.mIsInfinite);
@@ -652,8 +660,10 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     @Override
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
+        int adapterSize = mInputAdapter != null ? mInputAdapter.getItemCount() : 0;
         return new SavedState(superState,
-                mCurrentItemPosition, mSelectionGravity, mInfinite, mScrollMode);
+                mCurrentItemPosition, mSelectionGravity, mInfinite, mScrollMode,
+                adapterSize);
     }
 
     private void startSelectedViewOutAnimation(final int position) {
@@ -887,6 +897,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         @ScrollAttr
         private int mScrollMode;
         private boolean mIsInfinite;
+        private int mAdapterSize;
 
         public SavedState(Parcelable superState) {
             super(superState);
@@ -905,15 +916,17 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
             boolean[] booleanValues = new boolean[1];
             parcel.readBooleanArray(booleanValues);
             mIsInfinite = booleanValues[0];
+            mAdapterSize = parcel.readInt();
         }
 
         SavedState(Parcelable superState, int currentItemPosition,
-                   int selectionGravity, boolean isInfinite, int scrollMode) {
+                   int selectionGravity, boolean isInfinite, int scrollMode, int adapterSize) {
             super(superState);
             mCurrentItemPosition = currentItemPosition;
             mSelectionGravity = selectionGravity;
             mIsInfinite = isInfinite;
             mScrollMode = scrollMode;
+            mAdapterSize = adapterSize;
         }
 
         public int describeContents() {
@@ -925,6 +938,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
             parcel.writeInt(mSelectionGravity);
             parcel.writeInt(mScrollMode);
             parcel.writeBooleanArray(new boolean[]{mIsInfinite});
+            parcel.writeInt(mAdapterSize);
         }
     }
 

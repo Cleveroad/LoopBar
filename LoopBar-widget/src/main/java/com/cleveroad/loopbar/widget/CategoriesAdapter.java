@@ -135,11 +135,15 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
 
     @Override
     public int getItemCount() {
+        int innerCount = mWrappedItems.size();
+        if (innerCount < 1) {
+            return 0;
+        }
         //infinite scroll
         if (mIsIndeterminate) {
             return Integer.MAX_VALUE;
         } else {
-            return mWrappedItems.size();
+            return innerCount;
         }
     }
 
