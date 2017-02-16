@@ -20,7 +20,7 @@ If you need more details on how you can use the component and what benefits it p
 by gradle : 
 ```groovy
 dependencies {
-    compile "com.cleveroad:loopbar:1.1.2"
+    compile "com.cleveroad:loopbar:1.1.3"
 }
 ```
 
