@@ -226,7 +226,12 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         setGravity(selectionGravity);
 
         ColorDrawable colorDrawable = new NegativeMarginFixColorDrawable(mColorCodeSelectionView);
-        mViewColorable.setBackground(colorDrawable);
+
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            mViewColorable.setBackgroundDrawable(colorDrawable);
+        } else {
+            mViewColorable.setBackground(colorDrawable);
+        }
 
         mLinearLayoutManager = mOrientationState.getLayoutManager(getContext());
         mRvCategories.setLayoutManager(mLinearLayoutManager);
@@ -631,7 +636,12 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
                                 checkAndScroll();
                                 updateCategoriesOffsetBySelector(!mInfinite);
                                 mRvCategories.addOnScrollListener(mIndeterminateOnScrollListener);
-                                mRvCategories.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                                    mRvCategories.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                                } else {
+                                    mRvCategories.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                }
+
                             }
                         });
             }

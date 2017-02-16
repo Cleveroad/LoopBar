@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.cleveroad.loopbar.sample"
-        minSdkVersion 16
+        minSdkVersion 15
         targetSdkVersion 25
-        versionCode 7
-        versionName "1.1.1"
+        versionCode 8
+        versionName "1.1.2"
     }
     buildTypes {
         release {
@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    final SUPPORT_LIB_VERSION = '25.0.1'
+    final SUPPORT_LIB_VERSION = '25.1.1'
 
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':LoopBar-widget')
