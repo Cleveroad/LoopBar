@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/enls_ic_local_taxi"
+        android:title="auto"
+        tools:ignore="HardcodedText,PrivateResource"/>
+    <item
+        android:icon="@drawable/enls_ic_account_balance"
+        android:title="balance"
+        tools:ignore="HardcodedText,PrivateResource"/>
+    <item
+        android:icon="@drawable/enls_ic_alarm"
+        android:title="alarm"
+        tools:ignore="HardcodedText,PrivateResource"/>
+    <item
+        android:icon="@drawable/enls_vector_brush_white_24dp"
+        android:title="brush"
+        tools:ignore="HardcodedText,PrivateResource"/>
+    <item
+        android:icon="@drawable/enls_vector_camera_alt_white_24dp"
+        android:title="camera"
+        tools:ignore="HardcodedText,PrivateResource"/>
+    <item
+        android:icon="@drawable/enls_vector_landscape_white_24dp"
+        android:title="rock"
+        tools:ignore="HardcodedText,PrivateResource"/>
+    <item
+        android:icon="@drawable/enls_vector_palette_white_24dp"
+        android:title="palette"
+        tools:ignore="HardcodedText,PrivateResource"/>
+    <item
+        android:icon="@drawable/enls_vector_moon_white_24dp"
+        android:title="moon"
+        tools:ignore="HardcodedText,PrivateResource"/>
+
+</menu>

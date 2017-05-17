@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <public name="enls_app_name" type="string" />
+    <public name="enls_scale_restore" type="animator" />
+    <public name="enls_scale_small" type="animator" />
+</resources>

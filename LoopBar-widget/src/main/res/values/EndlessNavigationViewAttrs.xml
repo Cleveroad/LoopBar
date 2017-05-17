@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <declare-styleable name="LoopBarView" tools:ignore="ResourceName">
+        <attr name="enls_orientation" format="integer">
+            <flag name="vertical" value="0" />
+            <flag name="horizontal" value="1" />
+        </attr>
+
+        <attr name="enls_selectionGravity" format="integer">
+            <flag name="start" value="0" />
+            <flag name="end" value="1" />
+        </attr>
+
+        <attr name="enls_selectionMargin" format="dimension" />
+        <attr name="enls_overlaySize" format="dimension" />
+
+        <attr name="enls_selectionBackground" format="color" />
+        <attr name="enls_listBackground" format="color" />
+
+        <attr name="enls_placeholderId" format="reference" />
+
+        <attr name="enls_selectionInAnimation" format="reference" />
+        <attr name="enls_selectionOutAnimation" format="reference" />
+
+        <attr name="enls_menu" format="reference" />
+        <attr name="enls_infiniteScrolling" format="boolean" />
+
+        <attr name="enls_scrollMode" format="integer">
+            <flag name="auto" value="0" />
+            <flag name="infinite" value="1" />
+            <flag name="finite" value="2" />
+        </attr>
+
+    </declare-styleable>
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="enls_default_list_background">#ffc829</color>
+    <color name="enls_default_selection_view_background">#ffcd28</color>
+</resources>

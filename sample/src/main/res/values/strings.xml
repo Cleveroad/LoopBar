@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">EndlessNavigationView</string>
+    <string name="mask_on_item_clicked" formatted="false">"On item clicked, position = %s, name = %s"</string>
+    <string name="change_orientation">Change Orientation</string>
+    <string name="bottom_left_pager_text">Bottom left pager text</string>
+    <string name="change_gravity">Change Gravity</string>
+    <string name="change_scroll_mode">Change scrolling mode</string>
+    <string name="auto">Auto</string>
+    <string name="infinite">Infinite</string>
+    <string name="finite">Finite</string>
+</resources>

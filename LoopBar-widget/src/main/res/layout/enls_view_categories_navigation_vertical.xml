@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:orientation="vertical"
+    tools:background="@android:color/white">
+
+    <RelativeLayout
+        android:id="@+id/vRvContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvCategories"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
+            android:overScrollMode="never"
+            app:elevation="0dp"
+            tools:background="@color/enls_default_list_background"
+            tools:layout_marginRight="5dp"
+            tools:listItem="@layout/item_default" />
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/flContainerSelected"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/enls_selected_view_height"
+        android:layout_marginTop="@dimen/enls_margin_selected_view"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/enls_bottom_right_shadow">
+
+        <FrameLayout
+            android:id="@+id/viewColorable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+
+</FrameLayout>
