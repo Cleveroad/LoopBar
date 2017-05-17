@@ -60,6 +60,7 @@
         app:enls_scrollMode="auto"
         app:enls_selectionBackground="@android:color/holo_blue_dark"
         app:enls_selectionGravity="start"
-        app:enls_selectionMargin="10dp" />
+        app:enls_selectionMargin="10dp"
+        app:enls_listBackground="@android:color/darker_gray"/>
 
 </RelativeLayout>
