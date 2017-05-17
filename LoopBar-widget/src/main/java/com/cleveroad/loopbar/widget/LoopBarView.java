@@ -115,7 +115,6 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     private RecyclerView.Adapter<? extends RecyclerView.ViewHolder> mInputAdapter;
     private List<OnItemClickListener> mClickListeners = new ArrayList<>();
     private int mColorCodeSelectionView;
-    private int mColorListBackground;
 
     //view settings
     private Animator mSelectionInAnimator;
@@ -182,8 +181,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         /* background color must be set to container of recyclerView.
          * If you set it to main view, there will be any transparent part
          * when selector has overlay */
-//        vRvContainer.setBackgroundResource(backgroundResource);
-        vRvContainer.setBackgroundColor(backgroundResource);
+        vRvContainer.setBackgroundResource(backgroundResource);
     }
 
     private void init(Context context, @Nullable AttributeSet attrs) {
@@ -191,11 +189,6 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LoopBarView);
         mColorCodeSelectionView = typedArray.getColor(R.styleable.LoopBarView_enls_selectionBackground,
                 ContextCompat.getColor(getContext(), android.R.color.holo_blue_dark));
-
-        mColorListBackground = typedArray.getColor(R.styleable.LoopBarView_enls_listBackground,
-                ContextCompat.getColor(getContext(), android.R.color.holo_green_dark));
-
-
         int orientation = typedArray
                 .getInteger(R.styleable.LoopBarView_enls_orientation, Orientation.ORIENTATION_HORIZONTAL);
         int selectionAnimatorInId = typedArray
@@ -222,8 +215,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         int[] attributes = new int[]{android.R.attr.background};
         //then obtain typed array
         typedArray = context.obtainStyledAttributes(attrs, attributes);
-//        int backgroundResource = typedArray.getResourceId(0, R.color.enls_default_list_background);
-        int backgroundResource = typedArray.getResourceId(0, mColorListBackground);
+        int backgroundResource = typedArray.getResourceId(0, R.color.enls_default_list_background);
 
         mSelectionInAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorInId);
         mSelectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
