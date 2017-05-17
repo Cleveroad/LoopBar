@@ -64,6 +64,7 @@
         app:enls_selectionGravity="start"
         app:enls_selectionInAnimation="@animator/enls_scale_restore"
         app:enls_selectionMargin="10dp"
-        app:enls_selectionOutAnimation="@animator/enls_scale_small" />
+        app:enls_selectionOutAnimation="@animator/enls_scale_small"
+        app:enls_listBackground="@android:color/darker_gray"/>
 
 </RelativeLayout>
