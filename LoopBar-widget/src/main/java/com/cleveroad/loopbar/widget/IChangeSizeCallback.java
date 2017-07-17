@@ -17,8 +17,10 @@ interface IChangeSizeCallback {
      * Returns current orientation state
      *
      * @return One of {@link Orientation}
-     * @see Orientation#ORIENTATION_HORIZONTAL
-     * @see Orientation#ORIENTATION_VERTICAL
+     * @see Orientation#ORIENTATION_HORIZONTAL_BOTTOM
+     * @see Orientation#ORIENTATION_HORIZONTAL_TOP
+     * @see Orientation#ORIENTATION_VERTICAL_LEFT
+     * @see Orientation#ORIENTATION_VERTICAL_RIGHT
      */
     @Orientation
     int getOrientation();

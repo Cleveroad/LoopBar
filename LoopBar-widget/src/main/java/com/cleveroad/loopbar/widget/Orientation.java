@@ -8,17 +8,28 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Interface with pre-defined constants for orientation of LoopBar
  */
-@IntDef({Orientation.ORIENTATION_VERTICAL, Orientation.ORIENTATION_HORIZONTAL})
+@IntDef({Orientation.ORIENTATION_VERTICAL_LEFT, Orientation.ORIENTATION_HORIZONTAL_BOTTOM,
+        Orientation.ORIENTATION_VERTICAL_RIGHT, Orientation.ORIENTATION_HORIZONTAL_TOP})
 @Retention(RetentionPolicy.SOURCE)
 public @interface Orientation {
-    
-    /**
-     * Constant representing vertical orientation state of LoopBar
-     */
-    int ORIENTATION_VERTICAL = 0;
 
     /**
-     * Constant representing horizontal orientation state of LoopBar
+     * Constant representing vertical left orientation state of LoopBar
      */
-    int ORIENTATION_HORIZONTAL = 1;
+    int ORIENTATION_VERTICAL_LEFT = 0;
+
+    /**
+     * Constant representing horizontal bottom orientation state of LoopBar
+     */
+    int ORIENTATION_HORIZONTAL_BOTTOM = 1;
+
+    /**
+     * Constant representing vertical right orientation state of LoopBar
+     */
+    int ORIENTATION_VERTICAL_RIGHT = 2;
+
+    /**
+     * Constant representing horizontal top orientation state of LoopBar
+     */
+    int ORIENTATION_HORIZONTAL_TOP = 3;
 }

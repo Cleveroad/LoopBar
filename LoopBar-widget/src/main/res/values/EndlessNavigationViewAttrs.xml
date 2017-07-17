@@ -3,8 +3,10 @@
 
     <declare-styleable name="LoopBarView" tools:ignore="ResourceName">
         <attr name="enls_orientation" format="integer">
-            <flag name="vertical" value="0" />
-            <flag name="horizontal" value="1" />
+            <flag name="verticalLeft" value="0" />
+            <flag name="horizontalBottom" value="1" />
+            <flag name="verticalRight" value="2"/>
+            <flag name="horizontalTop" value="3"/>
         </attr>
 
         <attr name="enls_selectionGravity" format="integer">

@@ -12,11 +12,11 @@ import com.cleveroad.loopbar.R;
 
 import java.util.UnknownFormatFlagsException;
 
-class OrientationStateVertical extends AbstractOrientationState implements IOrientationState {
+class OrientationStateVerticalLeft extends AbstractOrientationState implements IOrientationState {
 
     private Integer itemHeight;
 
-    OrientationStateVertical() {
+    OrientationStateVerticalLeft() {
     }
 
     @Override
@@ -26,7 +26,7 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
 
     @Override
     public int getLayoutId() {
-        return R.layout.enls_view_categories_navigation_vertical;
+        return R.layout.enls_view_categories_navigation_vertical_left;
     }
 
     @Override
@@ -90,7 +90,7 @@ class OrientationStateVertical extends AbstractOrientationState implements IOrie
 
     @Override
     public int getOrientation() {
-        return Orientation.ORIENTATION_VERTICAL;
+        return Orientation.ORIENTATION_VERTICAL_LEFT;
     }
 
     @Override
