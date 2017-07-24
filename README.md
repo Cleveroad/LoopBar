@@ -20,7 +20,7 @@ If you need more details on how you can use the component and what benefits it p
 by gradle : 
 ```groovy
 dependencies {
-    compile "com.cleveroad:loopbar:1.1.3"
+    compile "com.cleveroad:loopbar:1.1.4"
 }
 ```
 
@@ -68,6 +68,7 @@ will be limited only by list of groups. You can see an example of overlay usage 
 |  attribute name | description |
 |---|---|
 | enls_overlaySize  | a size of selected view overlaying |
+| enls_orientation | orientation of loopbar view. Can be verticalLeft, verticalRight, horizontalBottom, horizontalTop. Default verticalLeft
 | enls_placeholderId | an id of view on which you should use layout:above or other attributes of RelativeLayouts,  because LoopBarView will have increased height in this case. See more in sample |
 | enls_selectionGravity | a gravity of selection view. Can be vertical or horizontal. Default horizontal |
 | enls_selectionMargin | a margin of selectionView from bounds of view. Default ```5dp``` |
