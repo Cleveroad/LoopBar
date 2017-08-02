@@ -23,9 +23,7 @@
             android:overScrollMode="never"
             app:elevation="0dp"
             tools:background="@color/enls_default_list_background"
-            tools:layout_marginBottom="5dp"
-            tools:listItem="@layout/item_default" />
-
+            tools:listItem="@layout/item_default"/>
 
     </RelativeLayout>
 
@@ -41,9 +39,8 @@
         <FrameLayout
             android:id="@+id/viewColorable"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
 
     </FrameLayout>
-
 
 </FrameLayout>

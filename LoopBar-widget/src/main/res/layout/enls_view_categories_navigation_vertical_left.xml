@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:background="@android:color/transparent"
-    android:orientation="vertical"
-    tools:background="@android:color/white">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:background="@android:color/transparent"
+             android:orientation="vertical"
+             tools:background="@android:color/white">
 
     <RelativeLayout
         android:id="@+id/vRvContainer"
@@ -24,8 +24,7 @@
             android:overScrollMode="never"
             app:elevation="0dp"
             tools:background="@color/enls_default_list_background"
-            tools:layout_marginRight="5dp"
-            tools:listItem="@layout/item_default" />
+            tools:listItem="@layout/item_default"/>
 
     </RelativeLayout>
 
@@ -40,7 +39,7 @@
         <FrameLayout
             android:id="@+id/viewColorable"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
 
     </FrameLayout>
 

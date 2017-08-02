@@ -26,7 +26,6 @@
             android:overScrollMode="never"
             app:elevation="0dp"
             tools:background="@color/enls_default_list_background"
-            tools:layout_marginLeft="5dp"
             tools:listItem="@layout/item_default"/>
 
     </RelativeLayout>
