@@ -148,6 +148,8 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     @ScrollAttr
     private int mScrollMode;
 
+    private int mOrientation;
+
     private IndeterminateOnScrollListener mIndeterminateOnScrollListener = new IndeterminateOnScrollListener(this);
 
     public LoopBarView(Context context) {
@@ -189,8 +191,8 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LoopBarView);
         mColorCodeSelectionView = typedArray.getColor(R.styleable.LoopBarView_enls_selectionBackground,
                 ContextCompat.getColor(getContext(), android.R.color.holo_blue_dark));
-        int orientation = typedArray
-                .getInteger(R.styleable.LoopBarView_enls_orientation, Orientation.ORIENTATION_HORIZONTAL);
+        mOrientation = typedArray
+                .getInteger(R.styleable.LoopBarView_enls_orientation, Orientation.ORIENTATION_HORIZONTAL_BOTTOM);
         int selectionAnimatorInId = typedArray
                 .getResourceId(R.styleable.LoopBarView_enls_selectionInAnimation, R.animator.enls_scale_restore);
         int selectionAnimatorOutId = typedArray
@@ -204,7 +206,6 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         @ScrollAttr int scrollMode = typedArray.getInt(R.styleable.LoopBarView_enls_scrollMode,
                 mInfinite ? SCROLL_MODE_INFINITE : SCROLL_MODE_FINITE);
         mScrollMode = scrollMode;
-
 
         mSelectionMargin = typedArray.getDimensionPixelSize(R.styleable.LoopBarView_enls_selectionMargin,
                 getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view));
@@ -220,8 +221,8 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         mSelectionInAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorInId);
         mSelectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
 
-        //current view has two state : horizontal & vertical. State design pattern
-        mOrientationState = getOrientationStateFromParam(orientation);
+        //current view has four state : horizontalBottom, horizontalTop & verticalLeft, verticalRight. State design pattern
+        mOrientationState = getOrientationStateFromParam(mOrientation);
         inflate(mOrientationState, mPlaceHolderId, backgroundResource);
         setGravity(selectionGravity);
 
@@ -245,6 +246,31 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
             setCategoriesAdapterFromMenu(menuId);
         }
         typedArray.recycle();
+    }
+
+    /**
+     * Sets orientation of loopbar
+     *
+     * @param orientation int value of orientation. Must be one of {@link Orientation}
+     */
+    public final void setOrientation(int orientation) {
+        mOrientation = orientation;
+        mOrientationState = getOrientationStateFromParam(mOrientation);
+        invalidate();
+        if (mOuterAdapter != null) {
+            mOuterAdapter.setOrientation(mOrientation);
+        }
+
+    }
+
+    /**
+     * Gets current value of orientation
+     *
+     * @return int constant representing current orientation of loopbar
+     * Will be one of {@link Orientation}
+     */
+    public final int getOrientation() {
+        return mOrientation;
     }
 
     /**
@@ -744,7 +770,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     }
 
     /**
-     * Select item by its' position
+     * Select item by it's position
      *
      * @param position        int value of item position to select
      * @param invokeListeners boolean value for invoking listeners
@@ -784,7 +810,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     }
 
     /**
-     * Select item by its' position. Listeners will be invoked
+     * Select item by it's position. Listeners will be invoked
      *
      * @param position int value of item position to select
      */
@@ -795,9 +821,18 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
     //orientation state factory method
     public IOrientationState getOrientationStateFromParam(int orientation) {
-        return orientation == Orientation.ORIENTATION_VERTICAL
-                ? new OrientationStateVertical()
-                : new OrientationStateHorizontal();
+        switch (orientation) {
+            case Orientation.ORIENTATION_HORIZONTAL_BOTTOM:
+                return new OrientationStateHorizontalBottom();
+            case Orientation.ORIENTATION_HORIZONTAL_TOP:
+                return new OrientationStateHorizontalTop();
+            case Orientation.ORIENTATION_VERTICAL_LEFT:
+                return new OrientationStateVerticalLeft();
+            case Orientation.ORIENTATION_VERTICAL_RIGHT:
+                return new OrientationStateVerticalRight();
+            default:
+                return new OrientationStateHorizontalBottom();
+        }
     }
 
     private void checkAndScroll() {

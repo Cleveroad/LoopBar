@@ -6,8 +6,8 @@
         <shape>
             <padding
                 android:bottom="1dp"
-                android:left="0dp"
-                android:right="0.5dp"
+                android:left="0.5dp"
+                android:right="0dp"
                 android:top="0dp"/>
 
             <solid android:color="#00CCCCCC"/>
@@ -18,8 +18,8 @@
         <shape>
             <padding
                 android:bottom="1dp"
-                android:left="0dp"
-                android:right="0.5dp"
+                android:left="0.5dp"
+                android:right="0dp"
                 android:top="0dp"/>
 
             <solid android:color="#102A2A2A"/>
@@ -30,8 +30,8 @@
         <shape>
             <padding
                 android:bottom="1dp"
-                android:left="0dp"
-                android:right="0.5dp"
+                android:left="0.5dp"
+                android:right="0dp"
                 android:top="0dp"/>
 
             <solid android:color="#202A2A2A"/>
@@ -42,8 +42,8 @@
         <shape>
             <padding
                 android:bottom="1dp"
-                android:left="0dp"
-                android:right="0.5dp"
+                android:left="0.5dp"
+                android:right="0dp"
                 android:top="0dp"/>
 
             <solid android:color="#302A2A2A"/>
@@ -54,8 +54,8 @@
         <shape>
             <padding
                 android:bottom="1dp"
-                android:left="0dp"
-                android:right="0.5dp"
+                android:left="0.5dp"
+                android:right="0dp"
                 android:top="0dp"/>
 
             <solid android:color="#502A2A2A"/>

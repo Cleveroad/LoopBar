@@ -22,7 +22,7 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
     static final int VIEW_TYPE_OTHER = 0;
     private static final int VIEW_TYPE_RESERVED_HIDDEN = -1;
     @Orientation
-    private int mOrientation = Orientation.ORIENTATION_VERTICAL;
+    private int mOrientation = Orientation.ORIENTATION_VERTICAL_LEFT;
 
     private RecyclerView.Adapter<? extends RecyclerView.ViewHolder> mInputAdapter;
 
@@ -103,7 +103,7 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
         RecyclerView.ViewHolder viewHolder = mInputAdapter.createViewHolder(parent, viewType);
         CategoriesHolder categoriesHolder = new CategoriesHolder(viewHolder);
 
-        if (mOrientation == Orientation.ORIENTATION_VERTICAL) {
+        if (mOrientation == Orientation.ORIENTATION_VERTICAL_LEFT || mOrientation == Orientation.ORIENTATION_VERTICAL_RIGHT) {
             //if mOrientation vertical set layout params to MATCH_PARENT to center item in view
             ViewGroup.LayoutParams layoutParams = viewHolder.itemView.getLayoutParams();
             layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;

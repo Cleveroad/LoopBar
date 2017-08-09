@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity implements IFragmentReplacer
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            replaceFragment(CategoriesAdapterLoopBarFragment.newInstance(Orientation.ORIENTATION_VERTICAL));
+            replaceFragment(CategoriesAdapterLoopBarFragment.newInstance(Orientation.ORIENTATION_VERTICAL_LEFT));
         }
     }
 

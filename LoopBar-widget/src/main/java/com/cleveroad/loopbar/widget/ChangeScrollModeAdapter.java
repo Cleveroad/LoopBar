@@ -19,7 +19,7 @@ final class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVie
     static final int VIEW_TYPE_CHANGE_SCROLL_MODE = 2;
     private static final int VIEW_TYPE_OFFSET = 1;
     @Orientation
-    private int mOrientation = Orientation.ORIENTATION_VERTICAL;
+    private int mOrientation = Orientation.ORIENTATION_VERTICAL_LEFT;
     private CategoriesAdapter mInputAdapter;
     private boolean mIsIndeterminate = true;
     @LoopBarView.GravityAttr
@@ -160,7 +160,7 @@ final class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVie
 
 
     private View createHeaderView(ViewGroup parent) {
-        @LayoutRes int layoutId = mOrientation == Orientation.ORIENTATION_VERTICAL
+        @LayoutRes int layoutId = mOrientation == Orientation.ORIENTATION_VERTICAL_LEFT
                 ? R.layout.enls_empty_header_vertical
                 : R.layout.enls_empty_header_horizontal;
         return LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
@@ -181,7 +181,7 @@ final class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVie
             int size = mChangeSizeCallback.getHeaderSize();
             if (size > 0) {
                 ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
-                if (mChangeSizeCallback.getOrientation() == Orientation.ORIENTATION_HORIZONTAL) {
+                if (mChangeSizeCallback.getOrientation() == Orientation.ORIENTATION_HORIZONTAL_BOTTOM) {
                     layoutParams.width = size;
                 } else {
                     layoutParams.height = size;
