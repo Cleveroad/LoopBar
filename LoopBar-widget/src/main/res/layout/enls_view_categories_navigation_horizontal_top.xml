@@ -1,31 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-    android:clipToPadding="false"
-    android:orientation="vertical"
-    tools:background="@android:color/white">
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@android:color/transparent"
+             android:clipToPadding="false"
+             android:orientation="vertical"
+             tools:background="@android:color/white">
 
     <RelativeLayout
         android:id="@+id/vRvContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
+        android:layout_gravity="top">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvCategories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_gravity="top"
             android:overScrollMode="never"
             app:elevation="0dp"
             tools:background="@color/enls_default_list_background"
-            tools:layout_marginTop="5dp"
-            tools:listItem="@layout/item_default" />
-
+            tools:listItem="@layout/item_default"/>
 
     </RelativeLayout>
 
@@ -36,14 +34,13 @@
         android:layout_marginLeft="@dimen/enls_margin_selected_view"
         android:layout_marginStart="@dimen/enls_margin_selected_view"
         android:animateLayoutChanges="true"
-        android:background="@drawable/enls_top_right_shadow">
+        android:background="@drawable/enls_bottom_right_shadow">
 
         <FrameLayout
             android:id="@+id/viewColorable"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
 
     </FrameLayout>
-
 
 </FrameLayout>

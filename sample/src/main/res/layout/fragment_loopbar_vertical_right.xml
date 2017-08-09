@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.cleveroad.sample.fragments.AbstractLoopBarFragment">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toStartOf="@+id/placeHolder"
+        android:layout_toLeftOf="@+id/placeHolder"
+        android:background="@android:color/holo_red_dark" />
+
+    <Spinner
+        android:id="@+id/spScrollMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnOrientation"
+        android:layout_centerInParent="true"
+        android:background="?attr/selectableItemBackground" />
+
+    <Button
+        android:id="@+id/btnOrientation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="?attr/selectableItemBackground"
+        android:text="@string/change_orientation"
+        android:textAllCaps="false"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btnGravity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnOrientation"
+        android:layout_centerInParent="true"
+        android:background="?attr/selectableItemBackground"
+        android:text="@string/change_gravity"
+        android:textAllCaps="false"
+        android:textSize="16sp" />
+
+    <View
+        android:id="@+id/placeHolder"
+        android:layout_width="0dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"/>
+
+    <com.cleveroad.loopbar.widget.LoopBarView
+        android:id="@+id/endlessView"
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        app:enls_orientation="verticalRight"
+        app:enls_overlaySize="10dp"
+        app:enls_placeholderId="@+id/placeHolder"
+        app:enls_scrollMode="auto"
+        app:enls_selectionBackground="@android:color/holo_blue_dark"
+        app:enls_selectionGravity="start"
+        app:enls_selectionMargin="10dp" />
+
+</RelativeLayout>

@@ -45,12 +45,28 @@ public abstract class AbstractLoopBarFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         @Orientation
-        int orientation = getArguments().getInt(EXTRA_ORIENTATION, Orientation.ORIENTATION_HORIZONTAL);
+        int orientation = getArguments().getInt(EXTRA_ORIENTATION, Orientation.ORIENTATION_HORIZONTAL_BOTTOM);
         this.mOrientation = orientation;
-
+        int layoutId;
+        switch (orientation) {
+            case Orientation.ORIENTATION_VERTICAL_LEFT:
+                layoutId = R.layout.fragment_loopbar_vertical_left;
+                break;
+            case Orientation.ORIENTATION_VERTICAL_RIGHT:
+                layoutId = R.layout.fragment_loopbar_vertical_right;
+                break;
+            case Orientation.ORIENTATION_HORIZONTAL_TOP:
+                layoutId = R.layout.fragment_loopbar_horizontal_top;
+                break;
+            case Orientation.ORIENTATION_HORIZONTAL_BOTTOM:
+                layoutId = R.layout.fragment_loopbar_horizontal_bottom;
+                break;
+            default:
+                layoutId = R.layout.fragment_loopbar_horizontal_bottom;
+                break;
+        }
         View rootView = inflater.inflate(
-                orientation == Orientation.ORIENTATION_VERTICAL
-                        ? R.layout.fragment_loopbar_vertical : R.layout.fragment_loopbar_horizontal,
+                layoutId,
                 container,
                 false);
 
@@ -61,12 +77,12 @@ public abstract class AbstractLoopBarFragment extends Fragment
         rootView.findViewById(R.id.btnOrientation).setOnClickListener(this);
         rootView.findViewById(R.id.btnGravity).setOnClickListener(this);
         loopBarView.addOnItemClickListener(this);
-
         SimpleFragmentStatePagerAdapter pagerAdapter = new SimpleFragmentStatePagerAdapter(
                 getChildFragmentManager(),
                 getMockFragments(),
                 MockedItemsFactory.getCategoryItems(getContext()));
         viewPager.setAdapter(pagerAdapter);
+
         viewPager.addOnPageChangeListener(new AbstractPageChangedListener() {
             @Override
             public void onPageSelected(int position) {
@@ -79,6 +95,9 @@ public abstract class AbstractLoopBarFragment extends Fragment
                 Log.d("tag", "on page scrolled");
             }
         });
+        if(orientation == Orientation.ORIENTATION_HORIZONTAL_TOP){
+            loopBarView.setOrientation(Orientation.ORIENTATION_HORIZONTAL_TOP);
+        }
 
         return rootView;
     }
@@ -147,8 +166,25 @@ public abstract class AbstractLoopBarFragment extends Fragment
     }
 
     private void changeOrientation() {
-        Fragment fragment = getNewInstance(mOrientation == Orientation.ORIENTATION_VERTICAL ?
-                Orientation.ORIENTATION_HORIZONTAL : Orientation.ORIENTATION_VERTICAL);
+        Fragment fragment;
+        switch (mOrientation) {
+            case Orientation.ORIENTATION_VERTICAL_LEFT:
+                fragment = getNewInstance(Orientation.ORIENTATION_HORIZONTAL_TOP);
+                break;
+            case Orientation.ORIENTATION_HORIZONTAL_TOP:
+                fragment = getNewInstance(Orientation.ORIENTATION_VERTICAL_RIGHT);
+                break;
+            case Orientation.ORIENTATION_VERTICAL_RIGHT:
+                fragment = getNewInstance(Orientation.ORIENTATION_HORIZONTAL_BOTTOM);
+                break;
+            case Orientation.ORIENTATION_HORIZONTAL_BOTTOM:
+                fragment = getNewInstance(Orientation.ORIENTATION_VERTICAL_LEFT);
+                break;
+            default:
+                fragment = getNewInstance(Orientation.ORIENTATION_HORIZONTAL_BOTTOM);
+                break;
+
+        }
         ((IFragmentReplacer) getActivity()).replaceFragment(fragment);
     }
 
