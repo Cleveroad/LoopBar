@@ -2,6 +2,7 @@ package com.cleveroad.loopbar.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -413,7 +414,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
      * @param menuRes id for inflating {@link Menu}
      */
     public void setCategoriesAdapterFromMenu(@MenuRes int menuRes) {
-        Menu menu = new MenuBuilder(getContext());
+        @SuppressLint("RestrictedApi") Menu menu = new MenuBuilder(getContext());
         new MenuInflater(getContext()).inflate(menuRes, menu);
         setCategoriesAdapterFromMenu(menu);
     }

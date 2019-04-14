@@ -11,7 +11,7 @@ class NegativeMarginFixColorDrawable extends android.graphics.drawable.ColorDraw
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.clipRect(getBounds(), Region.Op.REPLACE);
+       // canvas.clipRect(getBounds(), Region.Op.REPLACE);
         super.draw(canvas);
     }
 }

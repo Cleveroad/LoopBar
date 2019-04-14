@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:clipChildren="false"
     android:layout_height="@dimen/enls_selected_view_height"
     android:background="@android:color/transparent"
     tools:background="@color/enls_default_selection_view_background" />
