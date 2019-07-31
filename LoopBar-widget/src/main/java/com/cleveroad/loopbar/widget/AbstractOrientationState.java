@@ -27,7 +27,7 @@ abstract class AbstractOrientationState implements IOrientationState {
         return mSelectionGravityState;
     }
 
-    //dispatch to gravity state
+    // Dispatch to gravity state
     @Override
     public <T extends ViewGroup.MarginLayoutParams> T setSelectionMargin(int marginPx, T layoutParams) {
         return mSelectionGravityState.setSelectionMargin(marginPx, layoutParams);

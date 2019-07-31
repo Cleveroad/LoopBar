@@ -1,12 +1,13 @@
 package com.cleveroad.loopbar.widget;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleveroad.loopbar.R;
 
@@ -21,7 +22,7 @@ class OrientationStateVerticalLeft extends AbstractOrientationState implements I
 
     @Override
     public LinearLayoutManager getLayoutManager(Context context) {
-        return new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        return new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
     }
 
     @Override
@@ -30,11 +31,9 @@ class OrientationStateVerticalLeft extends AbstractOrientationState implements I
     }
 
     @Override
-    public boolean isItemsFitOnScreen(RecyclerView rvCategories, int itemsSize) {
-        calcItemHeight(rvCategories);
-        int itemsHeight = itemHeight * (itemsSize);
-        int containerHeight = rvCategories.getHeight();
-        return containerHeight >= itemsHeight;
+    public boolean isItemsFitOnScreen(RecyclerView container, int itemsSize) {
+        calcItemHeight(container);
+        return container.getHeight() >= itemHeight * (itemsSize);
     }
 
     @Override
@@ -81,7 +80,7 @@ class OrientationStateVerticalLeft extends AbstractOrientationState implements I
                 }
             }
         }
-        // in case of call before view was created
+        // In case of call before view was created
         if (itemHeight == null) {
             itemHeight = 0;
         }
@@ -106,7 +105,7 @@ class OrientationStateVerticalLeft extends AbstractOrientationState implements I
         if (overlayPlaceHolder != null) {
             int containerWidth = rvContainer.getMeasuredWidth();
 
-            //make placeholder same height as a recyclerView
+            //Make placeholder same height as a recyclerView
             overlayPlaceHolder.getLayoutParams().width = containerWidth;
             overlayPlaceHolder.requestLayout();
 

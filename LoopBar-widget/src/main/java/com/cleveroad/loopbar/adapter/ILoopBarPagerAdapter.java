@@ -1,10 +1,11 @@
 package com.cleveroad.loopbar.adapter;
 
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 /**
- * Interface for ViewPager adapter {@link android.support.v4.view.PagerAdapter}
+ * Interface for ViewPager adapter {@link androidx.viewpager.widget.PagerAdapter}
  * Need to be implemented if you want to show images in LoopBar
  */
 public interface ILoopBarPagerAdapter {
@@ -13,6 +14,7 @@ public interface ILoopBarPagerAdapter {
      * Returns the title for page to show in LoopBar item
      *
      * @param position Page position
+     *
      * @return instance of {@link CharSequence}
      */
     @NonNull
@@ -22,6 +24,7 @@ public interface ILoopBarPagerAdapter {
      * Returns the drawable for page to show in LoopBar item
      *
      * @param position Page position
+     *
      * @return instance of {@link Drawable}
      */
     @NonNull

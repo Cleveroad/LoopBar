@@ -11,6 +11,8 @@ Version | Changes
 v.1.1.1 | <ul><li>Added ability to change scroll mode</li><li>Fixed overlay feature</li><li>Updated start position in Infinite scroll mode</li><li>Removed unused dependencies</li><li>Updated versions of dependencies</li><li>unused or old methods were marked as deprecated</li><li>Added auto resize selector logic for different size of items support</li><li>Removed start and end shadows</li></ul>
 v.1.1.2 | <ul><li>Added SDK v.15 support</li><ul>
 v.1.1.3 | <ul><li>Fixed crashes with empty adapter</li><li>Fixed crashes without adapter</li><ul>
-v.1.1.4 | <ul><li>Added loopbar orientation top and right </li><li>Update buildToolsVersion to 25.0.3</li></ul>
+v.1.1.4 | <ul><li>Added loopbar orientation top and right </li><li>BuildToolsVersion updated to 25.0.3</li></ul>
+v.1.1.5 | <ul><li>Added attribute and methods for list background changing</li><li>BuildToolsVersion updated to 27.0.2</li></ul>
+v.1.2.0 | <ul><li>[Fix issue #30](https://github.com/Cleveroad/LoopBar/issues/30)</li><li>Migrate library to AndroidX</li><li>BuildToolsVersion updated to 29.0.1</li></ul>
 
 <br />

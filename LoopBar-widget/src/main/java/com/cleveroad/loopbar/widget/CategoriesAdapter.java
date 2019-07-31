@@ -1,20 +1,22 @@
 package com.cleveroad.loopbar.widget;
 
 import android.annotation.SuppressLint;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleveroad.loopbar.R;
 import com.cleveroad.loopbar.adapter.IOperationItem;
 import com.cleveroad.loopbar.adapter.OperationItem;
 
+import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOperationItem>>
         implements OnItemClickListener {
@@ -28,8 +30,7 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
 
     @SuppressLint("UseSparseArrays")
     private HashMap<Integer, IOperationItem> mWrappedItems = new HashMap<>();
-    private OnItemClickListener mListener;
-    private List<OnItemClickListener> mOuterItemClickListeners = new LinkedList<>();
+    private WeakReference<OnItemClickListener> mListener;
     private boolean mIsIndeterminate = true;
 
     CategoriesAdapter(RecyclerView.Adapter<? extends RecyclerView.ViewHolder> inputAdapter) {
@@ -39,27 +40,12 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
         }
     }
 
-
-    void addOnItemClickListener(OnItemClickListener onItemClickListener) {
-        mOuterItemClickListeners.add(onItemClickListener);
-    }
-
-    void removeOnItemClickListener(OnItemClickListener onItemClickListener) {
-        mOuterItemClickListeners.remove(onItemClickListener);
-    }
-
-    private void notifyItemClicked(int position) {
-        for (OnItemClickListener listener : mOuterItemClickListeners) {
-            listener.onItemClicked(position);
-        }
-    }
-
     Collection<IOperationItem> getWrappedItems() {
         return mWrappedItems.values();
     }
 
     void setListener(OnItemClickListener listener) {
-        mListener = listener;
+        mListener = new WeakReference<>(listener);
     }
 
     private View createEmptyView(ViewGroup parent) {
@@ -106,15 +92,14 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
         if (mOrientation == Orientation.ORIENTATION_VERTICAL_LEFT || mOrientation == Orientation.ORIENTATION_VERTICAL_RIGHT) {
             //if mOrientation vertical set layout params to MATCH_PARENT to center item in view
             ViewGroup.LayoutParams layoutParams = viewHolder.itemView.getLayoutParams();
-            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.width = MATCH_PARENT;
             viewHolder.itemView.requestLayout();
         } else {
             //if mOrientation vertical set layout params to MATCH_PARENT to center item in view
             ViewGroup.LayoutParams layoutParams = viewHolder.itemView.getLayoutParams();
-            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.height = MATCH_PARENT;
             viewHolder.itemView.requestLayout();
         }
-
         if (mListener != null) {
             categoriesHolder.setListener(this);
         }
@@ -124,8 +109,10 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
     @Override
     public void onItemClicked(int position) {
         int normalizedPosition = normalizePosition(position);
-        mListener.onItemClicked(normalizedPosition);
-        notifyItemClicked(normalizedPosition);
+        OnItemClickListener listener = mListener.get();
+        if (listener != null) {
+            listener.onItemClicked(normalizedPosition);
+        }
     }
 
     @Override
@@ -159,7 +146,6 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
         protected void onBindItem(IOperationItem item, int position) {
             //do nothing
         }
-
     }
 
     class CategoriesHolder extends BaseRecyclerViewHolder<IOperationItem> {
@@ -177,7 +163,6 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
             adapter.onBindViewHolder(vh, normalizePosition(position));
         }
 
-
         @Override
         protected final void onBindItem(IOperationItem item, int position) {
             bindItemWildcardHelper(mInputAdapter, position);
@@ -188,6 +173,5 @@ class CategoriesAdapter extends RecyclerView.Adapter<BaseRecyclerViewHolder<IOpe
         public boolean isClickAllowed() {
             return getItem().isVisible();
         }
-
     }
 }

@@ -1,7 +1,8 @@
 package com.cleveroad.loopbar.model;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 
 import com.cleveroad.loopbar.R;
 import com.cleveroad.loopbar.adapter.ICategoryItem;

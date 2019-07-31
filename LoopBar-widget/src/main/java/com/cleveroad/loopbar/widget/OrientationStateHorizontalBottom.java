@@ -1,12 +1,13 @@
 package com.cleveroad.loopbar.widget;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleveroad.loopbar.R;
 
@@ -83,7 +84,7 @@ class OrientationStateHorizontalBottom extends AbstractOrientationState implemen
         selectionViewContainer.requestLayout();
     }
 
-    //very big duct tape
+    //Very big duct tape
     private int calcItemWidth(RecyclerView rvCategories) {
         if (itemWidth == null || itemWidth == 0) {
             for (int i = 0; i < rvCategories.getChildCount(); i++) {
@@ -93,7 +94,7 @@ class OrientationStateHorizontalBottom extends AbstractOrientationState implemen
                 }
             }
         }
-        // in case of call before view was created
+        // In case of call before view was created
         if (itemWidth == null) {
             itemWidth = 0;
         }
@@ -106,7 +107,7 @@ class OrientationStateHorizontalBottom extends AbstractOrientationState implemen
         if (overlayPlaceHolder != null) {
             int containerHeight = rvContainer.getMeasuredHeight();
 
-            //make placeholder same height as a recyclerView
+            //Make placeholder same height as a recyclerView
             overlayPlaceHolder.getLayoutParams().height = containerHeight;
             overlayPlaceHolder.requestLayout();
 

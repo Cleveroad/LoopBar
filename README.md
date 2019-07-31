@@ -20,7 +20,7 @@ If you need more details on how you can use the component and what benefits it p
 by gradle : 
 ```groovy
 dependencies {
-    compile "com.cleveroad:loopbar:1.1.4"
+    implementation "com.cleveroad:loopbar:1.2.0"
 }
 ```
 
@@ -56,6 +56,7 @@ Android Studio layouts preview is supported.
         app:enls_selectionBackground="@android:color/holo_blue_dark"
         app:enls_menu="@menu/loopbar"
         app:enls_scrollMode="auto"
+        app:enls_listBackground="@android:color/holo_orange_dark"
         />
 ```
 
@@ -65,20 +66,20 @@ LoopBar will set width or height for this view by itself (depending of LoopBar o
 Without this placeholder the bounds of LoopBar will be limited by selected view (with overlay). And thanks to placeholder the bounds
 will be limited only by list of groups. You can see an example of overlay usage in sample.
 
-|  attribute name | description |
+|  attribute name | Description |
 |---|---|
-| enls_overlaySize  | a size of selected view overlaying |
-| enls_orientation | orientation of loopbar view. Can be verticalLeft, verticalRight, horizontalBottom, horizontalTop. Default verticalLeft
-| enls_placeholderId | an id of view on which you should use layout:above or other attributes of RelativeLayouts,  because LoopBarView will have increased height in this case. See more in sample |
-| enls_selectionGravity | a gravity of selection view. Can be vertical or horizontal. Default horizontal |
-| enls_selectionMargin | a margin of selectionView from bounds of view. Default ```5dp``` |
-| enls_selectionInAnimation | an animation of appearing an icon inside selection view |
-| enls_selectionOutAnimation | an animation of hiding an icon inside selection view |
-| enls_selectionBackground | selection background. Default ```#ff0099cc``` |
-| enls_menu | an id of menu which will be used for getting title and icon items  |
+| enls_overlaySize  | A size of selected view overlaying |
+| enls_orientation | Orientation of loopbar view. Can be verticalLeft, verticalRight, horizontalBottom, horizontalTop. Default verticalLeft
+| enls_placeholderId | An id of view on which you should use layout:above or other attributes of RelativeLayouts,  because LoopBarView will have increased height in this case. See more in sample |
+| enls_selectionGravity | A gravity of selection view. Can be vertical or horizontal. Default horizontal |
+| enls_selectionMargin | A margin of selectionView from bounds of view. Default ```5dp``` |
+| enls_selectionInAnimation | An animation of appearing an icon inside selection view |
+| enls_selectionOutAnimation | An animation of hiding an icon inside selection view |
+| enls_selectionBackground | Selection background. Default ```#ff0099cc``` |
+| enls_menu | An id of menu which will be used for getting title and icon items  |
 | enls_scrollMode | Scrolling mode. Can be ```infinite```, ```finite```, ```auto```. Default ```infinite``` |
-| android:background | View have yellow background by default. Use standart ```android:background``` attribute to change it. Default ```#ffc829``` |
-
+| android:background | View have transparent background by default. Use standard ```android:background``` attribute to change it. Default ```#00000000``` |
+| enls_listBackground | Set list background. View have yellow list background by default ```#ffc829``` |
 
 To initialize items in widget and work with it you should setup adapter to it and add item click mListener:
 ```
@@ -121,6 +122,14 @@ To customize wrapped ```RecyclerView``` (control animations, decorators or add `
 | ```addOnScrollListener(RecyclerView.OnScrollListener listener)``` | Add a ```OnScrollListener``` to wrapped RecyclerView |
 | ```removeOnScrollListener(RecyclerView.OnScrollListener listener)``` | Remove a ```OnScrollListener``` from wrapped RecyclerView |
 | ```clearOnScrollListeners()``` | Remove all secondary ```OnScrollListener``` from wrapped RecyclerView |
+| ```setListBackgroundResource(int backgroundResource)``` | Set list background to a given resource |
+| ```setListBackgroundColor(int color)``` | Set list background color |
+| ```getListBackground()``` | Get list background drawable |
+| ```setListBackground(Drawable background)``` | Set list background to a given Drawable |
+| ```setListBackgroundTintList(ColorStateList tint)``` | Set tint to the list background drawable |
+| ```getListBackgroundTintList()``` | Get tint applied to the list background drawable |
+| ```setListBackgroundTintMode(PorterDuff.Mode tintMode)``` | Set blending mode used to apply the tint specified to the list background drawable |
+| ```getListBackgroundTintMode()``` | Get blending mode used to apply the tint to the list background drawable |
 
 <br />
 

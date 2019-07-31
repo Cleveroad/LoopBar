@@ -1,9 +1,12 @@
 package com.cleveroad.loopbar.widget;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.lang.ref.WeakReference;
 
 abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -12,7 +15,7 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
     private static final String TAG_ITEM_VIEW = "itemView";
     private T mItem;
     @Nullable
-    private OnItemClickListener mListener;
+    private WeakReference<OnItemClickListener> mWeakRefListener;
     private int mCurrentPosition;
 
     BaseRecyclerViewHolder(@NonNull View itemView) {
@@ -30,7 +33,7 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
 
     void setListener(@Nullable OnItemClickListener listener) {
         setClickable(true);
-        mListener = listener;
+        mWeakRefListener = new WeakReference<>(listener);
     }
 
     public T getItem() {
@@ -43,17 +46,16 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
         onBindItem(item, position);
     }
 
-    private int getmCurrentPosition() {
+    private int getCurrentPosition() {
         return mCurrentPosition;
     }
 
     /**
      * Override this method with {@link #setClickable(boolean)} to receive click events on viewHolder mItem in child class
      */
-
     @SuppressWarnings("WeakerAccess")
     void onItemClicked(T item) {
-
+        // do nothing
     }
 
     public boolean isClickAllowed() {
@@ -67,8 +69,11 @@ abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder impleme
         Object tag = v.getTag(KEY_VIEW_TAG);
         if (tag != null && tag.equals(TAG_ITEM_VIEW) && getAdapterPosition() != -1 && isClickAllowed()) {
             onItemClicked(getItem());
-            if (mListener != null) {
-                mListener.onItemClicked(getmCurrentPosition());
+            if (mWeakRefListener != null) {
+                OnItemClickListener listener = mWeakRefListener.get();
+                if (listener != null) {
+                    listener.onItemClicked(getCurrentPosition());
+                }
             }
         }
     }

@@ -1,15 +1,23 @@
 package com.cleveroad.loopbar.widget;
 
-import android.support.annotation.IntDef;
+
+import androidx.annotation.IntDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import static android.view.Gravity.BOTTOM;
+import static android.view.Gravity.END;
+import static android.view.Gravity.LEFT;
+import static android.view.Gravity.RIGHT;
+import static android.view.Gravity.START;
+import static android.view.Gravity.TOP;
+
+
 /**
  * Interface with pre-defined limit of layout gravity for LoopBar
  */
-@IntDef({android.view.Gravity.TOP, android.view.Gravity.BOTTOM, android.view.Gravity.LEFT,
-        android.view.Gravity.RIGHT, android.view.Gravity.START, android.view.Gravity.END})
+@IntDef({TOP, BOTTOM, LEFT, RIGHT, START, END})
 @Retention(RetentionPolicy.SOURCE)
 @interface LayoutGravity {
 }

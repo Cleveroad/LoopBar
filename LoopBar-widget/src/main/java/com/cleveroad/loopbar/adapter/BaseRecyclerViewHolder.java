@@ -1,14 +1,17 @@
 package com.cleveroad.loopbar.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleveroad.loopbar.widget.OnItemClickListener;
 
+import java.lang.ref.WeakReference;
+
 /**
- * Base realization of ViewHolder {@link android.support.v7.widget.RecyclerView.ViewHolder}
+ * Base realization of ViewHolder {@link  androidx.recyclerview.widget.RecyclerView.ViewHolder}
  *
  * @param <T> Type of models for displaying in ViewHolder
  */
@@ -19,7 +22,7 @@ public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder 
     private static final String TAG_ITEM_VIEW = "itemView";
     private T item;
     @Nullable
-    private OnItemClickListener mListener;
+    private WeakReference<OnItemClickListener> mWeakRefListener;
 
     public BaseRecyclerViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -37,7 +40,7 @@ public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder 
     @SuppressWarnings("unused")
     public void setListener(@Nullable OnItemClickListener listener) {
         setClickable(true);
-        mListener = listener;
+        mWeakRefListener = new WeakReference<>(listener);
     }
 
     public T getItem() {
@@ -53,6 +56,7 @@ public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder 
      * Override this method with {@link #setClickable(boolean)} to receive click events on viewHolder item in child class
      */
     public void onItemClicked(T item) {
+        //do nothing
     }
 
     /**
@@ -71,8 +75,11 @@ public abstract class BaseRecyclerViewHolder<T> extends RecyclerView.ViewHolder 
         Object tag = v.getTag(KEY_VIEW_TAG);
         if (tag != null && tag.equals(TAG_ITEM_VIEW) && getAdapterPosition() != -1 && isClickAllowed()) {
             onItemClicked(getItem());
-            if (mListener != null) {
-                mListener.onItemClicked(getAdapterPosition());
+            if (mWeakRefListener != null) {
+                OnItemClickListener listener = mWeakRefListener.get();
+                if (listener != null) {
+                    listener.onItemClicked(getAdapterPosition());
+                }
             }
         }
     }

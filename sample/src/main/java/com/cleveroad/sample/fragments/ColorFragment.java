@@ -2,12 +2,13 @@ package com.cleveroad.sample.fragments;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.cleveroad.sample.R;
 
@@ -19,7 +20,7 @@ public class ColorFragment extends Fragment {
     private static final String EXTRA_COLOR = "color";
 
     //args
-    private int color;
+    private int mColor;
 
     public static ColorFragment newInstance(int color) {
 
@@ -37,7 +38,7 @@ public class ColorFragment extends Fragment {
         if (getArguments() == null || !getArguments().containsKey(EXTRA_COLOR))
             throw new IllegalArgumentException("you should run fragment view newInstance");
 
-        color = getArguments().getInt(EXTRA_COLOR, -1);
+        mColor = getArguments().getInt(EXTRA_COLOR, -1);
     }
 
     @Override
@@ -49,7 +50,6 @@ public class ColorFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.setBackgroundColor(ContextCompat.getColor(getContext(), color));
-
+        view.setBackgroundColor(ContextCompat.getColor(getContext(), mColor));
     }
 }
