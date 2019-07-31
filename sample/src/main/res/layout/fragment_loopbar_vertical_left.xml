@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.cleveroad.sample.fragments.AbstractLoopBarFragment">
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -47,7 +47,7 @@
         android:id="@+id/placeHolder"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"/>
+        android:background="@android:color/transparent" />
 
     <com.cleveroad.loopbar.widget.LoopBarView
         android:id="@+id/endlessView"

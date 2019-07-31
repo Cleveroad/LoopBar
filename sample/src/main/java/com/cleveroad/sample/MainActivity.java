@@ -1,8 +1,9 @@
 package com.cleveroad.sample;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.cleveroad.loopbar.widget.Orientation;
 import com.cleveroad.sample.fragments.CategoriesAdapterLoopBarFragment;

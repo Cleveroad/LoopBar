@@ -7,8 +7,8 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="8dp"
-    android:paddingEnd="16dp"
     android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     tools:background="@color/enls_default_selection_view_background">
 
     <ImageView

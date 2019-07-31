@@ -1,8 +1,9 @@
 package com.cleveroad.loopbar.adapter;
 
-import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
 
 import com.cleveroad.loopbar.model.CategoryItem;
 

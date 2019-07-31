@@ -4,22 +4,14 @@ import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.IntDef;
-import android.support.annotation.MenuRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.view.menu.MenuBuilder;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -29,6 +21,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IntDef;
+import androidx.annotation.MenuRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.cleveroad.loopbar.BuildConfig;
 import com.cleveroad.loopbar.R;
@@ -111,28 +117,29 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
     private static final String TAG = LoopBarView.class.getSimpleName();
 
-    //outside params
+    //Outside params
     private RecyclerView.Adapter<? extends RecyclerView.ViewHolder> mInputAdapter;
     private List<OnItemClickListener> mClickListeners = new ArrayList<>();
     private int mColorCodeSelectionView;
 
-    //view settings
+    //View settings
     private Animator mSelectionInAnimator;
     private Animator mSelectionOutAnimator;
     private int mSelectionMargin;
     private IOrientationState mOrientationState;
     private int mPlaceHolderId;
     private int mOverlaySize;
-    //state settings below
+    //State settings below
     private int mCurrentItemPosition;
     @GravityAttr
     private int mSelectionGravity;
 
     private int mRealHidedPosition = 0;
 
-    //views
+    //Views
     private FrameLayout mFlContainerSelected;
     private RecyclerView mRvCategories;
+    private View mVRvContainer;
     @Nullable
     private View mOverlayPlaceholder;
     private View mViewColorable;
@@ -177,13 +184,13 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         inflate(getContext(), orientationState.getLayoutId(), this);
         mFlContainerSelected = (FrameLayout) findViewById(R.id.flContainerSelected);
         mRvCategories = (RecyclerView) findViewById(R.id.rvCategories);
-        View vRvContainer = findViewById(R.id.vRvContainer);
+        mVRvContainer = findViewById(R.id.vRvContainer);
         mOverlayPlaceholder = getRootView().findViewById(placeHolderId);
-        mViewColorable = getRootView().findViewById(R.id.viewColorable);
-        /* background color must be set to container of recyclerView.
+        mViewColorable = getRootView().findViewById(R.id.flColorable);
+        /* Background color must be set to container of recyclerView.
          * If you set it to main view, there will be any transparent part
          * when selector has overlay */
-        vRvContainer.setBackgroundResource(backgroundResource);
+        mVRvContainer.setBackgroundResource(backgroundResource);
     }
 
     private void init(Context context, @Nullable AttributeSet attrs) {
@@ -210,18 +217,13 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         mSelectionMargin = typedArray.getDimensionPixelSize(R.styleable.LoopBarView_enls_selectionMargin,
                 getResources().getDimensionPixelSize(R.dimen.enls_margin_selected_view));
         mOverlaySize = typedArray.getDimensionPixelSize(R.styleable.LoopBarView_enls_overlaySize, 0);
-        typedArray.recycle();
 
-        //check attributes you need, for example all paddings
-        int[] attributes = new int[]{android.R.attr.background};
-        //then obtain typed array
-        typedArray = context.obtainStyledAttributes(attrs, attributes);
-        int backgroundResource = typedArray.getResourceId(0, R.color.enls_default_list_background);
+        int backgroundResource = typedArray.getResourceId(R.styleable.LoopBarView_enls_listBackground, R.color.enls_default_list_background);
 
         mSelectionInAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorInId);
         mSelectionOutAnimator = AnimatorInflater.loadAnimator(getContext(), selectionAnimatorOutId);
 
-        //current view has four state : horizontalBottom, horizontalTop & verticalLeft, verticalRight. State design pattern
+        //Current view has four state : horizontalBottom, horizontalTop & verticalLeft, verticalRight. State design pattern
         mOrientationState = getOrientationStateFromParam(mOrientation);
         inflate(mOrientationState, mPlaceHolderId, backgroundResource);
         setGravity(selectionGravity);
@@ -249,6 +251,111 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     }
 
     /**
+     * Set list background to a given resource
+     *
+     * @param backgroundResource The identifier of the resource
+     */
+    public void setListBackgroundResource(@DrawableRes int backgroundResource) {
+        mVRvContainer.setBackgroundResource(backgroundResource);
+    }
+
+    /**
+     * Set list background color.
+     *
+     * @param color the color of the list background
+     */
+    public void setListBackgroundColor(@ColorInt int color) {
+        mVRvContainer.setBackgroundColor(color);
+    }
+
+    /**
+     * Gets list background drawable
+     *
+     * @return The drawable used as list background
+     * @see #setListBackground(Drawable)
+     */
+    public Drawable getListBackground() {
+        return mVRvContainer.getBackground();
+    }
+
+    /**
+     * Set list background to a given Drawable
+     *
+     * @param background The Drawable to use as the list background
+     */
+    public void setListBackground(Drawable background) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mVRvContainer.setBackground(background);
+        } else {
+            mVRvContainer.setBackgroundDrawable(background);
+        }
+    }
+
+    /**
+     * Applies a tint to the list background drawable.
+     *
+     * @param tint the tint to apply
+     *
+     * @see #getListBackgroundTintList()
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void setListBackgroundTintList(@Nullable ColorStateList tint) {
+        mVRvContainer.setBackgroundTintList(tint);
+    }
+
+    /**
+     * Return the tint applied to the list background drawable
+     *
+     * @return the tint applied to the list background drawable
+     *
+     * @see #setListBackgroundTintList(ColorStateList)
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Nullable
+    public ColorStateList getListBackgroundTintList() {
+        return mVRvContainer.getBackgroundTintList();
+    }
+
+    /**
+     * Specifies the blending mode used to apply the tint specified by
+     * {@link #setListBackgroundTintList(ColorStateList)}} to the list background
+     * drawable.
+     *
+     * @param tintMode the blending mode used to apply the tint
+     *
+     * @see #getListBackgroundTintMode()
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void setListBackgroundTintMode(@Nullable PorterDuff.Mode tintMode) {
+        mVRvContainer.setBackgroundTintMode(tintMode);
+    }
+
+    /**
+     * Return the blending mode used to apply the tint to the list background
+     * drawable
+     *
+     * @return the blending mode used to apply the tint to the list background
+     *         drawable
+     *
+     * @see #setListBackgroundTintMode(PorterDuff.Mode)
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Nullable
+    public PorterDuff.Mode getListBackgroundTintMode() {
+        return mVRvContainer.getBackgroundTintMode();
+    }
+
+    /**
+     * Gets current value of orientation
+     *
+     * @return int constant representing current orientation of loopbar
+     * Will be one of {@link Orientation}
+     */
+    public final int getOrientation() {
+        return mOrientation;
+    }
+
+    /**
      * Sets orientation of loopbar
      *
      * @param orientation int value of orientation. Must be one of {@link Orientation}
@@ -260,17 +367,6 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
         if (mOuterAdapter != null) {
             mOuterAdapter.setOrientation(mOrientation);
         }
-
-    }
-
-    /**
-     * Gets current value of orientation
-     *
-     * @return int constant representing current orientation of loopbar
-     * Will be one of {@link Orientation}
-     */
-    public final int getOrientation() {
-        return mOrientation;
     }
 
     /**
@@ -393,7 +489,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
 
         mSelectorHolder = (ChangeScrollModeAdapter.ChangeScrollModeHolder) mOuterAdapter
                 .createViewHolder(mRvCategories, ChangeScrollModeAdapter.VIEW_TYPE_CHANGE_SCROLL_MODE);
-        // set first item to selectionView
+        // Set first item to selectionView
         if (hasItems) {
             mSelectorHolder.bindItemWildcardHelper(inputAdapter, 0);
         }
@@ -505,7 +601,7 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
     /**
      * Sets the {@link RecyclerView.ItemAnimator} that will handle animations involving changes
      * to the items in wrapped RecyclerView. By default, RecyclerView instantiates and
-     * uses an instance of {@link DefaultItemAnimator}. Whether item animations are
+     * uses an instance of {@link androidx.recyclerview.widget.DefaultItemAnimator}. Whether item animations are
      * enabled for the RecyclerView depends on the ItemAnimator and whether
      * the LayoutManager {@link RecyclerView.LayoutManager#supportsPredictiveItemAnimations()
      * supports item animations}.
@@ -968,7 +1064,9 @@ public class LoopBarView extends FrameLayout implements OnItemClickListener {
             return 0;
         }
 
+        @Override
         public void writeToParcel(Parcel parcel, int flags) {
+            super.writeToParcel(parcel, flags);
             parcel.writeInt(mCurrentItemPosition);
             parcel.writeInt(mSelectionGravity);
             parcel.writeInt(mScrollMode);

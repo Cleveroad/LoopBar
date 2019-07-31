@@ -1,11 +1,12 @@
 package com.cleveroad.loopbar.widget;
 
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cleveroad.loopbar.R;
 import com.cleveroad.loopbar.adapter.IOperationItem;
@@ -101,18 +102,9 @@ final class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVie
         notifyItemChanged(unOffsetPosition(position));
     }
 
-    void addOnItemClickListener(OnItemClickListener onItemClickListener) {
-        mInputAdapter.addOnItemClickListener(onItemClickListener);
-    }
-
-    void removeOnItemClickListener(OnItemClickListener onItemClickListener) {
-        mInputAdapter.removeOnItemClickListener(onItemClickListener);
-    }
-
     Collection<IOperationItem> getWrappedItems() {
         return mInputAdapter.getWrappedItems();
     }
-
 
     void setListener(OnItemClickListener listener) {
         mInputAdapter.setListener(listener);
@@ -135,7 +127,6 @@ final class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVie
         return mInputAdapter.getItem(position);
     }
 
-
     void setOrientation(int orientation) {
         if (mOrientation != orientation) {
             mOrientation = orientation;
@@ -157,7 +148,6 @@ final class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVie
     int normalizePosition(int position) {
         return mInputAdapter.normalizePosition(position);
     }
-
 
     private View createHeaderView(ViewGroup parent) {
         @LayoutRes int layoutId = mOrientation == Orientation.ORIENTATION_VERTICAL_LEFT
@@ -190,7 +180,7 @@ final class ChangeScrollModeAdapter extends RecyclerView.Adapter<BaseRecyclerVie
         }
     }
 
-    // this class is only for encapsulation CategoriesHolder, actually now it doesn't change any logic
+    // This class is only for encapsulation CategoriesHolder, actually now it doesn't change any logic
     class ChangeScrollModeHolder extends BaseRecyclerViewHolder<IOperationItem> {
 
         private CategoriesAdapter.CategoriesHolder categoriesHolder;
